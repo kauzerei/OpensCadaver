@@ -10,13 +10,14 @@ rb=2;
 
 dji_width=34.7;
 dji_length=51.2;
-rs=0.7;
+expand=0.5;
+rs=1;
 difference() {
-  hull() for (i=[-plate_width/2-rb,plate_width/2+rb]) for (j=[-plate_length/2-rb,plate_length/2+rb]) translate([j,i])cylinder(h=depth+wall,r=rb);
+  hull() for (i=[-plate_width/2+rb,plate_width/2-rb]) for (j=[-plate_length/2+rb,plate_length/2-rb]) translate([j,i])cylinder(h=depth+wall,r=rb);
   minkowski() {
     translate([0,0,wall+rs]) hull() {
-      cylinder(d=dji_width-2*rs,h=depth);
-      translate([dji_length-dji_width,0,0])cylinder(d=dji_width-2*rs,h=depth);
+      cylinder(d=dji_width-2*rs+2*expand,h=depth);
+      translate([dji_length-dji_width,0,0])cylinder(d=dji_width-2*rs+2*expand,h=depth);
     }
     sphere(r=rs);
   }
