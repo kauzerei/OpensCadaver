@@ -1,0 +1,23 @@
+{
+    "fileFormatVersion": "1",
+    "parameterSets": {
+        "New set 1": {
+            "bissl": "0.01",
+            "part": "rail_holder",
+            "rod": "9",
+            "side": "30",
+            "thickness": "3",
+            "wall": "3"
+        },
+        "New set 2": {
+            "$fa": "1",
+            "$fs": "0.5",
+            "bissl": "0.01",
+            "part": "tripod_mount",
+            "rod": "9",
+            "side": "30",
+            "thickness": "3",
+            "wall": "3"
+        }
+    }
+}
