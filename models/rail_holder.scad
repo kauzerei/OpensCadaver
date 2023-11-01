@@ -24,16 +24,14 @@ module rail_holder() {
   }
 }
 module tripod_mount() {
-  thick=rod/2+wall;
+  thick=rod+2*wall;
   size=rod+2*wall+rod_distance;
   difference() {
     translate([-size/2,-size/2,0])cube([size,size,thick]);
-    translate([0,-rod_distance/2,thick])rotate([0,90,0])cylinder(d=rod,h=size+bissl,center=true);
-    translate([0,rod_distance/2,thick])rotate([0,90,0])cylinder(d=rod,h=size+bissl,center=true);
-    translate([0,0,thick-3])cylinder(d=14,h=3+bissl,$fn=6);
+    translate([0,-rod_distance/2,thick/2])rotate([0,90,0])cylinder(d=rod,h=size+bissl,center=true);
+    translate([0,rod_distance/2,thick/2])rotate([0,90,0])cylinder(d=rod,h=size+bissl,center=true);
+    translate([0,0,wall])cylinder(d=14,h=thick,$fn=6);
     translate([0,0,-bissl])cylinder(d=8,h=thick);
-    translate([0,0,-bissl])for(t=[[wall+screw/2-size/2,rod+2*wall+screw/2-size/2],[wall+screw/2-size/2,size/2-rod-2*wall-screw/2],[size/2-wall-screw/2,rod+2*wall+screw/2-size/2],[size/2-wall-screw/2,size/2-rod-2*wall-screw/2]])
-      translate(t)cylinder(d=screw,h=thick+2*bissl);
   }
 }
 if (part=="rail_holder") rail_holder();
