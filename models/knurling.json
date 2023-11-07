@@ -3,6 +3,20 @@
     "parameterSets": {
         "New set 1": "",
         "New set 2": "",
-        "New set 3": ""
+        "New set 3": {
+            "a": "76",
+            "d": "30",
+            "depth": "1",
+            "h": "40",
+            "n": "30"
+        },
+        "New set 4": {
+            "a": "45",
+            "d": "30",
+            "depth": "1",
+            "h": "10",
+            "n": "30",
+            "precision": "1"
+        }
     }
 }
