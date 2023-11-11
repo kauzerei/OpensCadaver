@@ -33,12 +33,12 @@ module cross_knurl(n=60,d=30,h=20,a=45,depth=1,precision=1,fraction=2) {
 }
 module perpendicular_knurl(n=60,d=30,h=20,a=45,depth=1,precision=1,fraction=2) {
   intersection() {
-    knurl(n=n,d=d,h=h,a=a,depth=depth,precision=precision,fraction=fraction);
-    knurl(n=n,d=d,h=h,a=a-90,depth=depth,precision=precision,fraction=fraction);
+    knurl(n=abs(a)==90?n:floor(n*cos(a)),d=d,h=h,a=a,depth=depth,precision=precision,fraction=fraction);
+    knurl(n=abs(a-90)==90?n:floor(n*cos(a-90)),d=d,h=h,a=a-90,depth=depth,precision=precision,fraction=fraction);
   }
 }
 
-//knurl(n=n,d=d,h=h,a=a,depth=depth,precision=precision,fraction=fraction);
+//knurl(n=floor(n*cos(a)),d=d,h=h,a=a,depth=depth,precision=precision,fraction=fraction);
 perpendicular_knurl(n=n,d=d,h=h,a=a,depth=depth,precision=precision,fraction=fraction);
 //cross_knurl(n=n,d=d,h=h,a=a,depth=depth,precision=precision,fraction=fraction);
 //cross_knurl();
