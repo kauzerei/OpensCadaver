@@ -2,12 +2,17 @@
 //Generalized for multiple layers of depth
 //Added regularity as an alternative to randomness
 
-nhor=32;
+nhor=32; 
 nvert=3;
 hvert=15;
 ndepth=2;
 od=34;
 id=22; 
+bissl=0.10; //parrtern needs to be a bissl offset from slicer layers. Make it half print layer
+
+points=[[0.5, 0.75, 1], [0.25, 1, 1], [0.75, 1, 1], [0, 1, 0.75], [0.5, 1, 0.75], [1, 1, 0.75], [0.25, 1, 0.5], [0.75, 1, 0.5], [0, 1, 0.25], [0.5, 1, 0.25], [1, 1, 0.25], [0.25, 1, 0], [0.75, 1, 0], [0, 0.75, 1], [0, 0.75, 0.5], [0, 0.75, 0], [0.5, 0.75, 0], [1, 0.75, 0], [1, 0.75, 0.5], [1, 0.75, 1], [0, 0.5, 0.75], [0, 0.5, 0.25], [0.25, 0.5, 0], [0.75, 0.5, 0], [1, 0.5, 0.25], [1, 0.5, 0.75], [0, 0.25, 1], [0, 0.25, 0.5], [0, 0.25, 0], [0.5, 0.25, 0], [1, 0.25, 0], [1, 0.25, 0.5], [1, 0.25, 1], [0, 0, 0.75], [0, 0, 0.25], [0.25, 0, 0], [0.75, 0, 0], [1, 0, 0.25], [1, 0, 0.75], [0.5, 0, 0.25], [0.25, 0, 0.5], [0.75, 0, 0.5], [0.5, 0, 0.75], [0.25, 0, 1], [0.75, 0, 1], [0.5, 0.25, 1], [0.25, 0.5, 1], [0.75, 0.5, 1]];
+  faces=[[1,3,8,6,4,2],[5,7,9,11,12,10],[13,26,33,34,27,20],[3,14,21,28,15,8],[11,16,23,30,17,12],[15,28,35,36,29,22],[10,17,30,24,18,5],[19,25,31,37,38,32],[35,39,41,38,37,36],[34,33,43,44,42,40],[43,26,13,46,45,44],[32,47,0,1,2,19],[10,12,17],[33,26,43],[3,1,0,47,32,38,41,39,35,28,21,14],[2,4,6,8,15,22,29,36,37,31,25,19],[11,9,7,5,18,24,30,23,16],[13,20,27,34,40,42,44,45,46]];
+  
 /*
 module element(as=0,ae=30,od=30,id=20,h=5,rotated=false) {
   assert(!is_undef(as));
@@ -127,10 +132,38 @@ module unit(xmin=0,xmax=10,ymin=0,ymax=10,zmin=0,zmax=10) {
   polyhedron(points=points,faces=faces);
 }
 module element(amin=0,amax=12,rmin=20,rmax=25,zmin=0,zmax=5,flipped=false) {
-  points=[[0.5, 0.75, 1], [0.25, 1, 1], [0.75, 1, 1], [0, 1, 0.75], [0.5, 1, 0.75], [1, 1, 0.75], [0.25, 1, 0.5], [0.75, 1, 0.5], [0, 1, 0.25], [0.5, 1, 0.25], [1, 1, 0.25], [0.25, 1, 0], [0.75, 1, 0], [0, 0.75, 1], [0, 0.75, 0.5], [0, 0.75, 0], [0.5, 0.75, 0], [1, 0.75, 0], [1, 0.75, 0.5], [1, 0.75, 1], [0, 0.5, 0.75], [0, 0.5, 0.25], [0.25, 0.5, 0], [0.75, 0.5, 0], [1, 0.5, 0.25], [1, 0.5, 0.75], [0, 0.25, 1], [0, 0.25, 0.5], [0, 0.25, 0], [0.5, 0.25, 0], [1, 0.25, 0], [1, 0.25, 0.5], [1, 0.25, 1], [0, 0, 0.75], [0, 0, 0.25], [0.25, 0, 0], [0.75, 0, 0], [1, 0, 0.25], [1, 0, 0.75], [0.5, 0, 0.25], [0.25, 0, 0.5], [0.75, 0, 0.5], [0.5, 0, 0.75], [0.25, 0, 1], [0.75, 0, 1], [0.5, 0.25, 1], [0.25, 0.5, 1], [0.75, 0.5, 1]];
-  faces=[[1,3,8,6,4,2],[5,7,9,11,12,10],[13,26,33,34,27,20],[3,14,21,28,15,8],[11,16,23,30,17,12],[15,28,35,36,29,22],[10,17,30,24,18,5],[19,25,31,37,38,32],[35,39,41,38,37,36],[34,33,43,44,42,40],[43,26,13,46,45,44],[32,47,0,1,2,19],[10,12,17],[33,26,43],[3,1,0,47,32,38,41,39,35,28,21,14],[2,4,6,8,15,22,29,36,37,31,25,19],[11,9,7,5,18,24,30,23,16],[13,20,27,34,40,42,44,45,46]];
-  function flip(points)=[for (p=points) [p[0],p[2],1-p[1]]];
+  assert(!is_undef(amin));
+  assert(!is_undef(amax));
+  assert(!is_undef(rmin));
+  assert(!is_undef(rmax));
+  assert(!is_undef(zmin));
+  assert(!is_undef(zmax));
+  assert(!is_undef(flipped));
+  
+  function flip(points)=[for (p=points) [1-p[0],1-p[1],p[2]]];
   function map_cylinder(amin,amax,rmin,rmax,zmin,zmax,points)=[for (p=points) [(rmin+p[0]*(rmax-rmin))*cos(amin+p[1]*(amax-amin)),(rmin+p[0]*(rmax-rmin))*sin(amin+p[1]*(amax-amin)),zmin+p[2]*(zmax-zmin)]];
   polyhedron(points=map_cylinder(amin,amax,rmin,rmax,zmin,zmax,flipped?flip(points):points),faces=faces);
 }
-element();
+//element();
+//element(amin=348,amax=360,flipped=true);
+module ring(nhor=16,nvert=3,hvert=10,ndepth=1,od=15,id=10) {
+  function angle(i)=i*360/nhor;
+  function radius(i)=id/2+i*0.5*(od-id)/ndepth;
+  function zvalue(i)=i*hvert/nvert;  
+  randoms=rands(0,2,nhor*nvert*ndepth);
+
+  //calculating vector of orientations of elements (true if flipped)
+  //flipped=[for (r=randoms) r>1]; 
+  flipped=[for (i=[0:1:nhor*nvert*ndepth]) i%2==0 ];
+  //flipped=[for (i=[0:1:nhor*nvert*ndepth-1]) i%3==0 ];
+  //flipped=[for (i=[0:1:nhor*nvert*ndepth-1]) i%5>2 ];
+  //echo(flipped);
+  
+  //calculating vector of parameters of element() module
+  p=[for (k=[0:ndepth-1]) for (j=[0:nvert-1]) for (i=[0:nhor-1])
+    [angle(i),angle(i+1),radius(k),radius(k+1),zvalue(j),zvalue(j+1)]];
+  
+  for (i=[0:1:nhor*nvert*ndepth-1]) element(p[i][0],p[i][1],p[i][2],p[i][3],p[i][4],p[i][5],flipped[i]);
+  translate([0,0,-bissl])cylinder(h=hvert+bissl,d=id+0.1,$fn=nhor*4);
+}
+translate([0,0,bissl])ring(nhor=nhor,nvert=nvert,hvert=hvert,ndepth=ndepth,od=od,id=id);
