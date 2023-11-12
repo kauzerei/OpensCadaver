@@ -2,84 +2,44 @@
 //Generalized for multiple layers of depth
 //Added regularity as an alternative to randomness
 
+//horizontal density of pattern, nubmer of line pairs on one cylinder circumference
 nhor=32; 
+
+//vertical density of pattern, nubmer of line pairs from top to bottom
 nvert=3;
-hvert=15;
+
+//radial density of pattern, nubmer of line pairs on one cylinder radius
 ndepth=2;
+
+//pattern type
+pattern="X out of Y";//[X out of Y,random,user_defined]
+user_defined_pattern=[for (i=[0:1:nhor*nvert*ndepth-1]) i%7%5==0 ];
+X=1;
+Y=2;
+
+//cylinder height
+hvert=15;
+
+//cylinder outer diameter
 od=34;
+
+//cylinder inner diameter
 id=22; 
-bissl=0.10; //parrtern needs to be a bissl offset from slicer layers. Make it half print layer
+
+//parrtern corner features need to be offset from slicer layers. Make it half print layer
+bissl=0.10; 
+
+//calculating vector of orientations of elements (true if flipped)
+randoms=rands(0,2,nhor*nvert*ndepth);
+flipped=(pattern=="random")?[for (r=randoms) r>1]:
+     (pattern=="X out of Y")?[for (i=[0:1:nhor*nvert*ndepth-1]) i%Y<X ]:
+                            user_defined_pattern;
+echo(flipped);
 
 points=[[0.5, 0.75, 1], [0.25, 1, 1], [0.75, 1, 1], [0, 1, 0.75], [0.5, 1, 0.75], [1, 1, 0.75], [0.25, 1, 0.5], [0.75, 1, 0.5], [0, 1, 0.25], [0.5, 1, 0.25], [1, 1, 0.25], [0.25, 1, 0], [0.75, 1, 0], [0, 0.75, 1], [0, 0.75, 0.5], [0, 0.75, 0], [0.5, 0.75, 0], [1, 0.75, 0], [1, 0.75, 0.5], [1, 0.75, 1], [0, 0.5, 0.75], [0, 0.5, 0.25], [0.25, 0.5, 0], [0.75, 0.5, 0], [1, 0.5, 0.25], [1, 0.5, 0.75], [0, 0.25, 1], [0, 0.25, 0.5], [0, 0.25, 0], [0.5, 0.25, 0], [1, 0.25, 0], [1, 0.25, 0.5], [1, 0.25, 1], [0, 0, 0.75], [0, 0, 0.25], [0.25, 0, 0], [0.75, 0, 0], [1, 0, 0.25], [1, 0, 0.75], [0.5, 0, 0.25], [0.25, 0, 0.5], [0.75, 0, 0.5], [0.5, 0, 0.75], [0.25, 0, 1], [0.75, 0, 1], [0.5, 0.25, 1], [0.25, 0.5, 1], [0.75, 0.5, 1]];
   faces=[[1,3,8,6,4,2],[5,7,9,11,12,10],[13,26,33,34,27,20],[3,14,21,28,15,8],[11,16,23,30,17,12],[15,28,35,36,29,22],[10,17,30,24,18,5],[19,25,31,37,38,32],[35,39,41,38,37,36],[34,33,43,44,42,40],[43,26,13,46,45,44],[32,47,0,1,2,19],[10,12,17],[33,26,43],[3,1,0,47,32,38,41,39,35,28,21,14],[2,4,6,8,15,22,29,36,37,31,25,19],[11,9,7,5,18,24,30,23,16],[13,20,27,34,40,42,44,45,46]];
   
-/*
-module element(as=0,ae=30,od=30,id=20,h=5,rotated=false) {
-  assert(!is_undef(as));
-  assert(!is_undef(ae));
-  assert(!is_undef(od));
-  assert(!is_undef(id));
-  assert(!is_undef(h));
-  assert(!is_undef(rotated));
-  mp=(od+id)/4;
-  q=(od-id)/8;
-  p1=[[-1,-2,-2],[1,-2,-2],[2,-1,-2],[2,1,-2], //z=-2
-     [-2,1,2],[-2,-1,2],[-2,-2,1],[-2,-2,-1], //x=-2
-     [1,2,2],[-1,2,2],[2,2,-1],[2,2,1]];//y=2
-  p2=[[1,-2,2],[2,-2,1],[2,-1,2],[-1,-2,2],[2,-2,-1],[2,1,2]];
-  p3=[[-1,2,-2],[-2,2,-1],[-2,1,-2],[1,2,-2],[-2,2,1],[-2,-1,-2]];
-  function rot(pts)= [for (p=pts) [p[2],p[1],-p[0]]];
-  function bend(pts,mp,q,as,ae) =[for (p=pts) [(mp+q*p[0])*cos(as*(0.5-p[1]/4)+ae*(0.5+p[1]/4)),(mp+q*p[0])*sin(as*(0.5-p[1]/4)+ae*(0.5+p[1]/4)),h*p[2]/4]];
-  polyhedron(points=bend(rotated?rot(p1):p1,mp,q,as,ae),
-              faces=[[0,1,2,3], [9,8,5,4], //same z
-                     [4,5,6,7], [11,10,3,2], //same x
-                     [8,9,10,11], [7,6,1,0], //same y
-                     [0,3,10,9,4,7], [2,1,6,5,8,11]]);
-  polyhedron(points=bend(rotated?rot(p2):p2,mp,q,as,ae),
-              faces=[[0,2,1],[3,4,5],[0,3,5,2],[0,1,4,3],[1,2,5,4]]);
-  polyhedron(points=bend(rotated?rot(p3):p3,mp,q,as,ae),
-              faces=[[0,1,2],[3,5,4],[2,5,3,0],[3,4,1,0],[4,5,2,1]]);
-} 
-*/
-/*
-module ring(nhor=16,nvert=3,hvert=6,ndepth=1,od=60,id=50) {
-  randoms=rands(0,2,nhor*nvert*ndepth);
-  //rotations=[for (r=randoms) r>1]; 
-  rotations=[for (i=[0:1:nhor*nvert*ndepth]) i%2==0 ];
-  //rotations=[for (i=[0:1:nhor*nvert*ndepth-1]) i%3==0 ];
-  //rotations=[for (i=[0:1:nhor*nvert*ndepth-1]) i%5>2 ];
-  echo(rotations);
-  p=[for (k=[0:ndepth-1]) for (j=[0:nvert-1)]) for (i=[0:nhor-1])
-          xmin=
-          [j,i,i+360/nhor,k+(od-id)/ndepth,k,hvert/nvert]];
-  for (i=[0:1:nhor*nvert*ndepth-1])
-    translate([0,0,p[i][0]]) element(p[i][1],p[i][2],p[i][3],p[i][4],p[i][5],rotations[i]);
-  translate([0,0,-hvert/(2*nvert)])cylinder(h=hvert,d=id+0.1,$fn=nhor*4);
-}
-*/
-module test_tile(nhor=16,nvert=3,hvert=6,ndepth=1,od=60,id=50) {
-  randoms=rands(0,2,nhor*nvert*ndepth);
-  //rotations=[for (r=randoms) r>1]; 
-  //rotations=[for (i=[0:1:nhor*nvert*ndepth]) i%2==0 ];
-  //rotations=[for (i=[0:1:nhor*nvert*ndepth-1]) i%3==0 ];
-  //rotations=[for (i=[0:1:nhor*nvert*ndepth-1]) i%5>2 ];
-  //rotations=[false,false,false,false,false,false,false,false];
-  rotations=[false,true,false,true,true,false,true,false];
-  //echo(rotations);
-  p=[for (k=[id,id+(od-id)/ndepth])
-      for (j=[0,hvert/nvert])
-        for (i=[0,360/nhor])
-          [j,i,i+360/nhor,k+(od-id)/ndepth,k,hvert/nvert]];
-  for (i=[0:1:7])
-    translate([0,0,p[i][0]]) element(p[i][1],p[i][2],p[i][3],p[i][4],p[i][5],rotations[i]);
-  translate([0,0,-hvert/(2*nvert)])cylinder(h=hvert,d=id+0.1,$fn=nhor*4);
-}
-
-//ring(nhor=nhor,nvert=nvert,hvert=hvert,ndepth=ndepth,od=od,id=id);
-//test_tile(nhor=nhor,nvert=nvert,hvert=hvert,ndepth=ndepth,od=od,id=id);
-//element();
-
-/* Following code is not used in the model, but was used during development. But can still be useful for understanding, since it does not have polyhedron() calls with low-level vertex manipulations. unit() generates basically same building block as element(), just not bent, therefore consisting only of three intersections of cuboid pairs. pattern() builds small wall out of those blocks to see how they can be stacked.
+/* Following code is not used in the model, only during development. But can still be useful for understanding, since it does not have polyhedron() calls with low-level vertex manipulations. unit() generates basically same building block as element(), just not bent, therefore consisting only of three intersections of cuboid pairs. pattern() builds small wall out of those blocks to see how they can be stacked.
 x=2.0;
 appr=5;
 y=x*sqrt(12);
@@ -104,7 +64,8 @@ module pattern() { // straight non-cylindrical wall with this pattern. Used duri
 }
 pattern();
 */
-module unit(xmin=0,xmax=10,ymin=0,ymax=10,zmin=0,zmax=10) {
+
+module unit(xmin=0,xmax=10,ymin=0,ymax=10,zmin=0,zmax=10) { //also not used in ring
 
   /* initially I produced the list of points by drawing a net of cube on paper, indexing vertices of future faces with numbers 0 through 48, making lists of points that have certain x, y and z values and then populating the list with isin() function, this way is less prone to human error. However, depending on OpenSCAD version this function may produce warnings, so now the list of points is initialized directly, using echo() output of initial method 
   function isin(list,value)=len(search(value,list))>0;
@@ -131,6 +92,7 @@ module unit(xmin=0,xmax=10,ymin=0,ymax=10,zmin=0,zmax=10) {
   faces=[[1,3,8,6,4,2],[5,7,9,11,12,10],[13,26,33,34,27,20],[3,14,21,28,15,8],[11,16,23,30,17,12],[15,28,35,36,29,22],[10,17,30,24,18,5],[19,25,31,37,38,32],[35,39,41,38,37,36],[34,33,43,44,42,40],[43,26,13,46,45,44],[32,47,0,1,2,19],[10,12,17],[33,26,43],[3,1,0,47,32,38,41,39,35,28,21,14],[2,4,6,8,15,22,29,36,37,31,25,19],[11,9,7,5,18,24,30,23,16],[13,20,27,34,40,42,44,45,46]];
   polyhedron(points=points,faces=faces);
 }
+
 module element(amin=0,amax=12,rmin=20,rmax=25,zmin=0,zmax=5,flipped=false) {
   assert(!is_undef(amin));
   assert(!is_undef(amax));
@@ -144,20 +106,11 @@ module element(amin=0,amax=12,rmin=20,rmax=25,zmin=0,zmax=5,flipped=false) {
   function map_cylinder(amin,amax,rmin,rmax,zmin,zmax,points)=[for (p=points) [(rmin+p[0]*(rmax-rmin))*cos(amin+p[1]*(amax-amin)),(rmin+p[0]*(rmax-rmin))*sin(amin+p[1]*(amax-amin)),zmin+p[2]*(zmax-zmin)]];
   polyhedron(points=map_cylinder(amin,amax,rmin,rmax,zmin,zmax,flipped?flip(points):points),faces=faces);
 }
-//element();
-//element(amin=348,amax=360,flipped=true);
+
 module ring(nhor=16,nvert=3,hvert=10,ndepth=1,od=15,id=10) {
   function angle(i)=i*360/nhor;
   function radius(i)=id/2+i*0.5*(od-id)/ndepth;
   function zvalue(i)=i*hvert/nvert;  
-  randoms=rands(0,2,nhor*nvert*ndepth);
-
-  //calculating vector of orientations of elements (true if flipped)
-  //flipped=[for (r=randoms) r>1]; 
-  flipped=[for (i=[0:1:nhor*nvert*ndepth]) i%2==0 ];
-  //flipped=[for (i=[0:1:nhor*nvert*ndepth-1]) i%3==0 ];
-  //flipped=[for (i=[0:1:nhor*nvert*ndepth-1]) i%5>2 ];
-  //echo(flipped);
   
   //calculating vector of parameters of element() module
   p=[for (k=[0:ndepth-1]) for (j=[0:nvert-1]) for (i=[0:nhor-1])
