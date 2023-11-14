@@ -1,9 +1,14 @@
 {
     "fileFormatVersion": "1",
     "parameterSets": {
-        "New set 1": {
-            "$fn": "64",
-            "part": "plastic"
+        "New set 1": "",
+        "New set 2": "",
+        "New set 3": "",
+        "New set 4": "",
+        "New set 5": "",
+        "New set 6": "",
+        "New set 7": {
+            "part": "hard_plastic"
         }
     }
 }
