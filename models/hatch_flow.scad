@@ -107,7 +107,7 @@ module element(amin=0,amax=12,rmin=20,rmax=25,zmin=0,zmax=5,flipped=false) {
   polyhedron(points=map_cylinder(amin,amax,rmin,rmax,zmin,zmax,flipped?flip(points):points),faces=faces);
 }
 
-module ring(nhor=16,nvert=3,hvert=10,ndepth=1,od=15,id=10) {
+module ring(nhor=16,nvert=3,hvert=10,ndepth=1,od=15,id=10,flipped=[ for (f=[1:nhor*nvert*hvert]) false]) {
   function angle(i)=i*360/nhor;
   function radius(i)=id/2+i*0.5*(od-id)/ndepth;
   function zvalue(i)=i*hvert/nvert;  
@@ -117,6 +117,6 @@ module ring(nhor=16,nvert=3,hvert=10,ndepth=1,od=15,id=10) {
     [angle(i),angle(i+1),radius(k),radius(k+1),zvalue(j),zvalue(j+1)]];
   
   for (i=[0:1:nhor*nvert*ndepth-1]) element(p[i][0],p[i][1],p[i][2],p[i][3],p[i][4],p[i][5],flipped[i]);
-  translate([0,0,-bissl])cylinder(h=hvert+bissl,d=id+0.1,$fn=nhor*4);
 }
-translate([0,0,bissl])ring(nhor=nhor,nvert=nvert,hvert=hvert,ndepth=ndepth,od=od,id=id);
+translate([0,0,bissl])ring(nhor=nhor,nvert=nvert,hvert=hvert,ndepth=ndepth,od=od,id=id,flipped=flipped);
+cylinder(h=hvert+bissl,d=id+0.1,$fn=nhor*4);
