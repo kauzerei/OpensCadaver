@@ -1,12 +1,12 @@
 //Grip specifically developed for metal grip holders on my steadicam replica
-//Not really parametric, but developing this grip triggered reimplementing Hatch Flow in OpenSCAD
+//Ugly written, but developing this grip triggered reimplementing Hatch Flow in OpenSCAD
 //Rubber is the TPU part you print in surface mode, small is simplified hard plastic holder, it stops grip from rotating. Extended is bigger version of this holder.  
 $fa=1/1;
 $fs=1/1;
 part="tpu";//[tpu,hard_plastic]
 if (part=="tpu") tpu();
 if (part=="hard_plastic") hard_plastic();
-/*
+/* Initially this part was generated with Hatch Flow pattern, but experiment show that the softest grip is the one with no flips in pattern at all, which means, I don't have to use computationally-expensive generation, so I remodelled everything with simple circles and twisted linear extrusions. I'll keep the old code in this comment
 use <hatch_flow.scad>
 part="none";//[small,extended,rubber]
 inv=false;
@@ -42,7 +42,7 @@ module cutouts() {
 //fins(h=11,s=-0.5);
 module fins(h=11,s=0.5) linear_extrude(twist=-2.7*h,height=h,convexity=10)offset(r=s)projection(cut=true)cutouts();
 */
-module onetooth(id=22,od=32,w=5) {
+module onetooth(id=22,od=32,w=5) { //2d shape of horizontal cut through one tooth
   intersection() {
     translate([id/2,0]) difference() {
       circle(d=id+w);
@@ -55,20 +55,20 @@ module onetooth(id=22,od=32,w=5) {
     }
   }
 }
-module slice(id=27,od=32, w=6,n=12) for (a=[0:360/n:360-360/n]) rotate(a) onetooth(id=id,od=od,w=w);
-module spiral(id=27,od=32, w=6,n=12,h=100,t=-2.7) 
+module slice(id=27,od=32, w=6,n=12) for (a=[0:360/n:360-360/n]) rotate(a) onetooth(id=id,od=od,w=w); //2d horizontal cut of the whole spiral
+module spiral(id=27,od=32, w=6,n=12,h=100,t=-2.7) //the whole spiral
   linear_extrude(height=h,twist=h*t)slice(id=id,od=od,w=w,n=n);
   
-module cross(w=10,d=26,n=5,h=10) {
+module cross(w=10,d=26,n=5,h=10) { //Not used. I thought I'd use such coupling to hard plastic ends of the grip.
   for (a=[0:360/n:360-360/n]) rotate([0,0,a]) 
     linear_extrude(height=h,scale=(0.8))translate([-w/2,0])square([w,d/2]);
 }
-module tpu() {
+module tpu() { //the rubbery part of the grip. Print in surface mode, no retraction and spiralized for best results
   cylinder(d=27,h=100);
   spiral();
 }
 
-module hard_plastic() {
+module hard_plastic() { //the part that goes under rubber. Generated for surface mode spiralized, with supports built in model. 
   difference() {
     union() {
       intersection(){
@@ -84,9 +84,15 @@ module hard_plastic() {
         spiral(id=26,od=29,w=3);  
       }
     }
-    cylinder(h=116,d=23);
-    translate([0,0,8])linear_extrude(height=108,twist=-2.7*108)rotate(5)translate([9,-0.2])square([10,0.4]);
+    translate([0,0,-0.01])cylinder(h=116.02,d=25);
+    translate([0,0,8])linear_extrude(height=108,twist=-2.7*108,convexity=10)rotate(5)translate([9,-0.2])square([10,0.4]);
   }
-translate([-12,0,0])cube([24,1,8]);
-translate([-12,0,108])cube([24,1,8]);
+translate([-13,0,0])cube([26,1,8]);
+translate([-7,-14,0])cube([2,28,8]);
+translate([-1,-15,0])cube([2,30,8]);
+translate([-4,-15,0])cube([2,30,8]);
+translate([2,-15,0])cube([2,30,8]);
+translate([5,-14,0])cube([2,28,8]);
+translate([-7,-10,0])cube([14,20,8]);
+translate([-13,0,108])cube([26,1,8]);
 }
