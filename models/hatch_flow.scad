@@ -12,8 +12,8 @@ nvert=3;
 ndepth=2;
 
 //pattern type
-pattern="X out of Y";//[X out of Y,random,user_defined]
-user_defined_pattern=[for (i=[0:1:nhor*nvert*ndepth-1]) i%7%5==0 ];
+pattern="random";//[X out of Y,random,user_defined]
+//user_defined_pattern=[for (i=[0:1:nhor*nvert*ndepth-1]) i%7%5==0 ];
 X=1;
 Y=2;
 
@@ -30,15 +30,21 @@ id=22;
 bissl=0.10; 
 
 //calculating vector of orientations of elements (true if flipped)
-randoms=rands(0,2,nhor*nvert*ndepth);
-flipped=(pattern=="random")?[for (r=randoms) r>1]:
-     (pattern=="X out of Y")?[for (i=[0:1:nhor*nvert*ndepth-1]) i%Y<X ]:
+randoms=rands(0,3.999,nhor*nvert*ndepth);
+//flipped=(pattern=="random")?[for (r=randoms) floor(r)]:
+flipped=(pattern=="random")?[for (r=randoms) r<2?0:1]:
+    (pattern=="X out of Y")?[for (i=[0:1:nhor*nvert*ndepth-1]) i%Y<X?1:0 ]:
                             user_defined_pattern;
 echo(flipped);
 
-points=[[0.5, 0.75, 1], [0.25, 1, 1], [0.75, 1, 1], [0, 1, 0.75], [0.5, 1, 0.75], [1, 1, 0.75], [0.25, 1, 0.5], [0.75, 1, 0.5], [0, 1, 0.25], [0.5, 1, 0.25], [1, 1, 0.25], [0.25, 1, 0], [0.75, 1, 0], [0, 0.75, 1], [0, 0.75, 0.5], [0, 0.75, 0], [0.5, 0.75, 0], [1, 0.75, 0], [1, 0.75, 0.5], [1, 0.75, 1], [0, 0.5, 0.75], [0, 0.5, 0.25], [0.25, 0.5, 0], [0.75, 0.5, 0], [1, 0.5, 0.25], [1, 0.5, 0.75], [0, 0.25, 1], [0, 0.25, 0.5], [0, 0.25, 0], [0.5, 0.25, 0], [1, 0.25, 0], [1, 0.25, 0.5], [1, 0.25, 1], [0, 0, 0.75], [0, 0, 0.25], [0.25, 0, 0], [0.75, 0, 0], [1, 0, 0.25], [1, 0, 0.75], [0.5, 0, 0.25], [0.25, 0, 0.5], [0.75, 0, 0.5], [0.5, 0, 0.75], [0.25, 0, 1], [0.75, 0, 1], [0.5, 0.25, 1], [0.25, 0.5, 1], [0.75, 0.5, 1]];
-  faces=[[1,3,8,6,4,2],[5,7,9,11,12,10],[13,26,33,34,27,20],[3,14,21,28,15,8],[11,16,23,30,17,12],[15,28,35,36,29,22],[10,17,30,24,18,5],[19,25,31,37,38,32],[35,39,41,38,37,36],[34,33,43,44,42,40],[43,26,13,46,45,44],[32,47,0,1,2,19],[10,12,17],[33,26,43],[3,1,0,47,32,38,41,39,35,28,21,14],[2,4,6,8,15,22,29,36,37,31,25,19],[11,9,7,5,18,24,30,23,16],[13,20,27,34,40,42,44,45,46]];
-  
+points=[[0.5, 0.75, 1.0], [0.25, 1.0, 1.0], [0.75, 1.0, 1.0], [0.0, 1.0, 0.75], [0.5, 1.0, 0.75], [1.0, 1.0, 0.75], [0.25, 1.0, 0.5], [0.75, 1.0, 0.5], [0.0, 1.0, 0.25], [0.5, 1.0, 0.25], [1.0, 1.0, 0.25], [0.25, 1.0, 0], [0.75, 1.0, 0], [0.0, 0.75, 1.0], [0.0, 0.75, 0.5], [0.0, 0.75, 0.0], [0.5, 0.75, 0.0], [1.0, 0.75, 0.0], [1.0, 0.75, 0.5], [1.0, 0.75, 1.0], [0.0, 0.5, 0.75], [0.0, 0.5, 0.25], [0.25, 0.5, 0.0], [0.75, 0.5, 0.0], [1.0, 0.5, 0.25], [1.0, 0.5, 0.75], [0.0, 0.25, 1.0], [0.0, 0.25, 0.5], [0.0, 0.25, 0.0], [0.5, 0.25, 0.0], [1.0, 0.25, 0.0], [1.0, 0.25, 0.5], [1.0, 0.25, 1.0], [0.0, 0.0, 0.75], [0.0, 0.0, 0.25], [0.25, 0.0, 0.0], [0.75, 0.0, 0.0], [1.0, 0.0, 0.25], [1.0, 0.0, 0.75], [0.5, 0.0, 0.25], [0.25, 0.0, 0.5], [0.75, 0.0, 0.5], [0.5, 0.0, 0.75], [0.25, 0.0, 1.0], [0.75, 0.0, 1.0], [0.5, 0.25, 1.0], [0.25, 0.5, 1.0], [0.75, 0.5, 1.0]];
+vertices=[points, //corner in 0,0,1
+         [for (p=points) [1-p[0],1-p[1],p[2]]], //corner in 0,0,0
+         [for (p=points) [1-p[0],p[1],1-p[2]]], //corner in 1,0,0
+         [for (p=points) [p[0],1-p[1],1-p[2]]]];//corner in 0,1,0
+//  faces=[[1,3,8,6,4,2],[5,7,9,11,12,10],[13,26,33,34,27,20],[3,14,21,28,15,8],[11,16,23,30,17,12],[15,28,35,36,29,22],[10,17,30,24,18,5],[19,25,31,37,38,32],[35,39,41,38,37,36],[34,33,43,44,42,40],[43,26,13,46,45,44],[32,47,0,1,2,19],[10,12,17],[33,26,43],[3,1,0,47,32,38,41,39,35,28,21,14],[2,4,6,8,15,22,29,36,37,31,25,19],[11,9,7,5,18,24,30,23,16],[13,20,27,34,40,42,44,45,46]];
+faces=[[3, 8, 6], [4, 2, 1], [3, 6, 1], [4, 1, 6],[9, 11, 12], [10, 5, 7], [9, 12, 7], [10, 7, 12],[33, 34, 27], [20, 13, 26], [33, 27, 26], [20, 26, 27],[21, 28, 15], [8, 3, 14], [21, 15, 14], [8, 14, 15],[23, 30, 17], [12, 11, 16], [23, 17, 16], [12, 16, 17],[35, 36, 29], [22, 15, 28], [35, 29, 28], [22, 28, 29],[17, 30, 24], [18, 5, 10], [17, 24, 10], [18, 10, 24],[31, 37, 38], [32, 19, 25], [31, 38, 25], [32, 25, 38],[43, 44, 42], [40, 34, 33], [43, 42, 33], [40, 33, 42],[41, 38, 37], [36, 35, 39], [41, 37, 39], [36, 39, 37],[26, 13, 46], [45, 44, 43], [26, 46, 43], [45, 43, 46],[0, 1, 2], [19, 32, 47], [0, 2, 47], [19, 47, 2],[10,12,17],[33,26,43],[3,1,0,47,32,38,41,39,35,28,21,14],[2,4,6,8,15,22,29,36,37,31,25,19],[11,9,7,5,18,24,30,23,16],[13,20,27,34,40,42,44,45,46]];
+
 /* Following code is not used in the model, only during development. But can still be useful for understanding, since it does not have polyhedron() calls with low-level vertex manipulations. unit() generates basically same building block as element(), just not bent, therefore consisting only of three intersections of cuboid pairs. pattern() builds small wall out of those blocks to see how they can be stacked.
 x=2.0;
 appr=5;
@@ -87,13 +93,13 @@ module unit(xmin=0,xmax=10,ymin=0,ymax=10,zmin=0,zmax=10) { //also not used in r
                           isin(listz0,i)?0:isin(listz025,i)?0.25:isin(listz05,i)?0.5:isin(listz075,i)?0.75:1]];
   echo(points);
   */
-  points=[[0.5, 0.75, 1], [0.25, 1, 1], [0.75, 1, 1], [0, 1, 0.75], [0.5, 1, 0.75], [1, 1, 0.75], [0.25, 1, 0.5], [0.75, 1, 0.5], [0, 1, 0.25], [0.5, 1, 0.25], [1, 1, 0.25], [0.25, 1, 0], [0.75, 1, 0], [0, 0.75, 1], [0, 0.75, 0.5], [0, 0.75, 0], [0.5, 0.75, 0], [1, 0.75, 0], [1, 0.75, 0.5], [1, 0.75, 1], [0, 0.5, 0.75], [0, 0.5, 0.25], [0.25, 0.5, 0], [0.75, 0.5, 0], [1, 0.5, 0.25], [1, 0.5, 0.75], [0, 0.25, 1], [0, 0.25, 0.5], [0, 0.25, 0], [0.5, 0.25, 0], [1, 0.25, 0], [1, 0.25, 0.5], [1, 0.25, 1], [0, 0, 0.75], [0, 0, 0.25], [0.25, 0, 0], [0.75, 0, 0], [1, 0, 0.25], [1, 0, 0.75], [0.5, 0, 0.25], [0.25, 0, 0.5], [0.75, 0, 0.5], [0.5, 0, 0.75], [0.25, 0, 1], [0.75, 0, 1], [0.5, 0.25, 1], [0.25, 0.5, 1], [0.75, 0.5, 1]];
+
   /*The faces list is produced by hand by looking at the before mentioned drawing of a net of a cube. Extra collinear vertices are here on purpose, without them OpenSCAD sometimes fails to recognize coplanarity of neighboring faces and produces incorrect geometry, namely extra walls inside the boda, which breaks hatch flow on slicing*/
   faces=[[1,3,8,6,4,2],[5,7,9,11,12,10],[13,26,33,34,27,20],[3,14,21,28,15,8],[11,16,23,30,17,12],[15,28,35,36,29,22],[10,17,30,24,18,5],[19,25,31,37,38,32],[35,39,41,38,37,36],[34,33,43,44,42,40],[43,26,13,46,45,44],[32,47,0,1,2,19],[10,12,17],[33,26,43],[3,1,0,47,32,38,41,39,35,28,21,14],[2,4,6,8,15,22,29,36,37,31,25,19],[11,9,7,5,18,24,30,23,16],[13,20,27,34,40,42,44,45,46]];
   polyhedron(points=points,faces=faces);
 }
 
-module element(amin=0,amax=12,rmin=20,rmax=25,zmin=0,zmax=5,flipped=false) {
+module element(amin=0,amax=12,rmin=20,rmax=25,zmin=0,zmax=5,flipped=0) {
   assert(!is_undef(amin));
   assert(!is_undef(amax));
   assert(!is_undef(rmin));
@@ -102,14 +108,14 @@ module element(amin=0,amax=12,rmin=20,rmax=25,zmin=0,zmax=5,flipped=false) {
   assert(!is_undef(zmax));
   assert(!is_undef(flipped));
   
-  function flip(points)=[for (p=points) [1-p[0],1-p[1],p[2]]];
-  function map_cylinder(amin,amax,rmin,rmax,zmin,zmax,points)=[for (p=points) [(rmin+p[0]*(rmax-rmin))*cos(amin+p[1]*(amax-amin)),(rmin+p[0]*(rmax-rmin))*sin(amin+p[1]*(amax-amin)),zmin+p[2]*(zmax-zmin)]];
-  polyhedron(points=map_cylinder(amin,amax,rmin,rmax,zmin,zmax,flipped?flip(points):points),faces=faces);
+//  function flip(points)=[for (p=points) [1-p[0],1-p[1],p[2]]];
+  function map_cylinder(amin,amax,rmin,rmax,zmin,zmax,points)=[for (p=points) [(rmin*(1-p[0])+p[0]*rmax)*cos(amin*(1-p[1])+p[1]*amax),(rmin*(1-p[0])+p[0]*rmax)*sin(amin*(1-p[1])+p[1]*amax),zmin*(1-p[2])+p[2]*zmax]];
+  polyhedron(points=map_cylinder(amin,amax,rmin,rmax,zmin,zmax,vertices[flipped]),faces=faces);
 }
 
-module ring(nhor=16,nvert=3,hvert=10,ndepth=1,od=15,id=10,flipped=[ for (f=[1:nhor*nvert*hvert]) false]) {
+module ring(nhor=16,nvert=3,hvert=10,ndepth=1,od=15,id=10,flipped=[ for (f=[1:nhor*nvert*hvert]) 0]) {
   function angle(i)=i*360/nhor;
-  function radius(i)=id/2+i*0.5*(od-id)/ndepth;
+  function radius(i)=id*0.5+i*0.5*(od-id)/ndepth;
   function zvalue(i)=i*hvert/nvert;  
   
   //calculating vector of parameters of element() module
@@ -120,3 +126,5 @@ module ring(nhor=16,nvert=3,hvert=10,ndepth=1,od=15,id=10,flipped=[ for (f=[1:nh
 }
 translate([0,0,bissl])ring(nhor=nhor,nvert=nvert,hvert=hvert,ndepth=ndepth,od=od,id=id,flipped=flipped);
 cylinder(h=hvert+bissl,d=id+0.1,$fn=nhor*4);
+
+//for (i=[0:3]) translate([2*i,0,0]) polyhedron(points=vertices[i],faces=faces); //four elements
