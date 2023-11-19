@@ -1,8 +1,13 @@
-id=16;
-od=32;
-n=30;
-w=90;
-h=1.4;
+thickness=1.5;
+screw_head_space=1;
+screw_side_space_diameter=16;
+bcd=10;
+n_screws=4;
+d_center=4;
+d_circle=2.5;
+$fa=1/1;
+$fs=1/2;
+
 function hirth_height(d=32,n=30,w=90)=d*tan(asin(tan(90/n)/tan(w/2)));
 module tooth(d=32,n=30,w=90) {
   x=d*cos(180/n)/2;
@@ -37,7 +42,7 @@ module hirth_limited(od=32,id=16,h=1.4,n=30,w=90) {
   }
 }
 //hirth();
-hirth_limited(od=od,id=id,h=h,n=n,w=w);
+//hirth_limited(od=od,id=id,h=h,n=n,w=w);
 module arri_rosette(thickness=1.5,screw_head_space=1,screw_side_space_diameter=16,bcd=12,n_screws=4,d_center=4,d_circle=2.5) {
   difference() {
     union() {
@@ -52,4 +57,4 @@ module arri_rosette(thickness=1.5,screw_head_space=1,screw_side_space_diameter=1
     translate([0,0,-0.01]) cylinder(h=thickness+0.02,d=d_center);
   }  
 }
-//arri_rosette();
+arri_rosette(thickness=thickness, screw_head_space=screw_head_space, screw_side_space_diameter=screw_side_space_diameter, bcd=bcd, n_screws=n_screws, d_center=d_center, d_circle=d_circle);
