@@ -2,7 +2,7 @@ id=16;
 od=32;
 n=30;
 w=90;
-bissl=0.01;
+h=1.4;
 function hirth_height(d=32,n=30,w=90)=d*tan(asin(tan(90/n)/tan(w/2)));
 module tooth(d=32,n=30,w=90) {
   x=d*cos(180/n)/2;
@@ -25,13 +25,16 @@ module tooth(d=32,n=30,w=90) {
   
 }
 module hirth(d=32,n=30,w=90) {
-  for(i=[0:360/n:360-360/n])rotate([0,0,i])tooth();
+  for(i=[0:360/n:360-360/n])rotate([0,0,i])tooth(d=d,n=n,w=w);
 }
-h=hirth_height(d=od,n=n,w=w);
-difference() {
-  union() {
-    translate([0,0,h])hirth(d=od,n=n,w=w);
-    cylinder(h=h,d=od);
+module hirth_limited(od=32,id=16,h=1.4,n=30,w=90) {
+  intersection() {
+    hirth(d=od/cos(180/n),n=n,w=w);
+    if (h!=0) difference() {
+      cylinder(h=h!=0?h:hirth_height(od/cos(180/n),n,w),d=od);
+      translate([0,0,-0.01])cylinder(h=h+0.02,d=id);
+    }
   }
-  translate([0,0,bissl==undef?-0.01:-bissl])cylinder(h=2*h,d=id);
 }
+//hirth();
+hirth_limited(od=od,id=id,h=h,n=n,w=w);
