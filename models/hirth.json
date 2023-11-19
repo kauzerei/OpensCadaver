@@ -2,18 +2,9 @@
     "fileFormatVersion": "1",
     "parameterSets": {
         "New set 1": "",
-        "New set 2": {
-            "$fa": "1",
-            "$fs": "1"
-        },
-        "New set 3": {
-            "$fa": "1",
-            "$fs": "1"
-        },
+        "New set 2": "",
+        "New set 3": "",
         "New set 4": {
-            "$fa": "1",
-            "$fs": "1",
-            "diameter": "24",
             "n": "35",
             "w": "90"
         }
