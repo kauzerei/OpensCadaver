@@ -1,0 +1,39 @@
+{
+    "fileFormatVersion": "1",
+    "parameterSets": {
+        "New set 1": {
+            "bcd": "10",
+            "bissl": "0.01",
+            "center_to_center": "60",
+            "connect_thickness": "9",
+            "coupling": "false",
+            "d_bolt": "4",
+            "d_circle": "2",
+            "d_nut": "8",
+            "d_tube": "15",
+            "h_nut": "4",
+            "h_ring": "15",
+            "n_screws": "4",
+            "nut": "true",
+            "offset": "1",
+            "wall": "3"
+        },
+        "New set 2": {
+            "bcd": "10",
+            "bissl": "0.01",
+            "center_to_center": "60",
+            "connect_thickness": "8",
+            "coupling": "false",
+            "d_bolt": "4",
+            "d_circle": "2",
+            "d_nut": "8",
+            "d_tube": "15",
+            "h_nut": "4",
+            "h_ring": "17",
+            "n_screws": "4",
+            "nut": "true",
+            "offset": "1",
+            "wall": "3"
+        }
+    }
+}

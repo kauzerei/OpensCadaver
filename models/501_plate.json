@@ -1,0 +1,43 @@
+{
+    "fileFormatVersion": "1",
+    "parameterSets": {
+        "New set 1": {
+            "cut": "4.5",
+            "front_stop_begin": "6",
+            "front_stop_end": "14",
+            "front_stop_length": "25",
+            "h_height": "2.5",
+            "h_width": "42",
+            "height": "11",
+            "l_height": "2.5",
+            "l_width": "49",
+            "length": "50",
+            "nholes": "4",
+            "spring_stop_begin": "5",
+            "spring_stop_end": "9",
+            "spring_stop_length": "25",
+            "taper_depth": "1",
+            "taper_length": "6",
+            "thickness": "4"
+        },
+        "New set 2": {
+            "cut": "4.5",
+            "front_stop_begin": "6",
+            "front_stop_end": "14",
+            "front_stop_length": "25",
+            "h_height": "2.5",
+            "h_width": "42",
+            "height": "11",
+            "l_height": "2.5",
+            "l_width": "49",
+            "length": "50",
+            "nholes": "4",
+            "spring_stop_begin": "5",
+            "spring_stop_end": "9",
+            "spring_stop_length": "25",
+            "taper_depth": "1",
+            "taper_length": "6",
+            "thickness": "3"
+        }
+    }
+}

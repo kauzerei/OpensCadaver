@@ -1,0 +1,14 @@
+{
+    "fileFormatVersion": "1",
+    "parameterSets": {
+        "New set 1": {
+            "bissl": "0.01",
+            "border": "2",
+            "d_bolt": "4",
+            "d_nut": "8",
+            "depth": "40",
+            "h_nut": "6",
+            "thickness": "10"
+        }
+    }
+}
