@@ -1,3 +1,7 @@
+//The food drier that I bought had shelves too low for filament spools
+//This is a higher tube that fits two spools
+//My printer is too small for such a print, so that's a quarter of a cylinder
+//Print four and weld together with 3d-pen
 $fa=1;
 $fs=0.1;
 id=236;

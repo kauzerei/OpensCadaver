@@ -1,3 +1,10 @@
+//There is a number of parts on Thingiverse called Hirth joint
+//The ones implemented not in OpenSCAD I simply ignore, because I don't want to import stl into my models
+//Some are completely wrong in their geometry
+//Some have non-commercial licence
+//Some are nice, but require weird dependencies
+//The one that is good, very flexible (maybe too flexible for me) is very unefficient and slows OpenSCAD down a lot
+//This is minimalistic module, which is fast and produces correct geometry
 id=16;
 od=32;
 n=30;
@@ -22,7 +29,7 @@ module tooth(d=32,n=30,w=90) {
                      [x,-y,0],
                      [0,0,0]],
                      faces=[[0,2,1],[0,1,3],[1,2,3],[0,4,2],[0,3,4],[4,3,2]]);
-  
+
 }
 module hirth(d=32,n=30,w=90) {
   for(i=[0:360/n:360-360/n])rotate([0,0,i])tooth(d=d,n=n,w=w);
@@ -45,11 +52,11 @@ module arri_rosette(thickness=1.5,screw_head_space=1,screw_side_space_diameter=1
         hirth(d=33,n=60,w=90);
         cylinder(d1=32,d2=32-2*hirth_height(32/cos(180/60),60,90),h=hirth_height(32/cos(180/60),60,90),$fn=60);
         }
-      cylinder(h=thickness+screw_head_space,d=32,$fn=60);  
+      cylinder(h=thickness+screw_head_space,d=32,$fn=60);
     }
     translate([0,0,thickness]) cylinder(d=screw_side_space_diameter,h=screw_head_space+hirth_height(32/cos(180/60),60,90));
     for (i=[0:360/n_screws:360-360/n_screws]) rotate([0,0,i])translate([bcd/2,0,-0.01]) cylinder(h=thickness+0.02,d=d_circle);
     translate([0,0,-0.01]) cylinder(h=thickness+0.02,d=d_center);
-  }  
+  }
 }
 //arri_rosette();

@@ -1,3 +1,5 @@
+//Designed for diy Item-profile camera slider
+//never used
 $fa=1/1;
 $fs=0.1/1;
 part="lower_plate"; //[upper_plate,eccentric,post,lower_plate, all]
@@ -36,7 +38,7 @@ module plate() {
     translate([x+d/2+h,x/2+d/2+h,-bissl]) cylinder(h=h+2*bissl,d=d+air);
     translate([h+d/2,h+d/2,-bissl]) cylinder(h=h+2*bissl,d=d+air);
     translate([h+d/2,x+d/2+h,-bissl]) cylinder(h=h+2*bissl,d=d+air);
-    for (trans=[[item-dd+od/2+d/2+h,od/2+2+h,0],[dd+od/2+d/2+h,x/2+d/2+h,0],[item-dd+od/2+d/2+h,x+d+h-od/2-2-h,0]]) 
+    for (trans=[[item-dd+od/2+d/2+h,od/2+2+h,0],[dd+od/2+d/2+h,x/2+d/2+h,0],[item-dd+od/2+d/2+h,x+d+h-od/2-2-h,0]])
       translate(trans) translate([0,0,h-od/2+free_space]) rotate([0,90,0]) cylinder(d=od+4,h=bearing_h+2*lip_h,center=true);
     for (trans=[[h+d/2,x/2+d/2+h,-od+free_space],[x+d/2+h,h+d/2,-od+free_space],[x+d/2+h,x+d/2+h,-od+free_space]]) translate(trans)
       translate([0,0,-bissl])cylinder(d=bolt_d,h=+od-free_space+h+2*bissl);
@@ -111,7 +113,7 @@ if (part=="all") {
   translate([h+d/2,h+d/2,0]) post(nut_d=nut_d,nut_h=nut_h,bolt_d=bolt_d,bearing_h=bearing_h,id=id,od=od,lip_h=lip_h, lip_w=lip_w,h=h,d=d);
   translate([h+d/2,x+d/2+h,0]) post(nut_d=nut_d,nut_h=nut_h,bolt_d=bolt_d,bearing_h=bearing_h,id=id,od=od,lip_h=lip_h, lip_w=lip_w,h=h,d=d);
   translate([0,0,free_space-h-od-2])upper_plate();
-  for (trans=[[item-dd+od/2+d/2+h,od/2+2+h,-od/2+free_space],[dd+od/2+d/2+h,x/2+d/2+h,-od/2+free_space],[item-dd+od/2+d/2+h,x+d+h-od/2-2-h,-od/2+free_space]]) 
+  for (trans=[[item-dd+od/2+d/2+h,od/2+2+h,-od/2+free_space],[dd+od/2+d/2+h,x/2+d/2+h,-od/2+free_space],[item-dd+od/2+d/2+h,x+d+h-od/2-2-h,-od/2+free_space]])
     translate(trans) rotate([0,90,0]) color([0,1,1])cylinder(d=od,h=bearing_h,center=true);
 
 }
