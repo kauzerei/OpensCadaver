@@ -1,0 +1,16 @@
+{
+    "fileFormatVersion": "1",
+    "parameterSets": {
+        "New set 1": {
+            "X": "3",
+            "Y": "5",
+            "hvert": "100",
+            "id": "100",
+            "ndepth": "1",
+            "nhor": "32",
+            "nvert": "8",
+            "od": "110",
+            "pattern": "X out of Y"
+        }
+    }
+}
