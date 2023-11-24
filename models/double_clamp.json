@@ -152,6 +152,28 @@
             "offset": "1",
             "tightener_facing": "diagonally_inwards",
             "wall": "3"
+        },
+        "New set 10": {
+            "bcd": "10",
+            "center_to_center": "60",
+            "connect_position": "up",
+            "connect_thickness": "6",
+            "coupling": "false",
+            "d_bolt": "4",
+            "d_circle": "2",
+            "d_nut": "8",
+            "d_tube": "16",
+            "h_nut": "4",
+            "h_ring": "12",
+            "hole_distance": "10",
+            "invert_nut_side": "false",
+            "mount_object": "up",
+            "n_holes": "3",
+            "n_screws": "4",
+            "nut": "true",
+            "offset": "1",
+            "tightener_facing": "diagonally_up",
+            "wall": "3"
         }
     }
 }
