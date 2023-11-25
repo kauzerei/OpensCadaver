@@ -3,7 +3,7 @@ d_nut=8;
 h_nut=4;
 d_bolt=4;
 width=60;
-thickness=5;
+thickness=8;
 border=2;
 bissl=0.01;
 $fa=1/1;
@@ -11,6 +11,7 @@ $fs=1/2;
 depth=40;
 n_holes=5;
 hole_distance=10;
+wall=3;
 module camera_plate() {
   difference() {
     cube([width,depth,thickness+border]);
@@ -18,9 +19,9 @@ module camera_plate() {
   for (t=[-hole_distance*(n_holes-1)/2:hole_distance:hole_distance*(n_holes-1)/2])
     translate([t+width/2,0,-bissl]) {
       translate([0,bolts_offset,0])cylinder(d=d_bolt,h=thickness);
-      translate([0,bolts_offset,thickness/2])cylinder(d=d_nut,h=thickness);      
+      translate([0,bolts_offset,wall])cylinder(d=d_nut,h=thickness);      
       translate([0,depth-bolts_offset,0])cylinder(d=d_bolt,h=thickness);
-      translate([0,depth-bolts_offset,thickness/2])cylinder(d=d_nut,h=thickness);
+      translate([0,depth-bolts_offset,wall])cylinder(d=d_nut,h=thickness);
 }
     hull() {
       translate([0,depth/2+10,thickness+4])rotate([0,90,0])cylinder(d=8,h=60);

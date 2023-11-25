@@ -1,0 +1,14 @@
+{
+    "fileFormatVersion": "1",
+    "parameterSets": {
+        "New set 1": {
+            "bolt_offset": "20",
+            "d_bolt": "4",
+            "d_nut": "8",
+            "d_tube": "16",
+            "mount_offset": "100",
+            "mount_width": "10",
+            "wall": "3"
+        }
+    }
+}

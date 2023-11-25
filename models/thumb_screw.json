@@ -1,0 +1,16 @@
+{
+    "fileFormatVersion": "1",
+    "parameterSets": {
+        "New set 1": {
+            "d_bolt": "4",
+            "d_cp": "12",
+            "d_head": "10",
+            "h_cp": "2",
+            "h_lobes": "10",
+            "height": "18",
+            "radius": "2",
+            "wall": "2",
+            "width": "22"
+        }
+    }
+}
