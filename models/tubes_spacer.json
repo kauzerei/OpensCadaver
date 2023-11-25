@@ -1,0 +1,14 @@
+{
+    "fileFormatVersion": "1",
+    "parameterSets": {
+        "New set 1": {
+            "allowed_bend": "5",
+            "angle": "90",
+            "d1": "26",
+            "d2": "30",
+            "distance": "90",
+            "height": "20",
+            "wall": "3"
+        }
+    }
+}

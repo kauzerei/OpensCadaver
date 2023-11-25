@@ -1,7 +1,7 @@
 wall=3;
 screw=4;
 width=12;
-height=22;
+height=23;
 depth=10;
 cable=4;
 radius=1.5;
