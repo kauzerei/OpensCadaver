@@ -1,15 +1,15 @@
 $fa=1/1;
 $fs=1/2;
 module camera_spacer() {
-  height=38;
+  height=12;
   width=50;
   depth=12;
-  wall=4;
+  wall=3;
   rounded=5;
   n_holes=3;
   hole_distance=10;
   d_bolt=4;
-  d_nut=8;
+  d_nut=0;//8;
   nuts_through=true;
   bolts_offset=4;
   bissl=1/100;

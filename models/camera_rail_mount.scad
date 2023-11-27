@@ -8,7 +8,7 @@ border=2;
 bissl=0.01;
 $fa=1/1;
 $fs=1/2;
-depth=40;
+depth=52;
 n_holes=5;
 hole_distance=10;
 wall=3;
@@ -29,6 +29,7 @@ module camera_plate() {
       translate([0,depth/2-13,thickness+1+6])rotate([0,90,0])cylinder(d=2,h=60);
       translate([30,depth/2+20,thickness+31.5])rotate([90,0,0])cylinder(d=63,h=10);
     }
+          translate([30,depth/2+10,thickness+31.5])rotate([-90,0,0])cylinder(d=63,h=20);
   }
 }
 camera_plate();

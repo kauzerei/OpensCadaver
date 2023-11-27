@@ -17,7 +17,7 @@ ndepth=2;
 
 //pattern type
 pattern="X out of Y";//[X out of Y,random,user_defined]
-//user_defined_pattern=[for (i=[0:1:nhor*nvert*ndepth-1]) i%7%5==0 ];
+user_defined_pattern=[for (i=[0:1:nhor*nvert*ndepth-1]) i%7%5==0?0:1 ];
 X=3;
 Y=5;
 
