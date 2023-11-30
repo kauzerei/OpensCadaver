@@ -24,7 +24,7 @@ difference() {
     translate([d_tube/2+wall,0,0]) cylinder(h=mount_width+bissl,d=d_tube-2*wall,center=true);
   }
 }
-module rosette_mount_holes(depth=10,d_circle=12, d_center=4, d_around=2, n_holes=4,bissl=1/100,center=false) {
+module rosette_mount_holes(depth=10,d_circle=10, d_center=4, d_around=2, n_holes=4,bissl=1/100,center=false) {
   translate([0,0,center?0:-bissl])cylinder(h=depth+2*bissl,d=d_center,center=center);
   *translate([0,0,-bissl]) cylinder(h=h_nut+2*bissl, d=d_nut,$fn=6);
   for (i=[0:360/n_holes:360]) rotate([0,0,i])translate([d_circle/2,0,center?0:-bissl]) 

@@ -192,3 +192,28 @@ clamp_double(d_tube=d_tube,h_ring=h_ring,wall=wall,d_bolt=d_bolt,
              center_to_center=center_to_center,orientations=orientations,reflections=reflections,
              connect_thickness=connect_thickness,connect_offset=connect_offset,
              n_holes=n_holes,hole_distance=hole_distance,holes_orientation=holes_orientation);
+module bar(bar_thickness=6,center_to_center=60,h_ring=16,hole_distance=10,nholes=5,d_bolt=4,d_nut=8,h_nut=4) {
+  difference() {
+    cube([bar_thickness,center_to_center,h_ring],center=true);
+    for (t=[-hole_distance*(n_holes-1)/2:hole_distance:hole_distance*(n_holes-1)/2])
+      translate([0,t,0]) rotate([0,holes_orientation,0]) {
+        cylinder(h=bar_thickness+bissl,d=d_bolt,center=true);
+        rotate([0,0,90])cylinder(h=max(connect_thickness,h_ring)/2+bissl,d=d_nut,$fn=6);
+    }
+  }
+}
+module double_double_clamp() {
+clamp_double(d_tube=d_tube,h_ring=h_ring,wall=wall,d_bolt=d_bolt,
+             offset=offset,nut=nut,d_nut=d_nut,h_nut=h_nut,
+             coupling=coupling,bcd=bcd,n_screws=n_screws,d_circle=d_circle,
+             center_to_center=center_to_center,orientations=orientations,reflections=reflections,
+             connect_thickness=connect_thickness,connect_offset=connect_thickness/2-d_tube/2-wall,
+             n_holes=n_holes,hole_distance=hole_distance,holes_orientation=90);
+ clamp_double(d_tube=d_tube,h_ring=h_ring,wall=wall,d_bolt=d_bolt,
+             offset=offset,nut=nut,d_nut=d_nut,h_nut=h_nut,
+             coupling=coupling,bcd=bcd,n_screws=n_screws,d_circle=d_circle,
+             center_to_center=center_to_center,orientations=orientations,reflections=reflections,
+             connect_thickness=connect_thickness,connect_offset=-connect_thickness/2+d_tube/2+wall,
+             n_holes=n_holes,hole_distance=hole_distance,holes_orientation=-90);
+ }
+ *bar();

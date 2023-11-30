@@ -115,7 +115,7 @@ module element(amin=0,amax=12,rmin=20,rmax=25,zmin=0,zmax=5,flipped=0) {
   polyhedron(points=map_cylinder(amin,amax,rmin,rmax,zmin,zmax,vertices[flipped]),faces=faces);
 }
 
-module ring(nhor=16,nvert=3,hvert=10,ndepth=1,od=15,id=10,flipped=[ for (f=[1:nhor*nvert*hvert]) 0]) {
+module ring(nhor=16,nvert=3,hvert=10,ndepth=1,od=15,id=10,flipped=[ for (f=[1:nhor*nvert*hvert]) f%5<3?0:1]) {
   function angle(i)=i*360/nhor;
   function radius(i)=id*0.5+i*0.5*(od-id)/ndepth;
   function zvalue(i)=i*hvert/nvert;  

@@ -33,10 +33,10 @@ spring_stop_end=9;
 front_stop_begin=6;
 front_stop_end=14;
 /* [Cheeseplate raster] */
-nholes_across=7;
-nholes_along=3;
-d_bolt=4;
-d_head=8;
+nholes_across=1;
+nholes_along=1;
+d_bolt=7;
+d_head=20;
 $fa=1/1;
 $fs=1/2;
 bissl=1/100;

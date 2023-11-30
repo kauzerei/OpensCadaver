@@ -1,0 +1,49 @@
+{
+    "fileFormatVersion": "1",
+    "parameterSets": {
+        "New set 1": {
+            "bcd": "10",
+            "center_to_center": "60",
+            "connect_position": "low",
+            "connect_thickness": "6",
+            "coupling": "false",
+            "d_bolt": "4",
+            "d_circle": "2",
+            "d_nut": "8",
+            "d_tube": "16",
+            "h_nut": "4",
+            "h_ring": "16",
+            "hole_distance": "10",
+            "invert_nut_side": "false",
+            "mount_object": "down",
+            "n_holes": "3",
+            "n_screws": "4",
+            "nut": "true",
+            "offset": "1",
+            "tightener_facing": "diagonally_up",
+            "wall": "3"
+        },
+        "New set 2": {
+            "bcd": "10",
+            "center_to_center": "60",
+            "connect_position": "low",
+            "connect_thickness": "6",
+            "coupling": "false",
+            "d_bolt": "4",
+            "d_circle": "2",
+            "d_nut": "8",
+            "d_tube": "16",
+            "h_nut": "4",
+            "h_ring": "12",
+            "hole_distance": "10",
+            "invert_nut_side": "false",
+            "mount_object": "up",
+            "n_holes": "3",
+            "n_screws": "4",
+            "nut": "true",
+            "offset": "1",
+            "tightener_facing": "up",
+            "wall": "3"
+        }
+    }
+}
