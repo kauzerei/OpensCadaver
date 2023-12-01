@@ -2,10 +2,10 @@ $fa=1/1;
 $fs=1/2;
 front=17;
 back=17;
-left=40;
-right=80;
+left=41;
+right=81;
 up=70;
-bottom=10;
+bottom=8;
 wall=5;
 bissl=1/100;
 d_hole=4;
@@ -25,23 +25,23 @@ difference() {
   for (x=[-floor(left/raster-0.5)*raster:raster:right-raster/2])
     for (y=[-floor(back/raster-0.5)*raster:raster:front-raster/2]) 
       if (x<bottom_door[0]-raster/2 || x>bottom_door[2]+raster/2 || y<bottom_door[1]-raster/2 || y>bottom_door[3]+raster/2)
-      translate([x,y,0])rotate([180,0,0])nut_hole(h_nut=max(h_nut,2*bottom/3));
+      translate([x,y,0])rotate([180,0,0])nut_hole(d_hut=d_nut,d_hole=d_hole,depth=bottom,h_nut=max(h_nut,2*bottom/3));
   //top holes
   for (x=[-floor(left/raster-0.5)*raster:raster:right-raster/2])
     for (y=[-floor(back/raster-0.5)*raster:raster:front-raster/2]) 
-      translate([x,y,up])nut_hole();
+      translate([x,y,up])nut_hole(d_hut=d_nut,d_hole=d_hole,h_nut=h_nut,depth=wall);
   //left holes
   for (z=[raster/2:raster:up-raster/2])
     for (y=[-floor(back/raster-0.5)*raster:raster:front-raster/2]) 
       if (y<left_door[0]-raster/3 || y>left_door[2]+raster/3 || z<left_door[1]-raster/3 || z>left_door[3]+raster/3)
-      translate([-left,y,z])rotate([0,-90,0])nut_hole();
+      translate([-left,y,z])rotate([0,-90,0])nut_hole(d_hut=d_nut,d_hole=d_hole,h_nut=h_nut,depth=wall);
   //right holes
   for (z=[raster/2:raster:up-raster/2])
     for (y=[-floor(back/raster-0.5)*raster:raster:front-raster/2]) 
-      translate([right,y,z])rotate([0,90,0])nut_hole();
+      translate([right,y,z])rotate([0,90,0])nut_hole(d_hut=d_nut,d_hole=d_hole,h_nut=h_nut,depth=wall);
    translate([0,0,-bottom-bissl])cylinder(d=tripod_screw,h=bottom+2*bissl);
 *   translate([0,0,-bottom-bissl])cylinder(d=tripod_screw_head,h=bottom/2+2*bissl);
-translate([0,0,-2])camerashape();
+*translate([0,0,-2])camerashape();
 }
 module nut_hole(d_hut=8,d_hole=4,h_nut=4,depth=10) {
   translate([0,0,-bissl]) cylinder(h=h_nut+bissl,d=d_nut,$fn=6);
