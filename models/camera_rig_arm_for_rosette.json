@@ -1,0 +1,16 @@
+{
+    "fileFormatVersion": "1",
+    "parameterSets": {
+        "New set 1": {
+            "bcd": "12",
+            "bd": "2",
+            "d_bolt": "4",
+            "d_nut": "8",
+            "depth": "10",
+            "length": "100",
+            "nb": "4",
+            "wall": "3",
+            "width": "20"
+        }
+    }
+}
