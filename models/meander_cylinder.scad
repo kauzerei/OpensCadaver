@@ -1,3 +1,6 @@
+//Cylinder with meandering wall
+//To be printed with TPU in surface mode
+//Designed for replacing a missing rubber ring of a lens
 bd=54;
 sd=52;
 n=128;
