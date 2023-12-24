@@ -1,0 +1,22 @@
+{
+    "fileFormatVersion": "1",
+    "parameterSets": {
+        "New set 1": {
+            "air": "0.5",
+            "thread": "3",
+            "wall": "2"
+        },
+        "New set 2": {
+            "air": "0.5",
+            "button": "3",
+            "thread": "3",
+            "wall": "2"
+        },
+        "New set 3": {
+            "air": "0.5",
+            "button": "3",
+            "thread": "3",
+            "wall": "2"
+        }
+    }
+}

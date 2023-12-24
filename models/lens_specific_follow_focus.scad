@@ -32,8 +32,8 @@ $fs=1/1;
   cylinder(h=11,d=62,center=true);
 }
 *difference() { //noname 85/1.8
-  gear(0.8*3.1415926,78,15,50);
-  cylinder(h=16,d=59,center=true);
+  gear(0.8*3.1415926,78,14,50);
+  cylinder(h=15,d=59,center=true);
 }
 difference() { //beroflex 135/2.8
   gear(0.8*3.1415926,77,23,50);
