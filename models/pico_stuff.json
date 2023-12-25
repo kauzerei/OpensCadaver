@@ -17,6 +17,15 @@
             "button": "3",
             "thread": "3",
             "wall": "2"
+        },
+        "New set 4": {
+            "air": "0.5",
+            "button": "4",
+            "extra": "4",
+            "joystick": "6",
+            "part": "button",
+            "thread": "3",
+            "wall": "1.5"
         }
     }
 }
