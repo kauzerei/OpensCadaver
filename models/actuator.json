@@ -1,0 +1,44 @@
+{
+    "fileFormatVersion": "1",
+    "parameterSets": {
+        "New set 1": {
+            "air": "0.5",
+            "magnet_d": "15",
+            "magnet_h": "2",
+            "part": "spoolcap",
+            "plunger_height": "30",
+            "spool_thickness": "10",
+            "stopper": "5",
+            "thread_pitch": "3",
+            "threads": "2",
+            "throw": "15",
+            "wall": "1.6000000000000001"
+        },
+        "New set 2": {
+            "air": "0.5",
+            "magnet_d": "10",
+            "magnet_h": "2",
+            "part": "assembly",
+            "plunger_height": "30",
+            "spool_thickness": "10",
+            "stopper": "5",
+            "thread_pitch": "3",
+            "threads": "2",
+            "throw": "15",
+            "wall": "1.6000000000000001"
+        },
+        "New set 3": {
+            "air": "0.5",
+            "magnet_d": "10",
+            "magnet_h": "2",
+            "part": "assembly",
+            "plunger_height": "30",
+            "spool_thickness": "10",
+            "stopper": "5",
+            "thread_pitch": "3",
+            "threads": "2",
+            "throw": "15",
+            "wall": "1.6000000000000001"
+        }
+    }
+}
