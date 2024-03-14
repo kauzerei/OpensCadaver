@@ -3,42 +3,40 @@
     "parameterSets": {
         "New set 1": {
             "air": "0.5",
-            "magnet_d": "15",
-            "magnet_h": "2",
-            "part": "spoolcap",
-            "plunger_height": "30",
-            "spool_thickness": "10",
-            "stopper": "5",
-            "thread_pitch": "3",
-            "threads": "2",
-            "throw": "15",
             "wall": "1.6000000000000001"
         },
         "New set 2": {
             "air": "0.5",
-            "magnet_d": "10",
-            "magnet_h": "2",
-            "part": "assembly",
-            "plunger_height": "30",
-            "spool_thickness": "10",
-            "stopper": "5",
-            "thread_pitch": "3",
-            "threads": "2",
-            "throw": "15",
             "wall": "1.6000000000000001"
         },
         "New set 3": {
             "air": "0.5",
-            "magnet_d": "10",
-            "magnet_h": "2",
-            "part": "assembly",
-            "plunger_height": "30",
-            "spool_thickness": "10",
-            "stopper": "5",
-            "thread_pitch": "3",
-            "threads": "2",
-            "throw": "15",
             "wall": "1.6000000000000001"
+        },
+        "New set 4": {
+            "air": "1",
+            "wall": "1.6000000000000001"
+        },
+        "New set 5": {
+            "air": "1",
+            "wall": "1.6000000000000001"
+        },
+        "New set 6": {
+            "air": "2",
+            "wall": "1.6000000000000001"
+        },
+        "New set 7": {
+            "air": "1",
+            "wall": "1.6000000000000001"
+        },
+        "New set 8": {
+            "air": "0.5",
+            "border": "5",
+            "m_d": "10",
+            "m_h": "2",
+            "p_h": "20",
+            "s_h": "15",
+            "wall": "0.80000000000000004"
         }
     }
 }
