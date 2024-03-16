@@ -3,7 +3,7 @@
 $fs=1/2;
 $fa=1/1;
 bissl=1/100;
-
+part="all";//[frontcap,endcap,spoolcenter,coupling,beater,bracket]
 wall=0.8;
 air=0.5;
 iron_d=4;
@@ -43,11 +43,11 @@ module spoolcenter(id,wall,length) {
   }
 }
 
-module endcap(id,recess,thickness,width) {
+module endcap(id,recess,thickness,width,travel) {
   difference() {
-    cylinder(d=width,h=thickness);
+    translate([0,0,-travel])cylinder(d1=id+thickness,d2=width,h=thickness+travel);
     translate([0,0,thickness/2])cylinder(d=recess,h=thickness/2+bissl);
-    translate([0,0,-bissl])cylinder(d=id,h=thickness+2*bissl);
+    translate([0,0,-travel+thickness])cylinder(d=id,h=thickness+travel+bissl);
   }
 }
 
@@ -83,10 +83,18 @@ module bracket(diameter, length, wall, screw) {
     for (tr=[[diameter+3*wall+1.5*screw,length+wall-screw/2,-bissl],[wall+0.5*screw,length+wall-screw/2,-bissl],[diameter+3*wall+1.5*screw,wall+screw/2,-bissl],[wall+screw/2,wall+screw/2,-bissl]])translate(tr)cylinder(d=screw,h=diameter/2+wall+2*bissl);
   }
 }
-
-translate([0,0,-cap_thickness/2-air])endcap(id=coil_id,recess=cap_recess,thickness=cap_thickness,width=cap_od);
-translate([0,0,length+cap_thickness/2+air])mirror([0,0,1])endcap(id=coil_id,recess=cap_recess,thickness=cap_thickness,width=cap_od);
+if (part=="all") {
+translate([0,0,-cap_thickness/2-air])frontcap(id=coil_id,recess=cap_recess,thickness=cap_thickness,width=cap_od);
+translate([0,0,length+cap_thickness/2+air])mirror([0,0,1])endcap(id=coil_id,recess=cap_recess,thickness=cap_thickness,width=cap_od,travel=10);
 spoolcenter(id=coil_id,wall=wall,length=length);
 translate([0,0,-beater_travel-1.5*cap_thickness-2*air])coupling(id=coil_id, od=cap_od, wall=wall, depth=beater_travel, thickness=cap_thickness);
 translate([0,0,beater_inside_coil-cap_thickness])mirror([0,0,1])beater(iron_d=iron_d-2*air,beater_d=beater_d,length_coil=beater_inside_coil,length_beater=length_beater, holding_d=cap_od-2*wall-2*air, holding_h=2*wall);
 translate([-cap_od/2-screw-2*wall-air,0,cap_thickness-air/2])rotate([-90,0,0])bracket(diameter=cap_od+2*air, length=beater_travel+2*cap_thickness+2*air, wall=wall, screw=screw);
+}
+
+if(part=="frontcap")frontcap(id=coil_id,recess=cap_recess,thickness=cap_thickness,width=cap_od);
+if(part=="endcap")endcap(id=coil_id,recess=cap_recess,thickness=cap_thickness,width=cap_od,travel=10);
+if(part=="spoolcenter")spoolcenter(id=coil_id,wall=wall,length=length);
+if(part=="coupling")coupling(id=coil_id, od=cap_od, wall=wall, depth=beater_travel, thickness=cap_thickness);
+if(part=="beater")beater(iron_d=iron_d-2*air,beater_d=beater_d,length_coil=beater_inside_coil,length_beater=length_beater, holding_d=cap_od-2*wall-2*air, holding_h=2*wall);
+if(part=="bracket")mirror([0,0,1])bracket(diameter=cap_od+2*air, length=beater_travel+2*cap_thickness+2*air, wall=wall, screw=screw);

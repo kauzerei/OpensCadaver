@@ -3,48 +3,14 @@
     "parameterSets": {
         "New set 1": {
             "air": "0.5",
-            "wall": "1.6000000000000001"
-        },
-        "New set 2": {
-            "air": "0.5",
-            "wall": "1.6000000000000001"
-        },
-        "New set 3": {
-            "air": "0.5",
-            "wall": "1.6000000000000001"
-        },
-        "New set 4": {
-            "air": "1",
-            "wall": "1.6000000000000001"
-        },
-        "New set 5": {
-            "air": "1",
-            "wall": "1.6000000000000001"
-        },
-        "New set 6": {
-            "air": "2",
-            "wall": "1.6000000000000001"
-        },
-        "New set 7": {
-            "air": "1",
-            "wall": "1.6000000000000001"
-        },
-        "New set 8": {
-            "air": "0.5",
-            "border": "5",
-            "wall": "0.80000000000000004"
-        },
-        "New set 9": {
-            "air": "0.5",
+            "beater_inside_coil": "20",
+            "beater_travel": "15",
             "border": "3",
             "iron_d": "4",
-            "wall": "0.80000000000000004"
-        },
-        "New set 10": {
-            "air": "0.5",
-            "border": "1",
-            "iron_d": "4",
             "length": "30",
+            "length_beater": "20",
+            "part": "bracket",
+            "screw": "4",
             "wall": "0.80000000000000004"
         }
     }
