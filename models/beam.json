@@ -1,0 +1,14 @@
+{
+    "fileFormatVersion": "1",
+    "parameterSets": {
+        "New set 1": {
+            "hd": "10",
+            "height": "40",
+            "hole": "3",
+            "radius": "1",
+            "segments": "14",
+            "thickness": "7",
+            "wall": "1.6000000000000001"
+        }
+    }
+}
