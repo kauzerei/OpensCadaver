@@ -1,0 +1,17 @@
+{
+    "fileFormatVersion": "1",
+    "parameterSets": {
+        "New set 1": {
+            "air": "0.5",
+            "contact": "5",
+            "d123": "17",
+            "d_cell": "13",
+            "d_wire": "2",
+            "h_cell": "40",
+            "height": "45",
+            "neck": "14",
+            "part": "insert",
+            "wall": "0.40000000000000002"
+        }
+    }
+}
