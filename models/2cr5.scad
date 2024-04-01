@@ -4,10 +4,10 @@ bissl=1/100;
 part="insert";//[insert,case,all]
 d123=17;
 neck=14;
-wall=0.4;
+wall=0.5;
 air=0.5;
 height=45;
-contact=5;
+contact=4;
 d_cell=13;
 h_cell=40;
 d_wire=2;
@@ -78,7 +78,7 @@ module boost(){
 //translate([0,0,wall+air]) 
 //insert();
 if (part=="case") case();
-if (part=="insert") rotate([0,90,0])insert();
+if (part=="insert") rotate([0,180,0])insert();
 if (part=="all") {
   case();
   translate([0,0,wall+air]) insert();
