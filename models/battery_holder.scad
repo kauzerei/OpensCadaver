@@ -2,6 +2,8 @@
 //Project: released for camera stab, designed for drill battery pack
 $fs=0.7/1;
 $fa=0.01/1;
+diameter=19;
+number=4;
 module holder(diameter=18,battery_length=65,piptik_height=1,piptik_width=6,slit=2,wall=2,floor=2) {
 length=battery_length+2*piptik_height;
 difference() {
@@ -20,9 +22,9 @@ difference() {
 translate([diameter/2,wall,diameter/2+floor])rotate([0,90,0])linear_extrude(piptik_width,center=true)polygon([[-piptik_width/2,0],[piptik_width/2,0],[0,piptik_height]]);
 translate([diameter/2,wall+length,diameter/2+floor])rotate([0,90,0])linear_extrude(piptik_width,center=true)polygon([[-piptik_width/2,0],[piptik_width/2,0],[0,-piptik_height]]);
 }
-module holders(diameter=18,battery_length=65,piptik_height=1,piptik_width=6,slit=2,wall=2,floor=2,number=1) {
+module holders(diameter=18,battery_length=65,piptik_height=2,piptik_width=6,slit=2,wall=2,floor=2,number=1) {
   for (i=[0:1:number-1]) {
     translate([i*diameter,0,0])holder(diameter=diameter,battery_length=battery_length,piptik_height=piptik_height,piptik_width=piptik_width,slit=slit,wall=wall,floor=floor);
   }
 }
-holders(diameter=19,number=2);
+holders(diameter=diameter,number=number);
