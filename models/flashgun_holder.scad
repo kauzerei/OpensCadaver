@@ -5,12 +5,12 @@ flash_width=70;
 flash_height=40;
 clamp_depth=15;
 wall=1.6;
-filter_thickness=2;
+filter_thickness=1;
 
-air=3;
+air=5;
 
 arm_thickness=10;
-arm_width=20;
+arm_width=30;
 arm_length=120;
 bolt=4;
 
@@ -30,7 +30,7 @@ holder_length=holder_height;
 
 clamp_thickness=(holder_height-flash_height)/2;
     
-module filter_holder() {
+module holder_plate() {
   difference() {
     cube([holder_height,holder_length,arm_thickness]); //mount plate
     for (tr=[
@@ -38,12 +38,29 @@ module filter_holder() {
       [holder_height-clamp_thickness/2,holder_length-clamp_depth/2,-bissl],
       [holder_height/2,holder_length/2,-bissl]
       ]) translate(tr) cylinder(d=bolt, h=arm_thickness+2*bissl);
+    for (tr=[
+      [clamp_thickness/2,-bissl,arm_thickness/2],
+      [holder_height-clamp_thickness/2,-bissl,arm_thickness/2]
+      ]) translate(tr) rotate([-90,0,0])cylinder(d=bolt, h=arm_thickness+2*bissl);
   }
-  translate([0,0,arm_thickness]) difference() {
+}
+
+module filter_holder() {
+  difference() {
+    cube([holder_height,holder_width+arm_thickness*2,filter_thickness+wall]);
+    translate([holder_border,holder_border+arm_thickness,wall])cube([filter_height,filter_width,filter_thickness+bissl]);
+    translate([filter_border+holder_border,holder_border+filter_border+arm_thickness,-bissl]) cube([window_height,window_width,wall+2*bissl]);
+    for (tr=[
+    [clamp_thickness/2,arm_thickness/2,-bissl],
+    [holder_height-clamp_thickness/2,arm_thickness/2,-bissl],
+    [clamp_thickness/2,1.5*arm_thickness+holder_width,-bissl],
+    [holder_height-clamp_thickness/2,1.5*arm_thickness+holder_width,-bissl]
+    ]) translate(tr) cylinder(h=filter_thickness+wall+2*bissl,d=bolt);
+  }
+  *difference() {
   cube([holder_height,holder_depth,holder_width]); //vertical filter_holding_thingy
   translate([holder_border,wall,holder_border])cube([filter_height,filter_thickness, filter_width+holder_border+bissl]);
   translate([filter_border+holder_border,-bissl,filter_border+holder_border])cube([window_height,holder_depth+2*bissl,window_width+filter_border+holder_border+bissl]);
-  
   }
 }
 
@@ -55,12 +72,11 @@ module clamp() {
     [clamp_thickness/2,-bissl,clamp_depth/2],
     [holder_height-clamp_thickness/2,-bissl,clamp_depth/2]
     ]) translate(tr) rotate([-90,0,0]) cylinder (d=bolt,h=holder_width+2*bissl);
-    translate([-bissl,holder_width/2+air/2,-bissl])cube([holder_height+2*bissl,air,clamp_depth+2*bissl]);
+    translate([-bissl,holder_width/2-air/2,-bissl])cube([holder_height+2*bissl,air,clamp_depth+2*bissl]);
   }
 }
 
-filter_holder();
-translate([0,holder_length,arm_thickness+air])rotate([90,0,0])clamp();
+
 module collar() {
   difference() {
     cube([flash_height+2*holder_thickness,flash_width+2*holder_thickness,holder_depth]);
@@ -69,5 +85,19 @@ module collar() {
 }
 //collar();
  module arm() {
-   
+   difference() {
+     hull() {
+       cylinder(d=arm_width,h=arm_thickness);
+       translate([arm_length,0,0])cylinder(d=arm_width,h=arm_thickness);
+     }
+     translate([0,0,-bissl])cylinder(d=7,h=arm_thickness+2*bissl);
+     translate([arm_length,0,-bissl])cylinder(d=7,h=arm_thickness+2*bissl);
+   }
  }
+ {
+holder_plate();
+translate([0,-air,0]) rotate([90,0,0])filter_holder();
+translate([0,-2*air-2*wall-2*filter_thickness,0]) rotate([90,0,0]) mirror([0,0,1]) filter_holder();
+translate([0,holder_length,arm_thickness+air])rotate([90,0,0])clamp();
+translate([holder_height/2,holder_length/2,-bissl])rotate([0,0,45])translate([0,0,-arm_thickness-air])arm();
+}
