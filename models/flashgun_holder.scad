@@ -1,6 +1,13 @@
+//Clamp that can hold a flashgun sideways, a filter in front of that flashgun and can be mounted on a camera nearer to the lens than normally.
+//Can be used in macro photography
+//Can be used as a part of a cross-polarized setup for photogrammetry
+
 $fs=1/1;
 $fa=1/1;
 bissl=1/100;
+
+part="filter_holder";//[filter_holder,clamp,arm,holder_plate,all]
+
 flash_width=70;
 flash_height=40;
 clamp_depth=15;
@@ -13,6 +20,8 @@ arm_thickness=10;
 arm_width=30;
 arm_length=120;
 bolt=4;
+insert=6;
+tripod_screw=25.4/4;
 
 window_border=3;
 window_width=flash_width+2*window_border;
@@ -76,25 +85,21 @@ module clamp() {
   }
 }
 
-
-module collar() {
+module arm() {
   difference() {
-    cube([flash_height+2*holder_thickness,flash_width+2*holder_thickness,holder_depth]);
-    translate([holder_thickness,holder_thickness,-bissl])cube([flash_height,flash_width,holder_depth+2*bissl]);
+    hull() {
+      cylinder(d=arm_width,h=arm_thickness);
+      translate([arm_length,0,0])cylinder(d=arm_width,h=arm_thickness);
+    }
+    translate([0,0,-bissl])cylinder(d=bolt,h=arm_thickness+2*bissl);
+    translate([arm_length,0,-bissl])cylinder(d=tripod_screw,h=arm_thickness+2*bissl);
   }
 }
-//collar();
- module arm() {
-   difference() {
-     hull() {
-       cylinder(d=arm_width,h=arm_thickness);
-       translate([arm_length,0,0])cylinder(d=arm_width,h=arm_thickness);
-     }
-     translate([0,0,-bissl])cylinder(d=7,h=arm_thickness+2*bissl);
-     translate([arm_length,0,-bissl])cylinder(d=7,h=arm_thickness+2*bissl);
-   }
- }
- {
+if (part=="filter_holder") filter_holder();
+if (part=="clamp") clamp();
+if (part=="arm") arm();
+if (part=="holder_plate") holder_plate();
+if (part=="all") {
 holder_plate();
 translate([0,-air,0]) rotate([90,0,0])filter_holder();
 translate([0,-2*air-2*wall-2*filter_thickness,0]) rotate([90,0,0]) mirror([0,0,1]) filter_holder();
