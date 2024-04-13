@@ -6,7 +6,7 @@ $fs=1/1;
 $fa=1/1;
 bissl=1/100;
 
-part="all";//[filter_holder,clamp,arm,holder_plate,spacer,thumb_screw,all]
+part="NOSTL_all";//[filter_holder,clamp,arm,holder_plate,spacer,thumb_screw,NOSTL_all]
 
 flash_width=76;
 flash_height=49;
