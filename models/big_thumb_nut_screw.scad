@@ -39,32 +39,7 @@ module handle(d,n,h) {
   }
 }
 
-module thumb_screw() {
-  cyl_d=hex+2*wall;
-  flap_d=cyl_d/2; //thickness of side flaps, can be overriden
-  flap_len=cyl_d;
-  flap_height=cyl_d;
-  h=((flap_len-cyl_d/2-flap_d/2)+(flap_d/2)/cos(max_angle))/tan(max_angle);
-  difference() {
-    hull() {
-      //cylinder(d=cyl_d,h=2*h+flap_height-flap_d);
-      cylinder(d=cyl_d,h=h);
-      rotate_extrude(angle=360,convexity=1) {
-        translate([cyl_d/2-wall,2*h+flap_height-flap_d-wall])circle(r=wall);
-      }
-      for (tr=[
-      [-flap_len+flap_d/2,0,h],
-      [flap_len-flap_d/2,0,h],
-      [-flap_len+flap_d/2,0,h+flap_height-flap_d],
-      [flap_len-flap_d/2,0,h+flap_height-flap_d],
-      ]) translate(tr) sphere (d=flap_d);
-    }
-    translate([0,0,-bissl])cylinder(d=id,h=100);
-    translate([0,0,wall])cylinder(d=hex,h=100,$fn=6);
-  }
-}
-
-module thumb_screw_parametric(bolt_d,hex_d,wall=3,angle=45,flap_d,flap_l,flap_h){
+module thumb_screw(bolt_d,hex_d,wall=3,angle=45,flap_d,flap_l,flap_h){
   flap_d=is_undef(flap_d)?hex_d/2+wall:flap_d;
   flap_l=is_undef(flap_l)?hex_d+2*wall:flap_l;
   flap_h=is_undef(flap_h)?hex_d+2*wall:flap_h;
@@ -85,5 +60,5 @@ module thumb_screw_parametric(bolt_d,hex_d,wall=3,angle=45,flap_d,flap_l,flap_h)
     translate([0,0,wall])cylinder(d=hex_d,h=100,$fn=6);
   }
 }
-if (part=="thumb_screw") thumb_screw_parametric(bolt_d=8,hex_d=13);
+if (part=="thumb_screw") thumb_screw(bolt_d=id,hex_d=hex,wall=wall,angle=max_angle);
 if (part=="jam_screw") jam_screw();

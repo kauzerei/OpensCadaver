@@ -6,7 +6,7 @@ $fs=1/1;
 $fa=1/1;
 bissl=1/100;
 
-part="all";//[filter_holder,clamp,arm,holder_plate,spacer,all]
+part="all";//[filter_holder,clamp,arm,holder_plate,spacer,thumb_screw,all]
 
 flash_width=76;
 flash_height=49;
@@ -23,6 +23,7 @@ arm_length=150;
 bolt=4;
 insert=6;
 tripod_screw=25.4/4;
+nut_d=8;
 
 window_border=3;
 window_width=flash_width+2*window_border;
@@ -99,22 +100,47 @@ module spacer() {
   }
 }
 
+module thumb_screw(bolt_d,hex_d,wall=3,angle=45,flap_d,flap_l,flap_h){
+  flap_d=is_undef(flap_d)?hex_d/2+wall:flap_d;
+  flap_l=is_undef(flap_l)?hex_d+2*wall:flap_l;
+  flap_h=is_undef(flap_h)?hex_d+2*wall:flap_h;
+  cyl_d=hex_d+2*wall;
+  h=((flap_l-cyl_d/2-flap_d/2)+(flap_d/2)/cos(angle))/tan(angle);
+  difference() {
+    hull() {
+      cylinder(d=cyl_d,h=h);
+      rotate_extrude(angle=360,convexity=1) translate([cyl_d/2-wall,2*h+flap_h-flap_d-wall])circle(r=wall);
+      for (tr=[
+        [-flap_l+flap_d/2,0,h],
+        [flap_l-flap_d/2,0,h],
+        [-flap_l+flap_d/2,0,h+flap_h-flap_d],
+        [flap_l-flap_d/2,0,h+flap_h-flap_d],
+      ]) translate(tr) sphere (d=flap_d);
+    }
+    translate([0,0,-bissl])cylinder(d=bolt_d,h=100);
+    translate([0,0,wall])cylinder(d=hex_d,h=100,$fn=6);
+  }
+}
+
 module assembly() { //for visualization only
   holder_plate();
+  translate([holder_height/2,holder_length/2,-2*arm_thickness-3*air]) mirror([0,0,1]) thumb_screw(bolt_d=bolt,hex_d=nut_d,wall=wall);
   translate([0,-air,0]) rotate([90,0,0])filter_holder();
   translate([0,-2*air-2*wall-2*filter_thickness,0]) rotate([90,0,0]) mirror([0,0,1]) filter_holder();
   translate([0,holder_length,arm_thickness+air])rotate([90,0,0])clamp();
+  translate([clamp_thickness/2,holder_length-clamp_depth/2,holder_width+arm_thickness+2*air])thumb_screw(bolt_d=bolt,hex_d=nut_d,wall=wall);
+  translate([holder_height-clamp_thickness/2,holder_length-clamp_depth/2,holder_width+arm_thickness+2*air])thumb_screw(bolt_d=bolt,hex_d=nut_d,wall=wall);
 }
 
 if (part=="filter_holder") filter_holder();
 if (part=="clamp") clamp();
 if (part=="arm") arm();
 if (part=="holder_plate") holder_plate();
-if (part=="spacer") holder_spacer();
+if (part=="spacer") spacer();
+if (part=="thumb_screw") thumb_screw(bolt_d=bolt,hex_d=nut_d,wall=wall);
 if (part=="all") {
   assembly();
   translate([arm_length*sqrt(2),0,0])assembly();
-  spacer();
   translate([holder_height/2,holder_length/2,-bissl])rotate([0,0,45])translate([0,0,-arm_thickness-air])arm();
   translate([arm_length*sqrt(2)+holder_height/2,holder_length/2,-bissl])rotate([0,0,45])translate([0,0,-arm_thickness-air])spacer();
   translate([arm_length*sqrt(2)+holder_height/2,holder_length/2,-arm_thickness-air])rotate([0,0,180-45])translate([0,0,-arm_thickness-air])arm();
