@@ -38,7 +38,7 @@ do
       echo ${PART}
       MODULENAME=$(basename "$MODULE" ".${MODULE##*.}")
       FILENAME=$(echo stl/${MODULENAME}_${PART}.stl | tr '[:upper:]' '[:lower:]')
-      $SCAD ${MODULE} --D part=\"${PART}\" --o $(pwd)/${FILENAME}
+      $SCAD "$(cd "$(dirname "${MODULE}")" && pwd)/$(basename "${MODULE}")" --D part=\"${PART}\" --o $(pwd)/${FILENAME}
     fi
   done
 done

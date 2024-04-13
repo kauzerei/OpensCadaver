@@ -6,7 +6,7 @@ $fs=1/1;
 $fa=1/1;
 bissl=1/100;
 
-part="NOSTL_all";//[filter_holder,clamp,arm,holder_plate,spacer,thumb_screw,NOSTL_all]
+part="NOSTL_all";//[filter_holder,clamp,arm,holder_plate,spacer,thumb_screw_small,thumb_screw_big,NOSTL_all]
 
 flash_width=76;
 flash_height=49;
@@ -18,12 +18,13 @@ air=5;
 
 arm_thickness=10;
 arm_width=25;
-arm_length=150;
+arm_length=200;
 
 bolt=4;
 insert=6;
-tripod_screw=25.4/4;
-nut_d=8;
+tripod_screw=7;
+tripod_hex=14;
+nut_d=9;
 
 window_border=3;
 window_width=flash_width+2*window_border;
@@ -137,9 +138,11 @@ if (part=="clamp") clamp();
 if (part=="arm") arm();
 if (part=="holder_plate") holder_plate();
 if (part=="spacer") spacer();
-if (part=="thumb_screw") thumb_screw(bolt_d=bolt,hex_d=nut_d,wall=wall);
-if (part=="all") {
+if (part=="thumb_screw_small") thumb_screw(bolt_d=bolt,hex_d=nut_d,wall=wall);
+if (part=="thumb_screw_big") thumb_screw(bolt_d=tripod_screw,hex_d=tripod_hex,wall=wall);
+if (part=="NOSTL_all") {
   assembly();
+  translate([arm_length/sqrt(2)+holder_height/2,arm_length/sqrt(2)+holder_length/2,-2*arm_thickness-3*air])mirror([0,0,1])thumb_screw(bolt_d=tripod_screw,hex_d=tripod_hex,wall=wall);
   translate([arm_length*sqrt(2),0,0])assembly();
   translate([holder_height/2,holder_length/2,-bissl])rotate([0,0,45])translate([0,0,-arm_thickness-air])arm();
   translate([arm_length*sqrt(2)+holder_height/2,holder_length/2,-bissl])rotate([0,0,45])translate([0,0,-arm_thickness-air])spacer();

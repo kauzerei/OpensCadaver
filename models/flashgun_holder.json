@@ -3,7 +3,7 @@
     "parameterSets": {
         "New set 1": {
             "air": "5",
-            "arm_length": "120",
+            "arm_length": "200",
             "arm_thickness": "10",
             "arm_width": "25",
             "bolt": "4",
@@ -12,8 +12,12 @@
             "filter_thickness": "1",
             "flash_height": "49",
             "flash_width": "76",
+            "holder_length": "30",
             "insert": "6",
-            "part": "holder_plate",
+            "nut_d": "9",
+            "part": "arm",
+            "tripod_hex": "14",
+            "tripod_screw": "7",
             "wall": "1.6000000000000001",
             "window_border": "3"
         }
