@@ -50,6 +50,17 @@
             "screw_head_space": "1",
             "screw_side_space_diameter": "16",
             "thickness": "1.5"
+        },
+        "New set 6": {
+            "bcd": "20",
+            "d_center": "4",
+            "d_circle": "4",
+            "hirth_d": "32",
+            "hirth_n": "60",
+            "n_screws": "4",
+            "screw_head_space": "2",
+            "screw_side_space_diameter": "16",
+            "thickness": "0.40000000000000002"
         }
     }
 }

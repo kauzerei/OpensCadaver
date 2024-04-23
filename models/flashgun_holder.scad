@@ -12,7 +12,7 @@ flash_width=76;
 flash_height=49;
 clamp_depth=10;
 wall=1.6;
-filter_thickness=1;
+filter_thickness=1.6;
 
 air=5;
 
@@ -59,7 +59,14 @@ module holder_plate() {
 
 module filter_holder() {
   difference() {
-    cube([holder_height,holder_width+arm_thickness*2,filter_thickness+wall]);
+    cube([holder_height,filter_thickness+2*wall,holder_width+arm_thickness*2]);
+    translate([filter_border+holder_border,-bissl,holder_border+filter_border+arm_thickness]) cube([window_height,2*wall+filter_thickness+2*bissl,window_width]);
+    translate([holder_border,wall,holder_border+arm_thickness])cube([filter_height,filter_thickness,filter_width+arm_thickness+holder_border+bissl]);
+    for (tr=[
+            [clamp_thickness/2,-bissl,arm_thickness/2],
+            [holder_height-clamp_thickness/2,-bissl,arm_thickness/2],
+            ]) translate(tr) rotate([-90,0,0])cylinder(h=filter_thickness+2*wall+2*bissl,d=bolt);
+    /*
     translate([holder_border,holder_border+arm_thickness,wall])cube([filter_height,filter_width,filter_thickness+bissl]);
     translate([filter_border+holder_border,holder_border+filter_border+arm_thickness,-bissl]) cube([window_height,window_width,wall+2*bissl]);
     for (tr=[
@@ -68,6 +75,7 @@ module filter_holder() {
             [clamp_thickness/2,1.5*arm_thickness+holder_width,-bissl],
             [holder_height-clamp_thickness/2,1.5*arm_thickness+holder_width,-bissl]]) 
               translate(tr) cylinder(h=filter_thickness+wall+2*bissl,d=bolt);
+              */
   }
 }
 
@@ -126,8 +134,8 @@ module thumb_screw(bolt_d,hex_d,wall=3,angle=45,flap_d,flap_l,flap_h){
 module assembly() { //for visualization only
   holder_plate();
   translate([holder_height/2,holder_length/2,-2*arm_thickness-3*air]) mirror([0,0,1]) thumb_screw(bolt_d=bolt,hex_d=nut_d,wall=wall);
-  translate([0,-air,0]) rotate([90,0,0])filter_holder();
-  translate([0,-2*air-2*wall-2*filter_thickness,0]) rotate([90,0,0]) mirror([0,0,1]) filter_holder();
+  translate([0,-air-filter_thickness-2*wall,0]) filter_holder();
+  *translate([0,-2*air-2*wall-2*filter_thickness,0]) rotate([90,0,0]) mirror([0,0,1]) filter_holder();
   translate([0,holder_length,arm_thickness+air])rotate([90,0,0])clamp();
   translate([clamp_thickness/2,holder_length-clamp_depth/2,holder_width+arm_thickness+2*air])thumb_screw(bolt_d=bolt,hex_d=nut_d,wall=wall);
   translate([holder_height-clamp_thickness/2,holder_length-clamp_depth/2,holder_width+arm_thickness+2*air])thumb_screw(bolt_d=bolt,hex_d=nut_d,wall=wall);
