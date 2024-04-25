@@ -26,45 +26,54 @@ tripod_screw=7;
 tripod_hex=14;
 nut_d=9;
 
-window_border=3;
-window_width=flash_width+2*window_border;
-window_height=flash_height+2*window_border;
-
-filter_border=3;
-filter_width=window_width+2*filter_border;
-filter_height=window_height+2*filter_border;
+//flash defines clamp, clamp defines filter, filter defines window
 
 holder_border=wall;
-holder_height=filter_height+2*holder_border;
-holder_width=filter_width+2*holder_border;
+clamp_thickness=10;
+clamp_height=flash_height+2*clamp_thickness;
+clamp_width=flash_width+2*clamp_thickness;
 holder_depth=2*wall+filter_thickness;
-holder_length=30;//holder_height;
+holder_length=30;//distance from clamp to filter
 
-clamp_thickness=(holder_height-flash_height)/2;
-    
+filter_border=3;
+filter_width=clamp_width-2*wall;
+filter_height=clamp_height-2*wall;
+
+window_width=filter_width-2*filter_border;
+window_height=filter_height-2*filter_border;
+
+//threaded_insert=6;
+
+module hole(bolt_d=bolt, nut_d=nut_d, wall = wall, depth = depth, bissl=1/100, alot=200) {
+  translate([ 0, 0, -bissl ]) cylinder(d = bolt_d, h = alot);
+  if (is_undef(threaded_insert)) translate([ 0, 0, -bissl ]) cylinder(d = nut_d, h = wall - depth, $fn = 6);
+  if (!is_undef(threaded_insert)) translate([ 0, 0, -bissl ]) cylinder(d = threaded_insert, h = alot);
+}
+
 module holder_plate() {
   difference() {
-    cube([holder_height,holder_length,arm_thickness]); //mount plate
+    cube([clamp_height,holder_length,arm_thickness]); //mount plate
     for (tr=[
-      [clamp_thickness/2,holder_length-clamp_depth/2,-bissl],
-      [holder_height-clamp_thickness/2,holder_length-clamp_depth/2,-bissl],
-      [holder_height/2,holder_length/2,-bissl]
-      ]) translate(tr) cylinder(d=bolt, h=arm_thickness+2*bissl);
+      [clamp_thickness/2,holder_length-clamp_depth/2,0],
+      [clamp_height-clamp_thickness/2,holder_length-clamp_depth/2,0],
+      ]) translate(tr) hole(bolt_d=bolt, nut_d=nut_d, wall = clamp_depth, depth = 2);
+    translate([clamp_height/2,holder_length/2,arm_thickness]) mirror([0,0,1]) hole(bolt_d=bolt, nut_d=nut_d, wall = clamp_depth, depth = 2);
+      
     for (tr=[
       [clamp_thickness/2,-bissl,arm_thickness/2],
-      [holder_height-clamp_thickness/2,-bissl,arm_thickness/2]
+      [clamp_height-clamp_thickness/2,-bissl,arm_thickness/2]
       ]) translate(tr) rotate([-90,0,0])cylinder(d=bolt, h=arm_thickness+2*bissl);
   }
 }
 
 module filter_holder() {
   difference() {
-    cube([holder_height,filter_thickness+2*wall,holder_width+arm_thickness*2]);
-    translate([filter_border+holder_border,-bissl,holder_border+filter_border+arm_thickness]) cube([window_height,2*wall+filter_thickness+2*bissl,window_width]);
+    cube([clamp_height,holder_depth,clamp_width+arm_thickness*2]);
+    translate([(clamp_height-window_height)/2,-bissl,filter_border+arm_thickness]) cube([window_height,holder_depth+2*bissl,window_width]);
     translate([holder_border,wall,holder_border+arm_thickness])cube([filter_height,filter_thickness,filter_width+arm_thickness+holder_border+bissl]);
     for (tr=[
             [clamp_thickness/2,-bissl,arm_thickness/2],
-            [holder_height-clamp_thickness/2,-bissl,arm_thickness/2],
+            [clamp_height-clamp_thickness/2,-bissl,arm_thickness/2],
             ]) translate(tr) rotate([-90,0,0])cylinder(h=filter_thickness+2*wall+2*bissl,d=bolt);
     /*
     translate([holder_border,holder_border+arm_thickness,wall])cube([filter_height,filter_width,filter_thickness+bissl]);
@@ -81,13 +90,13 @@ module filter_holder() {
 
 module clamp() {
   difference() {
-    cube([holder_height,holder_width,clamp_depth]);
+    cube([clamp_height,clamp_width,clamp_depth]);
     translate([clamp_thickness,clamp_thickness,-bissl]) cube([flash_height,flash_width,clamp_depth+2*bissl]);
     for (tr=[
             [clamp_thickness/2,-bissl,clamp_depth/2],
-            [holder_height-clamp_thickness/2,-bissl,clamp_depth/2]
-      ]) translate(tr) rotate([-90,0,0]) cylinder (d=bolt,h=holder_width+2*bissl);
-    translate([-bissl,holder_width/2-air/2,-bissl])cube([holder_height+2*bissl,air,clamp_depth+2*bissl]);
+            [clamp_height-clamp_thickness/2,-bissl,clamp_depth/2]
+      ]) translate(tr) rotate([-90,0,0]) cylinder (d=bolt,h=clamp_width+2*bissl);
+    translate([-bissl,clamp_width/2-air/2,-bissl])cube([clamp_height+2*bissl,air,clamp_depth+2*bissl]);
   }
 }
 
@@ -133,12 +142,12 @@ module thumb_screw(bolt_d,hex_d,wall=3,angle=45,flap_d,flap_l,flap_h){
 
 module assembly() { //for visualization only
   holder_plate();
-  translate([holder_height/2,holder_length/2,-2*arm_thickness-3*air]) mirror([0,0,1]) thumb_screw(bolt_d=bolt,hex_d=nut_d,wall=wall);
+  translate([clamp_height/2,holder_length/2,-2*arm_thickness-3*air]) mirror([0,0,1]) thumb_screw(bolt_d=bolt,hex_d=nut_d,wall=wall);
   translate([0,-air-filter_thickness-2*wall,0]) filter_holder();
   *translate([0,-2*air-2*wall-2*filter_thickness,0]) rotate([90,0,0]) mirror([0,0,1]) filter_holder();
   translate([0,holder_length,arm_thickness+air])rotate([90,0,0])clamp();
-  translate([clamp_thickness/2,holder_length-clamp_depth/2,holder_width+arm_thickness+2*air])thumb_screw(bolt_d=bolt,hex_d=nut_d,wall=wall);
-  translate([holder_height-clamp_thickness/2,holder_length-clamp_depth/2,holder_width+arm_thickness+2*air])thumb_screw(bolt_d=bolt,hex_d=nut_d,wall=wall);
+  translate([clamp_thickness/2,holder_length-clamp_depth/2,clamp_width+arm_thickness+2*air])thumb_screw(bolt_d=bolt,hex_d=nut_d,wall=wall);
+  translate([clamp_height-clamp_thickness/2,holder_length-clamp_depth/2,clamp_width+arm_thickness+2*air])thumb_screw(bolt_d=bolt,hex_d=nut_d,wall=wall);
 }
 
 if (part=="filter_holder") filter_holder();
@@ -150,9 +159,9 @@ if (part=="thumb_screw_small") thumb_screw(bolt_d=bolt,hex_d=nut_d,wall=wall);
 if (part=="thumb_screw_big") thumb_screw(bolt_d=tripod_screw,hex_d=tripod_hex,wall=wall);
 if (part=="NOSTL_all") {
   assembly();
-  translate([arm_length/sqrt(2)+holder_height/2,arm_length/sqrt(2)+holder_length/2,-2*arm_thickness-3*air])mirror([0,0,1])thumb_screw(bolt_d=tripod_screw,hex_d=tripod_hex,wall=wall);
+  translate([arm_length/sqrt(2)+clamp_height/2,arm_length/sqrt(2)+holder_length/2,-2*arm_thickness-3*air])mirror([0,0,1])thumb_screw(bolt_d=tripod_screw,hex_d=tripod_hex,wall=wall);
   translate([arm_length*sqrt(2),0,0])assembly();
-  translate([holder_height/2,holder_length/2,-bissl])rotate([0,0,45])translate([0,0,-arm_thickness-air])arm();
-  translate([arm_length*sqrt(2)+holder_height/2,holder_length/2,-bissl])rotate([0,0,45])translate([0,0,-arm_thickness-air])spacer();
-  translate([arm_length*sqrt(2)+holder_height/2,holder_length/2,-arm_thickness-air])rotate([0,0,180-45])translate([0,0,-arm_thickness-air])arm();
+  translate([clamp_height/2,holder_length/2,-bissl])rotate([0,0,45])translate([0,0,-arm_thickness-air])arm();
+  translate([arm_length*sqrt(2)+clamp_height/2,holder_length/2,-bissl])rotate([0,0,45])translate([0,0,-arm_thickness-air])spacer();
+  translate([arm_length*sqrt(2)+clamp_height/2,holder_length/2,-arm_thickness-air])rotate([0,0,180-45])translate([0,0,-arm_thickness-air])arm();
 }
