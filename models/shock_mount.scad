@@ -26,13 +26,24 @@ translate([-wall/2,(cable_d/2+wall/2)*cos(0)])square([wall,wall/2]);
 
 }
 
+module bent_hook(l=50,stoppers=30) {
+rotate(-bend){
+translate([-wall/2,0])square([wall,(l-stoppers)/2]);
+translate([0,cable_d/2+wall+(l-stoppers)/2])mirror([0,1])hook();
+polygon(points=[[-wall/2,0],[-wall/2-wall*cos(bend),-wall*sin(bend)],[-wall/2,wall]], paths=[[0,1,2]]);
+}
+}
 module beam(l=50,stoppers=30) {
 linear_extrude(height=wall,center=true){
-translate([0,-cable_d/2-wall-l/2])hook();
-translate([0,cable_d/2+wall+l/2])mirror([0,1])hook();
-square([wall,l],center=true);
-polygon(points=[[-wall/2,-stoppers/2],[-1.5*wall,-stoppers/2],[-wall/2,-stoppers/2-wall]], paths=[[0,1,2]]);
-polygon(points=[[-wall/2,stoppers/2],[-1.5*wall,stoppers/2],[-wall/2,stoppers/2+wall]], paths=[[0,1,2]]);
+//translate([0,-cable_d/2-wall-l/2])hook();
+//polygon(points=[[-wall/2,-stoppers/2],[-1.5*wall,-stoppers/2],[-wall/2,-stoppers/2-wall]], paths=[[0,1,2]]);
+//square([wall,l],center=true);
+translate([0,stoppers/2])bent_hook(l=l,stoppers=stoppers);
+mirror([0,1])translate([0,stoppers/2])bent_hook(l=l,stoppers=stoppers);
+hull() {
+translate([0,stoppers/2])circle(d=wall);
+translate([0,-stoppers/2])circle(d=wall);
+}
 }
 }
 
@@ -81,8 +92,8 @@ rotate([0,0,-180/n_beams])outer_shell();
 for (a=[-180/n_beams:360/n_beams:360]) rotate([0,0,a]) translate([outer_id/2+wall/2,0,0]) rotate([90,0,0]) beam(stoppers=inner_length+2*wiggle_room);
 }
 
-//assembly();
-beam();
+assembly();
+//beam();
 /*
 id=60;
 h=40;
