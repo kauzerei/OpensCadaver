@@ -1,0 +1,17 @@
+{
+    "fileFormatVersion": "1",
+    "parameterSets": {
+        "New set 1": {
+            "cable_d": "3",
+            "inner_beams": "60",
+            "inner_length": "30",
+            "mic_id": "60",
+            "n_beams": "5",
+            "outer_beams": "60",
+            "outer_id": "80",
+            "outer_length": "30",
+            "wall": "3",
+            "wiggle_room": "0.40000000000000002"
+        }
+    }
+}
