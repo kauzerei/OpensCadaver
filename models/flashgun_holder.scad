@@ -3,7 +3,7 @@
 //Can be used as a part of a cross-polarized setup for photogrammetry
 
 $fs=1/1;
-$fa=1/1;
+$fa=1/2;
 bissl=1/100;
 
 part="NOSTL_all";//[filter_holder,clamp,arm,holder_plate,spacer,thumb_screw_small,thumb_screw_big,NOSTL_all]
