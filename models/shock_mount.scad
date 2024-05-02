@@ -2,17 +2,24 @@ $fa=1/1;
 $fs=1/2;
 bissl=1/100;
 
-mic_id=60;
-inner_length=30;
-wall=3;
-n_beams=5;
-inner_beams=60;
-outer_id=90;
-outer_beams=60;
-outer_length=30;
-cable_d=3;
-wiggle_room=0.4;
-bend=30;
+/*[general]*/
+wall=3; //wall thickness
+n_beams=5; //number of beams each tube has
+cable_d=3; //inner diameter of hooks
+wiggle_room=0.4; //extra space for gluing
+
+/*[inner mount dimensions]*/
+inner_id=60; //inner diameter of inner tube 
+inner_length=20; //length of inner tube
+inner_beams=60; //length of mounting beams on inner tube
+inner_bend=-15; //angle of inner beams to the tube axis
+
+/*[outer mount dimensions]*/
+outer_id=90; //inner diameter of outer tube 
+outer_length=20; //length of outer tube
+outer_beams=60; //length of mounting beams on outer tube
+outer_bend=30; //angle of outer beams to the tube axis
+
 
 module hook(a=120) {
 difference(){
@@ -26,20 +33,20 @@ translate([-wall/2,(cable_d/2+wall/2)*cos(0)])square([wall,wall/2]);
 
 }
 
-module bent_hook(l=50,stoppers=30) {
+module bent_hook(l=50,stoppers=30,bend) {
 rotate(-bend){
 translate([-wall/2,0])square([wall,(l-stoppers)/2]);
 translate([0,cable_d/2+wall+(l-stoppers)/2])mirror([0,1])hook();
-polygon(points=[[-wall/2,0],[-wall/2-wall*cos(bend),-wall*sin(bend)],[-wall/2,wall]], paths=[[0,1,2]]);
+*polygon(points=[[-wall/2,0],[-1.5*wall*cos(bend),-wall*sin(bend)],[-wall/2,wall]], paths=[[0,1,2]]);
 }
 }
-module beam(l=50,stoppers=30) {
+module beam(l=50,stoppers=30,bend=bend) {
 linear_extrude(height=wall,center=true){
-//translate([0,-cable_d/2-wall-l/2])hook();
-//polygon(points=[[-wall/2,-stoppers/2],[-1.5*wall,-stoppers/2],[-wall/2,-stoppers/2-wall]], paths=[[0,1,2]]);
-//square([wall,l],center=true);
-translate([0,stoppers/2])bent_hook(l=l,stoppers=stoppers);
-mirror([0,1])translate([0,stoppers/2])bent_hook(l=l,stoppers=stoppers);
+for(m=[[0,0],[0,1]]) mirror(m) {
+//translate([0,stoppers/2])bent_hook(l=l,stoppers=stoppers,bend=bend);
+translate([0,stoppers/2])bent_hook(l=l,stoppers=stoppers,bend=bend);
+polygon(points=[[0,stoppers/2],[-1.5*wall,stoppers/2],[wall*tan(bend),stoppers/2+wall]], paths=[[0,1,2]]);
+}
 hull() {
 translate([0,stoppers/2])circle(d=wall);
 translate([0,-stoppers/2])circle(d=wall);
@@ -50,14 +57,14 @@ translate([0,-stoppers/2])circle(d=wall);
 module inner_shell(n=n_beams) {
 linear_extrude(inner_length,center=true)difference(){
 union(){
-circle(d=mic_id+2*wall);
-for (a=[0:360/n:360]) rotate(a) translate([mic_id/2,0]) minkowski() {
+circle(d=inner_id+2*wall);
+for (a=[0:360/n:360]) rotate(a) translate([inner_id/2,0]) minkowski() {
 square([2*wall+2*wiggle_room,wall+2*wiggle_room],center=true);
 circle(d=2*wall);
 }
 }
-circle(d=mic_id);
-for (a=[0:360/n:360]) rotate(a) translate([mic_id/2,0])
+circle(d=inner_id);
+for (a=[0:360/n:360]) rotate(a) translate([inner_id/2,0])
 square([2*wall+2*wiggle_room,wall+2*wiggle_room],center=true);
 
 }
@@ -87,9 +94,9 @@ square([2*wall+2*wiggle_room,wall+2*wiggle_room],center=true);
 
 module assembly(){
 inner_shell();
-for (a=[0:360/n_beams:360]) rotate([0,0,a]) translate([mic_id/2+wall/2,0,0]) rotate([90,0,180]) beam(stoppers=inner_length+2*wiggle_room);
+for (a=[0:360/n_beams:360]) rotate([0,0,a]) translate([inner_id/2+wall/2,0,0]) rotate([90,0,180]) beam(l=inner_beams,stoppers=inner_length+2*wiggle_room,bend=inner_bend);
 rotate([0,0,-180/n_beams])outer_shell();
-for (a=[-180/n_beams:360/n_beams:360]) rotate([0,0,a]) translate([outer_id/2+wall/2,0,0]) rotate([90,0,0]) beam(stoppers=inner_length+2*wiggle_room);
+for (a=[-180/n_beams:360/n_beams:360]) rotate([0,0,a]) translate([outer_id/2+wall/2,0,0]) rotate([90,0,0]) beam(l=outer_beams,stoppers=outer_length+2*wiggle_room,bend=outer_bend);
 }
 
 assembly();
