@@ -37,9 +37,9 @@ module bent_hook(l=50,stoppers=30,bend) {
 rotate(-bend){
 translate([-wall/2,0])square([wall,(l-stoppers)/2]);
 translate([0,cable_d/2+wall+(l-stoppers)/2])mirror([0,1])hook();
-*polygon(points=[[-wall/2,0],[-1.5*wall*cos(bend),-wall*sin(bend)],[-wall/2,wall]], paths=[[0,1,2]]);
 }
 }
+
 module beam(l=50,stoppers=30,bend=bend) {
 linear_extrude(height=wall,center=true){
 for(m=[[0,0],[0,1]]) mirror(m) {
@@ -93,25 +93,27 @@ square([2*wall+2*wiggle_room,wall+2*wiggle_room],center=true);
 }
 
 module assembly(){
-inner_shell();
+inner_mount();
 for (a=[0:360/n_beams:360]) rotate([0,0,a]) translate([inner_id/2+wall/2,0,0]) rotate([90,0,180]) beam(l=inner_beams,stoppers=inner_length+2*wiggle_room,bend=inner_bend);
-rotate([0,0,-180/n_beams])outer_shell();
+rotate([0,0,-180/n_beams])outer_mount();
 for (a=[-180/n_beams:360/n_beams:360]) rotate([0,0,a]) translate([outer_id/2+wall/2,0,0]) rotate([90,0,0]) beam(l=outer_beams,stoppers=outer_length+2*wiggle_room,bend=outer_bend);
 }
 
-assembly();
-//beam();
-/*
-id=60;
-h=40;
-wall=1.6;
-n=7;
-d=4;
-difference(){
-cylinder($fn=n,h=h,d=id+2*wall,center=true);
-cylinder($fn=n,h=h+bissl,d=id,center=true);
-for (m=[[0,0,0],[0,0,1]]) mirror(m)
-for (a=[-90:360/n:360]) rotate([0,0,a])translate([0,id,-h/2+d/2-bissl])cube([d,2*id,d],center=true);
-rotate([0,-90,0])cylinder(d=10,h=2*id);
+module inner_mount(distance=14) {
+  inner_shell();
+  difference() {
+  hull() {
+    for (tr=[[distance,-sqrt((inner_id/2+wall/2)^2-distance^2)],[distance,sqrt((inner_id/2+wall/2)^2-distance^2)]])translate(tr)cylinder(h=inner_length,d=wall,center=true);
+  }
+  rotate([0,90,0])cylinder(d=8,h=distance+wall/2+bissl);
+  }
 }
-*/
+
+module outer_mount() {
+difference() {
+outer_shell();
+rotate([0,90,180/n_beams])cylinder(d=8,h=outer_id/2+wall+bissl);
+}
+}
+
+assembly();

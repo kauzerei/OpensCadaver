@@ -4,7 +4,7 @@
         "New set 1": {
             "cable_d": "3",
             "inner_beams": "60",
-            "inner_bend": "45",
+            "inner_bend": "-15",
             "inner_id": "60",
             "inner_length": "20",
             "n_beams": "5",
