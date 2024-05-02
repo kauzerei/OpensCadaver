@@ -12,6 +12,7 @@
             "outer_bend": "30",
             "outer_id": "90",
             "outer_length": "20",
+            "part": "NOSTL_all",
             "wall": "3",
             "wiggle_room": "0.40000000000000002"
         }
