@@ -27,4 +27,23 @@ module holders(diameter=18,battery_length=65,piptik_height=2,piptik_width=6,slit
     translate([i*diameter,0,0])holder(diameter=diameter,battery_length=battery_length,piptik_height=piptik_height,piptik_width=piptik_width,slit=slit,wall=wall,floor=floor);
   }
 }
-holders(diameter=diameter,number=number);
+//holders(diameter=diameter,number=number);
+wall=2;
+module spring_arc(x,y,r,start,end,n=64) {
+  polygon([for (a=[start:360/n:end]) [x+r*sin(a),y+r*cos(a)]]);
+}
+module spring_profile(d=18) {
+  u=d/7;
+  arcs=[
+  [1.5*u,1.5*u,1.5*u,0,180],
+  [2.5*u,1.5*u,0.5*u,-180,0],
+  ];
+  for(arc=arcs) spring_arc(arc[0],arc[1],arc[2],arc[3],arc[4]);
+}
+module spring() {
+difference() {
+offset(r=wall/2) spring_profile();
+offset(r=-wall/2) spring_profile();
+}
+}
+spring_profile();

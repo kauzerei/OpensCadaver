@@ -1,0 +1,16 @@
+{
+    "fileFormatVersion": "1",
+    "parameterSets": {
+        "New set 1": {
+            "base": "0",
+            "bolt_d": "5",
+            "d_lobes": "7.5",
+            "h_lobes": "15",
+            "hex_d": "9",
+            "l_lobes": "15",
+            "max_angle": "45",
+            "n_lobes": "6",
+            "wall": "3"
+        }
+    }
+}
