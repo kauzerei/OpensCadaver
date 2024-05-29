@@ -1,0 +1,14 @@
+{
+    "fileFormatVersion": "1",
+    "parameterSets": {
+        "New set 1": {
+            "contact": "1",
+            "height": "12.9",
+            "length": "54.899999999999999",
+            "part": "cover",
+            "wall": "0.80000000000000004",
+            "width": "35.399999999999999",
+            "wiggle_room": "0.40000000000000002"
+        }
+    }
+}

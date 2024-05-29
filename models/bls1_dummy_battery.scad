@@ -5,8 +5,8 @@ width = 35.4;
 length = 54.9;
 wall = 0.8;
 contact = 1.0;
-wiggle_room = 0.4;
-h = height - 2 * wiggle_room;
+wiggle_room = 0.0;
+h = height - 2 * wiggle_room - wall;
 w = width - 2 * wiggle_room;
 l = length - 2 * wiggle_room;
 
