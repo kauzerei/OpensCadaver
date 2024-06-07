@@ -80,15 +80,34 @@ function interpolateClosed(path, n, i) =
 // return a single-dimensional vector with all the data.
 function flatten(list) = [ for (i = list, v = i) v ]; 
 
-//path=[[39, 147], [41, 141], [44, 132], [41, 125], [37, 119], [39, 114], [41, 108], [39, 101], [36, 95], [38, 91], [41, 84], [40, 77], [37, 70], [40, 65], [43, 57], [40, 48], [39, 40], [42, 35], [51, 35], [76, 44], [92, 56], [101, 88], [106, 121], [108, 145], [103, 152], [70, 156]];
-path=[[39,148],[44,131],[37,119],[40,106],[35,94],[40,81],[37,70],[43,56],[39,36],[91,56],[105,149]];
-//polygon(path);
+//fr= [[107, -38], [101, -41], [87, -30], [71, -32], [61, -24], [47, -25], [36, -16], [25, -18], [15, -5], [0, -7]];
+//ba= [[107, 5], [94, 22], [59, 44], [25, 60], [0, 60]];
+fr=[[0,-55],[15,-54],[26,-52],[38,-49],[48,-45],[60,-37],[73,-27],[86,-18],[101,-6],[107,9]];
+ba=[[0,11],[15,9],[25,21],[38,19],[48,30],[60,28],[73,38],[86,36],[101,47],[107,47]];
+function decimate(poly,m)=len(poly)<3?poly
+                         :norm(poly[0]-poly[1])<m?decimate([poly[0], for (i=[2:len(poly)-1]) poly[i]],m)
+                         :[poly[0], each decimate([for (i=[1:len(poly)-1]) poly[i]],m)];
+//linear_extrude(30)polygon(decimate(smooth(poly,6,loop=true),1));
+$fn=64;
+module skew_extrude(list,d,reverse) {
+  for (i=[0:len(list)-2]) {
+    startx=list[i][0];
+    startz=list[i][1]+d*(reverse?-1:1)/2;
+    h=list[i+1][0]-list[i][0];
+    shift=list[i+1][1]-list[i][1];
+    multmatrix(m=[[d,0,shift,startz],
+                  [0,d,0,0],
+                  [0,0,h,startx]]){cylinder(d=1,h=1);translate([reverse?-10:0,-0.5,0])cube([10,1,1]);}
+  }
+}
 difference(){
-linear_extrude(14.92) polygon(smooth(path, loop=true,n=3));
-minkowski(){
-linear_extrude(1/1000) difference(){offset(delta=1/1000)polygon(smooth(path, loop=true,n=3));polygon(smooth(path, loop=true,n=3));}
-rotate_extrude(angle=360)difference(){square(15);translate([15,0])circle(15);}
+intersection(){
+skew_extrude(list=decimate(smooth(fr,6),1),d=30,reverse=false);
+skew_extrude(list=decimate(smooth(ba,6),1),d=30,reverse=true);
 }
-hull() for(tr=[[75,70,-1/100],[80,130,-1/100]])translate(tr) cylinder(d=5,h=16);
-hull() for(tr=[[75,70,3],[80,130,3]])translate(tr) cylinder(d=10,h=16);
-}
+hull() for (tr=[[-31,0,10],[2,0,80]]) translate(tr)
+rotate([90,0,0])cylinder(d=5,h=31,center=true);
+hull() for (tr=[[-31,-1.6,10],[2,-1.6,80]]) translate(tr)
+rotate([90,0,0])cylinder(d=12,h=31);
+hull() for (tr=[[-31,1.6,10],[2,1.6,80]]) translate(tr)
+rotate([-90,0,0])cylinder(d=12,h=31);}
