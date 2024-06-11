@@ -1,0 +1,13 @@
+{
+    "fileFormatVersion": "1",
+    "parameterSets": {
+        "New set 1": {
+            "depth": "10",
+            "gap": "2",
+            "hole": "4",
+            "nut": "8",
+            "wall": "2",
+            "width": "10"
+        }
+    }
+}
