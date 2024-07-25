@@ -5,19 +5,19 @@ bissl = 1 / 100;
 part = "NOSTL_all"; //[inner_mount,outer_mount,inner_beam,outer_beam]
 
 /*[general]*/
-wall = 3;          // wall thickness
+wall = 2.4;          // wall thickness
 n_beams = 5;       // number of beams each tube has
 cable_d = 3;       // inner diameter of hooks
-wiggle_room = 0.4; // extra space for gluing
+wiggle_room = 0.2; // extra space for gluing
 
 /*[inner mount dimensions]*/
-inner_id = 60;     // inner diameter of inner tube
+inner_id = 66;     // inner diameter of inner tube
 inner_length = 20; // length of inner tube
 inner_beams = 60;  // length of mounting beams on inner tube
 inner_bend = -15;  // angle of inner beams to the tube axis
 
 /*[outer mount dimensions]*/
-outer_id = 90;     // inner diameter of outer tube
+outer_id = 110;     // inner diameter of outer tube
 outer_length = 20; // length of outer tube
 outer_beams = 60;  // length of mounting beams on outer tube
 outer_bend = 30;   // angle of outer beams to the tube axis
