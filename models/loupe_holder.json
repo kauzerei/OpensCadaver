@@ -1,0 +1,13 @@
+{
+    "fileFormatVersion": "1",
+    "parameterSets": {
+        "New set 1": {
+            "$fn": "64",
+            "loupe_d": "79",
+            "loupe_h": "15",
+            "m": "23",
+            "part": "adapter",
+            "wall": "2"
+        }
+    }
+}

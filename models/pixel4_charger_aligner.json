@@ -1,0 +1,79 @@
+{
+    "fileFormatVersion": "1",
+    "parameterSets": {
+        "New set 1": {
+            "charger_d": "92",
+            "charger_h": "10",
+            "height": "148",
+            "larger_r": "10",
+            "smaller_r": "3",
+            "thickness": "14",
+            "wall": "4",
+            "width": "70"
+        },
+        "New set 2": {
+            "charger_d": "92",
+            "charger_h": "10",
+            "height": "148",
+            "larger_r": "10",
+            "smaller_r": "4",
+            "thickness": "10",
+            "wall": "4",
+            "width": "70"
+        },
+        "New set 3": {
+            "charger_d": "92",
+            "charger_h": "10",
+            "height": "148",
+            "larger_r": "10",
+            "smaller_r": "3",
+            "thickness": "8",
+            "wall": "4",
+            "width": "70"
+        },
+        "New set 4": {
+            "camera": "1.5",
+            "charger_d": "92",
+            "charger_h": "10",
+            "height": "148",
+            "larger_r": "10",
+            "smaller_r": "2",
+            "thickness": "8",
+            "wall": "4",
+            "width": "70"
+        },
+        "New set 5": {
+            "camera": "1.5",
+            "charger_d": "92",
+            "charger_h": "4",
+            "height": "148",
+            "larger_r": "10",
+            "smaller_r": "1.5",
+            "thickness": "8",
+            "wall": "4",
+            "width": "70"
+        },
+        "New set 6": {
+            "camera": "1.5",
+            "charger_d": "92",
+            "charger_h": "11",
+            "height": "148",
+            "larger_r": "10",
+            "smaller_r": "1.5",
+            "thickness": "8",
+            "wall": "4",
+            "width": "70"
+        },
+        "New set 7": {
+            "camera": "1.5",
+            "charger_d": "92",
+            "charger_h": "11",
+            "height": "148",
+            "larger_r": "10",
+            "smaller_r": "1.4999999999999996",
+            "thickness": "8",
+            "wall": "4",
+            "width": "70"
+        }
+    }
+}

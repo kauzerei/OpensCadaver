@@ -1,0 +1,23 @@
+{
+    "fileFormatVersion": "1",
+    "parameterSets": {
+        "New set 1": {
+            "angle": "18",
+            "gap": "2",
+            "height": "15",
+            "inner_d": "25",
+            "inner_flat": "22",
+            "lip": "2",
+            "outer_d": "32"
+        },
+        "New set 2": {
+            "angle": "17",
+            "gap": "2",
+            "height": "15",
+            "inner_d": "25",
+            "inner_flat": "22",
+            "lip": "1.6000000000000001",
+            "outer_d": "32"
+        }
+    }
+}
