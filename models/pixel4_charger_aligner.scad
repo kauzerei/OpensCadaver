@@ -6,7 +6,7 @@ thickness=8;
 larger_r=10;
 smaller_r=1.5;
 charger_d=92;
-charger_h=10;
+charger_h=11;
 wall=4;
 camera=1.5;
 module roundbox(w,h,t,r1,r2,fillet) {
@@ -27,13 +27,13 @@ module roundcylinder(d,h,r,fillet) {
 }
 difference() {
   union() {
-    roundbox(width+2*wall,height+2*wall,thickness/2+charger_h,larger_r,smaller_r);
-    roundcylinder(charger_d+wall*2,charger_h+thickness/2,smaller_r);
+    roundbox(width+2*wall,height+2*wall,thickness/2+charger_h+camera,larger_r,smaller_r);
+    roundcylinder(charger_d+wall*2,charger_h+thickness/2+camera,smaller_r);
   }
-  translate([0,0,charger_h-0.1])roundbox(width,height,thickness,larger_r,smaller_r,true);
-  translate([0,0,-camera])cylinder(d=charger_d,h=charger_h);
-  for (i=[0,180]) rotate([0,0,i])translate([(63-31)/2,(141-31)/2,charger_h-camera])roundbox(26,26,1.5,5,0);
-  translate([0,0,charger_h/2-3]) rotate([90,0,0]) linear_extrude(height=height) {
+  translate([0,0,charger_h+camera])roundbox(width,height,thickness,larger_r,smaller_r,true);
+  translate([0,0,-0.1])cylinder(d=charger_d,h=charger_h+0.1);
+  for (i=[0,180]) rotate([0,0,i])translate([(63-31)/2,(141-31)/2,charger_h])roundbox(26,26,camera+0.1,5,0);
+  *translate([0,0,charger_h/2]) rotate([90,0,90]) linear_extrude(height=height) {
     square([12,charger_h],center=true);
     //offset(r=smaller_r) offset(r=-smaller_r) square([12,charger_h],center=true);
   }
@@ -41,6 +41,8 @@ difference() {
     cylinder(d=charger_d,h=charger_h+thickness);
     translate([-width/2,-height/2,0])cube([width,height,charger_h+thickness]);
   }
-  translate([0,0,charger_h+thickness/2-smaller_r])roundbox(width+2*smaller_r,height,thickness,larger_r,smaller_r,false);
-  cylinder(d1=charger_d/4,d2=charger_d,h=thickness/2+charger_h+0.1);
+  translate([0,0,charger_h+thickness/2+camera-smaller_r])roundbox(width+2*smaller_r,height,thickness,larger_r,smaller_r,false);
+  cylinder(d1=0,d2=charger_d,h=thickness/2+charger_h+camera+0.1);
+  translate([0,0,-0.1])roundbox(width-2*wall,height-2*wall,thickness+charger_h,2*wall,0,true);
+  rotate([0,90,90])cylinder(d=10,h=height*2);
 }
