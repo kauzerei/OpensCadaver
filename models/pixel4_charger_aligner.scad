@@ -9,6 +9,7 @@ charger_d=92;
 charger_h=11;
 wall=4;
 camera=1.5;
+top_wall=false;
 module roundbox(w,h,t,r1,r2,fillet) {
   minkowski() {
     linear_extrude(height=t-2*r2) {
@@ -83,6 +84,10 @@ difference() {
     frame();
     charger_holder(charger_h,charger_d,wall,smaller_r,width+2*wall-2*smaller_r);
   }
-  translate([0,0,-0.01])cylinder(d=charger_d,h=charger_h+thickness);
+  if(!top_wall)translate([0,0,-0.01])cylinder(d=charger_d,h=charger_h+thickness);
+  else {
+    translate([0,0,-0.01]) cylinder(d=charger_d,h=charger_h+0.02);
+    translate([0,0,charger_h]) cylinder(d1=charger_d,d2=charger_d+wall,h=thickness/2+0.01);
+  }
   rotate([90,0,0]) cylinder(d=14,h=2*height);
 }

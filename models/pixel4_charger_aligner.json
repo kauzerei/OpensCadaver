@@ -74,6 +74,18 @@
             "thickness": "8",
             "wall": "4",
             "width": "70"
+        },
+        "New set 8": {
+            "camera": "1.5",
+            "charger_d": "92",
+            "charger_h": "11",
+            "height": "148",
+            "larger_r": "10",
+            "smaller_r": "1.5",
+            "thickness": "8",
+            "top_wall": "false",
+            "wall": "4",
+            "width": "70"
         }
     }
 }
