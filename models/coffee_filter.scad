@@ -1,6 +1,6 @@
 include <BOSL2/std.scad>
 top_d=180;
-bottom_d=50;
+bottom_d=35;
 //bottom_length=50;
 bottleneck=20;
 tube=30;
@@ -25,9 +25,9 @@ rs=[for(i=[0:steps*2-1]) r(i)];
 stars=[for (i=[0:steps*2-1]) rot(180/star_ns[i],p=star(n=star_ns[i],r=r(zvals[i])+grooves_depth/2,ir=r(zvals[i])-grooves_depth/2))];
 //star(n=n*2^i,r=2^i*bottom_d/2-grooves_depth/2,ir=2^i*bottom_d/2+grooves_depth/2)];
 //echo(star_ns);
-//skin(stars,z=zvals,slices=2, refine=2, method="fast_distance");
-skin(stars,z=zvals,slices=2, refine=2, method="direct");
-skin([circle(bottleneck/2),circle(bottleneck/2),stars[0]],z=[-tube-transition,-transition,0],slices=4, refine=4, method="direct");
+skin(stars,z=zvals,slices=2, refine=2, method="fast_distance");
+//skin(stars,z=zvals,slices=2, refine=2, method="direct");
+skin([circle(bottleneck/2),circle(bottleneck/2),stars[0]],z=[-tube-transition,-transition,0],slices=4, refine=4, method="reindex");
 /*translate([-20,0,0])skin([star(n=n,r=20,ir=10), star(n=2*n,r=100,ir=90)], z=[0,100], slices=20);
 translate([20,0,0])skin([star(n=20,r=20,ir=10), star(n=40,r=100,ir=90)], z=[0,100], slices=20);
 hull() {
