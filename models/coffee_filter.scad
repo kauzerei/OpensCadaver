@@ -1,10 +1,10 @@
 include <BOSL2/std.scad>
-top_d=180;
-bottom_d=35;
+top_d=130;
+bottom_d=55;
 //bottom_length=50;
-bottleneck=20;
+bottleneck=25;
 tube=30;
-height=100;
+height=90;
 grooves_depth=5;
 grooves_distance=5;
 transition=10;
