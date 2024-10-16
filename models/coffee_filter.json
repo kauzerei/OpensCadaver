@@ -1,0 +1,23 @@
+{
+    "fileFormatVersion": "1",
+    "parameterSets": {
+        "New set 1": {
+            "bottleneck": "15",
+            "bottom_d": "20",
+            "grooves_depth": "5",
+            "grooves_distance": "5",
+            "height": "100",
+            "top_d": "150",
+            "transition": "10"
+        },
+        "New set 2": {
+            "bottleneck": "15",
+            "bottom_d": "50",
+            "grooves_depth": "5",
+            "grooves_distance": "5",
+            "height": "100",
+            "top_d": "200",
+            "transition": "10"
+        }
+    }
+}
