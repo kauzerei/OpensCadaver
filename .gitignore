@@ -1,2 +1,5 @@
 .DS_Store
+*.stl
+*.json
+models/BOSL2
 stl/*
