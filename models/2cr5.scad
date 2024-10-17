@@ -1,7 +1,7 @@
 $fa=1/1;
 $fs=1/2;
 bissl=1/100;
-part="insert";//[insert,case,all]
+part="insert";//[insert,case,NOSTL_all]
 d123=17;
 neck=14;
 wall=0.5;
@@ -79,7 +79,7 @@ module boost(){
 //insert();
 if (part=="case") case();
 if (part=="insert") rotate([0,180,0])insert();
-if (part=="all") {
+if (part=="NOSTL_all") {
   case();
   translate([0,0,wall+air]) insert();
   }

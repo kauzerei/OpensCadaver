@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Script that generates 3d-printable .stl files from parametric .SCAD
-# models for OpenAutoLab
+# models
 #
-# Copyright (c) 2023-2024 Kauzerei <mailto:openautolab@kauzerei.de>
+# Copyright (c) 2023 - 2024 Kauzerei <mailto:github@kauzerei.de>
 # Copyright (c) 2023 - 2024 Thomas Buck <thomas@xythobuz.de>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -25,18 +25,23 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   SCAD="open -n -a OpenSCAD --args"
 else
   echo "Linux detected"
-  SCAD="openscad"
+  SCAD="openscad --q"
 fi
+
+mkdir -p stl
 
 for MODULE in $@
 do
+  MODULENAME=$(basename "$MODULE" ".${MODULE##*.}")
   PARTS=$(grep -o "part.*//.*\[.*]" ${MODULE} | sed 's/,/ /g' | sed 's/.*\[\([^]]*\)\].*/\1/g')
   echo "generating from ${MODULE}:"
+  if [ -z "$PARTS" ]; then 
+    $SCAD "$(cd "$(dirname "${MODULE}")" && pwd)/$(basename "${MODULE}")" --D part=\"${PART}\" --o $(pwd)/stl/${MODULENAME}.stl
+  fi
   for PART in ${PARTS}
   do
     if [[ "${PART}" != "NOSTL"* ]]; then
       echo ${PART}
-      MODULENAME=$(basename "$MODULE" ".${MODULE##*.}")
       FILENAME=$(echo stl/${MODULENAME}_${PART}.stl | tr '[:upper:]' '[:lower:]')
       $SCAD "$(cd "$(dirname "${MODULE}")" && pwd)/$(basename "${MODULE}")" --D part=\"${PART}\" --o $(pwd)/${FILENAME}
     fi
