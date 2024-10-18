@@ -1,5 +1,4 @@
 .DS_Store
-*.stl
 *.json
-models/BOSL2
+import/BOSL2
 stl/*

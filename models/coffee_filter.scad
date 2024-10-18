@@ -1,4 +1,4 @@
-include <BOSL2/std.scad>
+include <../import/BOSL2/std.scad>
 top_d=130;
 bottom_d=40;
 bottleneck=20;
