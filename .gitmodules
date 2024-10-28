@@ -1,0 +1,3 @@
+[submodule "import/BOSL2"]
+	path = import/BOSL2
+	url = https://github.com/BelfrySCAD/BOSL2.git
