@@ -3,7 +3,7 @@
 //Added regular patterns as an alternative to randomness
 //Needs to be printed in surface mode with spiralized contour, so the slicer ignores the central solid part
 //Otherwise it makes no sence, the whole gimmick is printing as continious extrusion
-//Render crashes Manifold on Windows, produces extra walls on Mac, untested on Linux
+//Works with Manifold, at least on Linux
 //If Cura doesn't want to produce continious line and generates jumps, adding horizontal expansion 0.001 helps
 
 //horizontal density of pattern, nubmer of line pairs on one cylinder circumference

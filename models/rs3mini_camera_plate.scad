@@ -1,4 +1,6 @@
 // Plate for dji rs3 mini stab
+// Allows mounting camera sideways,
+// as it does not have aligning protrusion like the original one
 $fn=64;
 height=12.4;
 height_top=6.4;
@@ -25,7 +27,6 @@ thread_begin=10;
 thread_end=depth-thread_begin;
 width_bottom=width_top+2*(height-height_top);
 module top_view(){
-  //square([depth,width]);
   difference() {
   polygon(points=[[tcx,0],[depth-tcx,0],[depth,tcy],[depth,width-tcy],[depth-tcx,width],[tcx,width],[0,width-tcy],[0,tcy]]);
   hull() {

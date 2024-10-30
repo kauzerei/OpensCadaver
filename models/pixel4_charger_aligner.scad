@@ -1,3 +1,5 @@
+//A frame to be placed on Ikea's wireless charger.
+//Centers Google Pixel 4 perfectly
 $fa=1/1;
 $fs=1/2;
 width=70;
@@ -50,8 +52,6 @@ module roundcylinder(d,h,r,fillet) {
 
 module profile(wall,charger_h,phone_h,chamfer,fillet) {
   difference() {
-    //square([2*wall,charger_h+phone_h/2]);
-    //translate([-wall,charger_h])offset(r=chamfer)offset(r=-chamfer)square([2*wall,phone_h]);
     polygon([[chamfer,0],[2*wall-chamfer,0],[2*wall,chamfer],[2*wall,charger_h+phone_h/2-chamfer],[2*wall-chamfer,charger_h+phone_h/2],
              [wall+chamfer,charger_h+phone_h/2],[wall,charger_h+phone_h/2-chamfer],[wall,charger_h+chamfer],[wall-chamfer,charger_h],
              [chamfer,charger_h],[0,charger_h-chamfer],[0,chamfer]]);

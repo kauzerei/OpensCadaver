@@ -1,3 +1,5 @@
+// The part that kinda holds steadycam in vertical position.
+// Not super steady, but allows keeping it on stand without falling.
 d1=26;
 d2=30;
 distance=90;

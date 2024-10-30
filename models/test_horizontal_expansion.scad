@@ -1,3 +1,4 @@
+//test part for calibrating 3d printer
 bissl=1/100;
 part="solid";//[solid,holes]
 nx=3;

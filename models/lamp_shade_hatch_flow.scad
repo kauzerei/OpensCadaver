@@ -1,3 +1,4 @@
+//Attempt at making an interestingly shaped pamp shade. Never used
 use <hatch_flow.scad>
 unit_height=19.999;
 nvert=4;

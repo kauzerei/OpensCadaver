@@ -1,3 +1,4 @@
+// Used for making shelves out of OSB and metal angles
 $fa=1/1;
 $fs=1/2;
 bissl=1/100;

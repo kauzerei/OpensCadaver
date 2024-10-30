@@ -1,3 +1,5 @@
+// Tighter insert for mounting follow-focus
+// Project: poor man's Trinity
 $fn=128;
 difference() {
   union() {

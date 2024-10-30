@@ -1,3 +1,5 @@
+// Adapter tube to connect vacuum cleaner to renovator, 
+// which has the tube of different diameter
 $fn=128;
 d1=35;
 d2=32.6;

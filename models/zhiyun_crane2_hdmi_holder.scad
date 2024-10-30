@@ -1,3 +1,6 @@
+// Holder for female-female HDMI piece on the stabilizer
+// Allows convenient way to connect and disconnect the monitor
+// without dealing with cabeling
 d_crane=45;
 wall=3;
 h_mount=14;
