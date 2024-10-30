@@ -1,3 +1,5 @@
+//The part is supposed to be mounted to the bottom of the camera
+//Early attempt, before I used the actual 3d-scanned shape of the camera
 bolts_offset=6;
 d_nut=8;
 h_nut=4;

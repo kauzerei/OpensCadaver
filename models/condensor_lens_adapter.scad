@@ -1,3 +1,5 @@
+//Adapter for putting some random condensor lens that I had
+//into some random enlarger that I had
 $fn=256;
 r=76; //curvature
 th=21.6; //lens thickness

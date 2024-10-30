@@ -1,3 +1,6 @@
+//A part to fix camera shoe to a threaded rod
+//Used for holding camera in the air for 3d-scanning
+//Motivation: bottom shape of the camera is uninterrupted
 $fa=1/1;
 $fs=1/2;
 bissl=1/100;

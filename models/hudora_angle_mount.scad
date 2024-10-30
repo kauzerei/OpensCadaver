@@ -1,3 +1,6 @@
+//Angled mount for Hudora Big Wheel scooter
+//Used to direct the flashlight in the direction of the ground
+//Stock straight mount directs it to the sky, because the bar is inclined up
 $fa=1/1;
 $fs=1/2;
 inner_d=25;

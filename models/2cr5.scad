@@ -1,3 +1,7 @@
+//Case for DIY rechargeable 2CR5 battery
+//Made of two parts, which are just friction fit
+//Street lithium cell, DC-DC converter and tiny switch
+//Contacts are made of metal strip
 $fa=1/1;
 $fs=1/2;
 bissl=1/100;

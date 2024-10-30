@@ -1,5 +1,5 @@
-//I tried a couple of knurling libraries here and found them too slow.
-//Here are short and mostly efficient modules that produce different types of knurling
+//Short and mostly efficient modules that produce different types of knurling
+//I've written it before learning about BOSL2, it's pathetic in comparison
 n=60;
 d=30;
 h=20;

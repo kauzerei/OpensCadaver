@@ -1,5 +1,5 @@
 // Magnetic actuator draft
-// Developed for acoustic drum hitting machine
+// Developed for LARS
 $fs=1/2;
 $fa=1/1;
 bissl=1/100;

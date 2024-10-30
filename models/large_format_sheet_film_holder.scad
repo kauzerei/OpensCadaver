@@ -1,5 +1,6 @@
 //Frame for using plain film or photopaper in glass plate camera
 //Supposed to be supported from the other side with some smaller sized plate
+//Too bendy, I ended up using part made of harder materials
 width=89;
 height=119;
 depth=1.5;

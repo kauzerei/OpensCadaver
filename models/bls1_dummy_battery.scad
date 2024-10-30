@@ -1,3 +1,5 @@
+//Battery adapter for Olympus cameras
+//For powering the camera from external power source
 bissl = 1 / 100;
 part = "box"; //[box,cover,NOSTL_assembly]
 height = 12.9;

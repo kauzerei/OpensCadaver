@@ -1,3 +1,4 @@
+//Bracket for holding Cytronix CM6 HDMI external monitor
 width=85;
 height=55;
 wall=3;

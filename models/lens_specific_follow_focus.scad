@@ -1,3 +1,9 @@
+//Collection of follow focus gears for my lenses
+//To be placed directly in place of original rubber rings
+//or on top of metal ring if there's no rubber (Porst 55)
+//Generates only the last design I made, others are commented
+//TODO: make it generator-script-compatible
+
 use <../import/publicDomainGearV1.1.scad>
 $fa=1/1;
 $fs=1/1;

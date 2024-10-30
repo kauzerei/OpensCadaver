@@ -1,3 +1,5 @@
+//Fix trash cans in the drawers
+//Motivation: stock mounts were colliding with something
 wall=2;
 width=10;
 depth=16;

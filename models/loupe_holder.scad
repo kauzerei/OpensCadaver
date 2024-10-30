@@ -1,3 +1,5 @@
+//Part of visual aid to explain how camera works
+//Used in analog photography workshop
 $fn=64;
 loupe_d=79;
 loupe_h=15;

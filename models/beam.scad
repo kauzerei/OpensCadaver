@@ -1,3 +1,5 @@
+// Beam to hold magnetic actuator further from the drum rim
+// Developed for LARS
 $fa=1/1;
 $fs=1/2;
 bissl=1/100;

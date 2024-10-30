@@ -1,3 +1,5 @@
+//Visual aid to explain how focal distance influences field of view
+//Used in analog photography workshop
 format=[24,36];
 //format=[56,56];
 //format=[56,84];

@@ -1,3 +1,4 @@
+//Box for RPi Pico with display
 part="bottom"; //[bottom,top,button]
 wall=1.5;
 extra=4; //lip on the lid that presses top pcb down
