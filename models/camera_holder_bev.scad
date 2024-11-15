@@ -61,14 +61,27 @@ module phone_frame(width,height,thickness,larger_r,smaller_r,wall,elevetion){
 }
 
 module phone_holder() {
-  translate([148/2-19,0,0])phone_frame(width=70,height=148,thickness=8,larger_r=10,smaller_r=vert_wall/3,wall=vert_wall,elevetion=3);
+  difference() {
+    union() {
+      difference() {
+        translate([0,0,hor_wall/2]) cube([inner_square[0]+2*vert_wall,inner_square[1]+2*vert_wall,hor_wall],center=true);
+        translate([0,0,hor_wall/2]) cube([inner_square[0]-2*lip,inner_square[1]-2*lip,hor_wall+1],center=true);
+      }
+      translate([-16,-55,0])phone_frame(width=70,height=148,thickness=8,larger_r=10,smaller_r=vert_wall/3,wall=vert_wall,elevetion=2*hor_wall);
+    }
+    for (hole=[for (i=[0.5,-0.5]) for (j=[0.5,-0.5])  [inner_square[0]*i,inner_square[1]*j]]) translate(hole) {
+      cylinder(d=d,h=hor_wall+lip+1,center=true);
+      translate([0,0,hor_wall]) cylinder(d=2*d,h=100);
+    }
+  }
 }
 
-if (part=="phone_holder") phone_holder(width=70,height=148,thickness=8,larger_r=10,smaller_r=vert_wall/3,wall=vert_wall,elevetion=3);
+if (part=="phone_holder") phone_holder();
 if (part=="led_holder") led_holder(outer_square,inner_square,vert_wall,lip,led_width,led_dist,d);
 if (part=="NOSTL_all") {
   frame(outer_square,lip,hor_wall,vert_wall,film_space,d);
   translate([0,0,hor_wall+film_space+1]) frame(outer_square,lip,hor_wall,vert_wall,led_space,d);
   translate([0,0,hor_wall+film_space+1+2*hor_wall+2*led_space]) mirror([0,0,1]) led_holder(outer_square,inner_square,vert_wall,lip,led_width,led_dist,d);
   translate([0,0,hor_wall+film_space+1+2*hor_wall+2*led_space+2*hor_wall+2*film_space]) mirror([0,0,1]) frame(inner_square,lip,hor_wall,vert_wall,film_space,d);
+  translate([0,0,hor_wall+film_space+1+2*hor_wall+2*led_space+2*hor_wall+2*film_space+1]) phone_holder();
 }
