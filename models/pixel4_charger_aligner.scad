@@ -58,7 +58,7 @@ module profile(wall,charger_h,phone_h,chamfer,fillet) {
     translate([wall-fillet,charger_h+fillet])circle(r=fillet);
   }
 }
-module frame(){
+module frame(width,height,thickness,larger_r,smaller_r){
   for (i=[0,1], j=[0,1]) mirror([i,0,0]) mirror([0,j,0]) 
   {
     translate([width/2-larger_r,height/2-larger_r])rotate_extrude(angle=90) 
@@ -81,7 +81,7 @@ module charger_holder(h,d,w,r,l) {
 }
 difference() {
   union() {
-    frame();
+    frame(width=width,height=height,thickness=thickness,larger_r=larger_r,smaller_r=smaller_r);
     charger_holder(charger_h,charger_d,wall,smaller_r,width+2*wall-2*smaller_r);
   }
   if(!top_wall)translate([0,0,-0.01])cylinder(d=charger_d,h=charger_h+thickness);
@@ -91,3 +91,4 @@ difference() {
   }
   rotate([90,0,0]) cylinder(d=14,h=2*height);
 }
+*frame(width=width,height=height,thickness=thickness,larger_r=larger_r,smaller_r=smaller_r);
