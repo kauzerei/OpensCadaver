@@ -1,3 +1,4 @@
+part="NOSTL_all";//[frame_outer,frame_spacer,frame_inner,led_holder,phone_holder,ceil_mount,NOSTL_all]
 $fa=1/1;
 $fs=1/2;
 inner_square=[50,45];
@@ -5,7 +6,7 @@ outer_square=[160,101.5];
 lip=1.6;
 hor_wall=2;
 vert_wall=3;
-led_width=12.0;
+led_width=11.0;
 film_space=1.6;
 led_space=3;
 led_dist=2.9;
@@ -13,7 +14,6 @@ even=false;
 perpendicular=true;
 d=2;
 mount_height=100;
-part="NOSTL_all";//[frame_outer,frame_spacer,frame_inner,led_holder,phone_holder,ceil_mount,NOSTL_all]
 if (part=="frame_outer") frame(outer_square,lip,hor_wall,vert_wall,film_space);
 module frame(square,lip,hor_wall,vert_wall,thickness,d) {
   linear_extrude(height=hor_wall) difference() {
@@ -109,7 +109,9 @@ module ceil_mount(outer_square,height,vert_wall,d,offset) {
     ]) translate(tr) rotate([90,0,0]) cylinder(d=d,h=thickness*2,center=true);
   }
 }
-
+if (part=="frame_outer") frame(outer_square,lip,hor_wall,vert_wall,led_space,d);
+if (part=="frame_spacer") frame(outer_square,lip,hor_wall,vert_wall,led_space,d);
+if (part=="frame_inner") frame(inner_square,lip,hor_wall,vert_wall,film_space,d);
 if (part=="phone_holder") phone_holder();
 if (part=="ceil_mount") ceil_mount(outer_square,mount_height,vert_wall,d,10);
 if (part=="led_holder") led_holder(outer_square,inner_square,vert_wall,lip,led_width,led_dist,d);
