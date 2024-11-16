@@ -1,17 +1,17 @@
 $fa=1/1;
 $fs=1/2;
-inner_square=[50,50];
+inner_square=[50,45];
 outer_square=[160,101.5];
 lip=1.6;
 hor_wall=2;
 vert_wall=3;
-led_width=10.5;
+led_width=12.0;
 film_space=1.6;
 led_space=3;
-led_dist=2;
-even=true;
+led_dist=2.9;
+even=false;
 perpendicular=true;
-d=3;
+d=2;
 mount_height=100;
 part="NOSTL_all";//[frame_outer,frame_spacer,frame_inner,led_holder,phone_holder,ceil_mount,NOSTL_all]
 if (part=="frame_outer") frame(outer_square,lip,hor_wall,vert_wall,film_space);
