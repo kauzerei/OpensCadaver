@@ -31,4 +31,4 @@ module layer(thickness,upper_feature,lower_feature) {
         cylinder(d=d,h=thickness+lip_width/2+2*bissl);
   }
 }
-  layer(hor_wall,true,false);
+  layer(hor_wall,true,true);
