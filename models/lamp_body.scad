@@ -11,21 +11,16 @@ hor_wall    =4;
 d           =4;
 
 module contact_line(film_x,film_y,lip_width) {
-  x=film_x+lip_width;
-  y=film_y+lip_width;
   roof(method="voronoi", convexity=3) difference() {
-    offset(r=lip_width) square([x-lip_width,y-lip_width],center=true);
-    square([x-lip_width,y-lip_width],center=true);
+    offset(r=lip_width) square([film_x,film_y],center=true);
+    square([film_x,film_y],center=true);
   }
 }
 module frame(film_x,film_y,inner_offset,outer_offset,lip_width,thickness,d,upper_feature,lower_feature) {
-
-x=film_x+lip_width;
-y=film_y+lip_width;
   difference() {
     union() {
       linear_extrude(height=thickness,convexity=2) difference() {
-        offset(r=lip_width+outer_offset)square([x-lip_width,y-lip_width],center=true);
+        offset(r=lip_width+outer_offset)square([film_x,film_y],center=true);
         square([film_x-2*inner_offset,film_y-2*inner_offset],center=true);
       }   
     if(upper_feature)translate([0,0,thickness])contact_line(film_x=film_x,film_y=film_y,lip_width=lip_width);
