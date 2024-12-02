@@ -4,9 +4,9 @@ $fs=1/2;
 
 nozzle=0.4;
 rod=6;
-tolerance=0.2;
-shell=20;
-compression=1;
+tolerance=0.4;
+shell=16;
+compression=0.5;
 n=10;
 skew=60;
 tube_length=60;
