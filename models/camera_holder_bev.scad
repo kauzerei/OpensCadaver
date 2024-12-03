@@ -17,26 +17,11 @@ led_width=11.5;
 //film_space=1.6;
 led_space=4;
 led_dist=1.3;
+led_thickness=1;
 even=true;
 perpendicular=true;
 d=2;
 mount_height=100;
-
-
-
-//if (part=="frame_outer") frame(outer_square,lip,hor_wall,vert_wall,film_space);
-module frame2(square,lip,hor_wall,vert_wall,thickness,d) {
-  linear_extrude(height=hor_wall) difference() {
-    square([square[0]+2*vert_wall,square[1]+2*vert_wall],center=true);
-    square([square[0]-2*lip,square[1]-2*lip],center=true);
-    for (hole=[for (i=[0.5,-0.5]) for (j=[0.5,-0.5])  [square[0]*i,square[1]*j]]) translate(hole) circle(d=d);
-  }
-    linear_extrude(height=thickness+hor_wall) difference() {
-    square([square[0]+2*vert_wall,square[1]+2*vert_wall],center=true);
-    square(square,center=true);
-    for (hole=[for (i=[0.5,-0.5]) for (j=[0.5,-0.5])  [square[0]*i,square[1]*j]]) translate(hole) circle(d=d);
-  }
-}
 
 module contact_line(film_x,film_y,lip_width) {
   roof(method="voronoi", convexity=3) difference() {
@@ -63,20 +48,25 @@ module frame(film_x,film_y,inner_offset,outer_offset,lip_width,thickness,d,upper
 
 //frame(film_x=outer_square[0],film_y=outer_square[1],inner_offset=inner_offset,outer_offset=outer_offset,lip_width=lip_width,thickness=hor_wall,d=d,true,true);
 
-module led_holder(outer_square,inner_square,vert_wall,lip,led_width,led_dist,d) {
-  difference() {
-    cube([outer_square[0]+2*vert_wall,outer_square[1]+2*vert_wall,hor_wall+lip],center=true);
-    cube([inner_square[0]-2*lip,inner_square[1]-2*lip,hor_wall+lip+1],center=true);
+module led_holder(l_film_x,l_film_y,s_film_x,s_film_y,thickness,lip_width,outer_offset,inner_offset,led_width,led_thickness,led_dist,d) {
   start=even?led_width/2+led_dist/2:0;
   orientation=perpendicular?90:0;
+  difference() {
+    linear_extrude(height=thickness,convexity=2) difference() {
+      offset(r=lip_width+outer_offset) square([l_film_x,l_film_y],center=true);
+      square([s_film_x-2*inner_offset,s_film_y-2*inner_offset],center=true);      
+      }
+    translate([0,0,thickness+bissl]) mirror([0,0,1]) contact_line(film_x=l_film_x,film_y=l_film_y,lip_width=lip_width);
   rotate([0,0,orientation]) for (d=[start:led_width+led_dist:outer_square[orientation?1:0]/2-led_width/2]) for (m=[[0,0,0],[1,0,0]]) mirror(m)
    translate([d,0,hor_wall/2-lip/2]) rotate([90,0,0]) linear_extrude(height=max(outer_square)+2*vert_wall+1,center=true)
-    polygon([[-led_width/2,0],[led_width/2,0],[0,led_width/2]]);
-    for (hole=[for (i=[0.5,-0.5]) for (j=[0.5,-0.5])  [inner_square[0]*i,inner_square[1]*j]]) translate(hole)
-     cylinder(d=d,h=hor_wall+lip+1,center=true);
-    for (hole=[for (i=[0.5,-0.5]) for (j=[0.5,-0.5])  [outer_square[0]*i,outer_square[1]*j]]) translate(hole)
-     cylinder(d=d,h=hor_wall+lip+1,center=true);
+    polygon([[-led_width/2,0],[led_width/2,0],[0,led_width/2]]);  
   }
+//    cube([inner_square[0]-2*lip,inner_square[1]-2*lip,hor_wall+lip+1],center=true);
+  
+//    for (hole=[for (i=[0.5,-0.5]) for (j=[0.5,-0.5])  [inner_square[0]*i,inner_square[1]*j]]) translate(hole)
+//     cylinder(d=d,h=hor_wall+lip+1,center=true);
+//    for (hole=[for (i=[0.5,-0.5]) for (j=[0.5,-0.5])  [outer_square[0]*i,outer_square[1]*j]]) translate(hole)
+//     cylinder(d=d,h=hor_wall+lip+1,center=true);
 }
 
 module profile(wall,elevation,phone_h,chamfer,fillet) {
@@ -149,7 +139,7 @@ if (part=="frame_spacer") frame(film_x=outer_square[0],film_y=outer_square[1],in
 if (part=="frame_inner") frame(inner_square,lip,hor_wall,vert_wall,film_space,d);
 if (part=="phone_holder") phone_holder();
 if (part=="ceil_mount") ceil_mount(outer_square,mount_height,vert_wall,d,10);
-if (part=="led_holder") led_holder(outer_square,inner_square,vert_wall,lip,led_width,led_dist,d);
+if (part=="led_holder") led_holder(l_film_x=outer_square[0],l_film_y=outer_square[1],s_film_x=inner_square[0],s_film_y=inner_square[1],thickness=hor_wall+led_thickness,lip_width=lip_width,outer_offset=outer_offset,inner_offset=inner_offset,led_width=led_width,led_thickness=led_thickness,led_dist=led_dist,d=d);
 if (part=="NOSTL_all") {
   frame(outer_square,lip,hor_wall,vert_wall,film_space,d);
   translate([0,0,hor_wall+film_space+1]) frame(outer_square,lip,hor_wall,vert_wall,led_space,d);
