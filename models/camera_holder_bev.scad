@@ -13,7 +13,6 @@ outer_offset=1;
 lip_width   =4;
 
 led_width=11.5;
-//film_space=1.6;
 led_space=5;
 led_dist=1.3;
 led_thickness=1;
@@ -46,8 +45,6 @@ module frame(film_x,film_y,inner_offset,outer_offset,lip_width,thickness,d,upper
   }
 }
 
-//frame(film_x=outer_square[0],film_y=outer_square[1],inner_offset=inner_offset,outer_offset=outer_offset,lip_width=lip_width,thickness=hor_wall,d=d,true,true);
-
 module led_holder(l_film_x,l_film_y,s_film_x,s_film_y,thickness,lip_width,outer_offset,inner_offset,led_width,led_thickness,led_dist,led_hold,d) {
   start=even?led_width/2+led_dist/2:0;
   orientation=perpendicular?90:0;
@@ -56,7 +53,7 @@ module led_holder(l_film_x,l_film_y,s_film_x,s_film_y,thickness,lip_width,outer_
    rotate(orientation) for (shift=[start:led_width+led_dist:outer_square[orientation?1:0]/2-led_width/2]) for (m=[[0,0],[1,0]]) mirror(m)
    translate([shift,0]) square([led_width,l_film_x+lip_width],center=true);
   }
-  
+   
   difference() {
     linear_extrude(height=thickness,convexity=2) difference() {
       offset(r=lip_width+outer_offset) square([l_film_x,l_film_y],center=true);
@@ -73,15 +70,6 @@ module led_holder(l_film_x,l_film_y,s_film_x,s_film_y,thickness,lip_width,outer_
         cylinder(d=d,h=thickness+lip_width/2+2*bissl);
     }    
   }      
-}
-
-module profile(wall,elevation,phone_h,chamfer,fillet) {
-  difference() {
-    polygon([[0,0],[2*wall,0],[2*wall,elevation+phone_h/2-chamfer],[2*wall-chamfer,elevation+phone_h/2],
-             [wall+chamfer,elevation+phone_h/2],[wall,elevation+phone_h/2-chamfer],[wall,elevation+chamfer],[wall-chamfer,elevation],
-             [chamfer,elevation],[0,elevation-chamfer]]);
-    translate([wall-fillet,elevation+fillet])circle(r=fillet);
-  }
 }
 
 module phone_frame(width,height,thickness,larger_r,smaller_r,wall,elevation){
@@ -142,10 +130,11 @@ module ceil_mount(outer_square,height,vert_wall,d,offset) {
 }
 if (part=="frame_outer") frame(film_x=outer_square[0],film_y=outer_square[1],inner_offset=inner_offset,outer_offset=outer_offset,lip_width=lip_width,thickness=hor_wall,d=d,true,false);
 if (part=="frame_spacer") frame(film_x=outer_square[0],film_y=outer_square[1],inner_offset=inner_offset,outer_offset=outer_offset,lip_width=lip_width,thickness=led_space,d=d,true,true);
-if (part=="frame_inner") frame(inner_square,lip,hor_wall,vert_wall,film_space,d);
+if (part=="led_holder") led_holder(l_film_x=outer_square[0],l_film_y=outer_square[1],s_film_x=inner_square[0],s_film_y=inner_square[1],thickness=hor_wall+led_thickness+led_hold,lip_width=lip_width,outer_offset=outer_offset,inner_offset=inner_offset,led_width=led_width,led_thickness=led_thickness,led_dist=led_dist,led_hold=led_hold,d=d);
+if (part=="frame_inner") frame(film_x=inner_square[0],film_y=inner_square[1],inner_offset=inner_offset,outer_offset=outer_offset,lip_width=lip_width,thickness=hor_wall,d=d,true,false);
 if (part=="phone_holder") phone_holder();
 if (part=="ceil_mount") ceil_mount(outer_square,mount_height,vert_wall,d,10);
-if (part=="led_holder") led_holder(l_film_x=outer_square[0],l_film_y=outer_square[1],s_film_x=inner_square[0],s_film_y=inner_square[1],thickness=hor_wall+led_thickness+led_hold,lip_width=lip_width,outer_offset=outer_offset,inner_offset=inner_offset,led_width=led_width,led_thickness=led_thickness,led_dist=led_dist,led_hold=led_hold,d=d);
+
 if (part=="NOSTL_all") {
   frame(outer_square,lip,hor_wall,vert_wall,film_space,d);
   translate([0,0,hor_wall+film_space+1]) frame(outer_square,lip,hor_wall,vert_wall,led_space,d);
