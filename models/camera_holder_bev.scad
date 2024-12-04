@@ -1,4 +1,4 @@
-part="NOSTL_all";//[frame_outer,frame_spacer,frame_inner,led_holder,phone_holder,ceil_mount,NOSTL_all]
+part="NOSTL_all";//[frame_outer,frame_spacer,led_holder,frame_inner,phone_holder,ceil_mount,NOSTL_all]
 $fa=1/1;
 $fs=1/2;
 bissl=1/100;
@@ -20,6 +20,7 @@ led_hold=1.5;
 even=true;
 perpendicular=true;
 d=4;
+phone_distance=10;
 mount_height=100;
 
 module contact_line(film_x,film_y,lip_width) {
@@ -72,6 +73,15 @@ module led_holder(l_film_x,l_film_y,s_film_x,s_film_y,thickness,lip_width,outer_
   }      
 }
 
+module profile(wall,elevation,phone_h,chamfer,fillet) {
+  difference() {
+    polygon([[0,0],[2*wall,0],[2*wall,elevation+phone_h/2-chamfer],[2*wall-chamfer,elevation+phone_h/2],
+             [wall+chamfer,elevation+phone_h/2],[wall,elevation+phone_h/2-chamfer],[wall,elevation+chamfer],[wall-chamfer,elevation],
+             [chamfer,elevation],[0,elevation-chamfer]]);
+    translate([wall-fillet,elevation+fillet])circle(r=fillet);
+  }
+}
+
 module phone_frame(width,height,thickness,larger_r,smaller_r,wall,elevation){
   difference() {
     for (i=[0,1], j=[0,1]) mirror([i,0,0]) mirror([0,j,0]) 
@@ -87,19 +97,20 @@ module phone_frame(width,height,thickness,larger_r,smaller_r,wall,elevation){
   }
 }
 
-module phone_holder() {
+module phone_holder(thickness,lip_width,outer_offset,film_x,film_y,inner_offset) {
   difference() {
     union() {
-      difference() {
-        translate([0,0,hor_wall/2]) cube([inner_square[0]+2*vert_wall,inner_square[1]+2*vert_wall,hor_wall],center=true);
-        translate([0,0,hor_wall/2]) cube([inner_square[0]-2*lip,inner_square[1]-2*lip,hor_wall+1],center=true);
+      linear_extrude(height=thickness,convexity=2) difference() {
+        offset(r=lip_width+outer_offset) square([film_x,film_y],center=true);
+        square([film_x-2*inner_offset,film_y-2*inner_offset],center=true);
+      }   
+      translate([-16,-55,0])phone_frame(width=70,height=148,thickness=8,larger_r=10,smaller_r=vert_wall/3,wall=vert_wall,elevation=hor_wall);
+    }
+    for (i=[-0.5,0.5]) for (j=[-0.5,0.5]) 
+      translate([i*(film_x+lip_width+outer_offset-inner_offset),j*(film_y+lip_width+outer_offset-inner_offset),-bissl]) {
+        cylinder(d=d,h=thickness+2*bissl);
+        translate([0,0,thickness]) cylinder(d=2*d,h=100);
       }
-      translate([-16,-55,0])phone_frame(width=70,height=148,thickness=8,larger_r=10,smaller_r=vert_wall/3,wall=vert_wall,elevation=2*hor_wall);
-    }
-    for (hole=[for (i=[0.5,-0.5]) for (j=[0.5,-0.5])  [inner_square[0]*i,inner_square[1]*j]]) translate(hole) {
-      cylinder(d=d,h=hor_wall+lip+1,center=true);
-      translate([0,0,hor_wall]) cylinder(d=2*d,h=100);
-    }
   }
 }
 
@@ -131,8 +142,8 @@ module ceil_mount(outer_square,height,vert_wall,d,offset) {
 if (part=="frame_outer") frame(film_x=outer_square[0],film_y=outer_square[1],inner_offset=inner_offset,outer_offset=outer_offset,lip_width=lip_width,thickness=hor_wall,d=d,true,false);
 if (part=="frame_spacer") frame(film_x=outer_square[0],film_y=outer_square[1],inner_offset=inner_offset,outer_offset=outer_offset,lip_width=lip_width,thickness=led_space,d=d,true,true);
 if (part=="led_holder") led_holder(l_film_x=outer_square[0],l_film_y=outer_square[1],s_film_x=inner_square[0],s_film_y=inner_square[1],thickness=hor_wall+led_thickness+led_hold,lip_width=lip_width,outer_offset=outer_offset,inner_offset=inner_offset,led_width=led_width,led_thickness=led_thickness,led_dist=led_dist,led_hold=led_hold,d=d);
-if (part=="frame_inner") frame(film_x=inner_square[0],film_y=inner_square[1],inner_offset=inner_offset,outer_offset=outer_offset,lip_width=lip_width,thickness=hor_wall,d=d,true,false);
-if (part=="phone_holder") phone_holder();
+if (part=="frame_inner") frame(film_x=inner_square[0],film_y=inner_square[1],inner_offset=inner_offset,outer_offset=outer_offset,lip_width=lip_width,thickness=phone_distance,d=d,true,false);
+if (part=="phone_holder") phone_holder(thickness=hor_wall,lip_width=lip_width,outer_offset=outer_offset,inner_offset=inner_offset,film_x=inner_square[0],film_y=inner_square[1]);
 if (part=="ceil_mount") ceil_mount(outer_square,mount_height,vert_wall,d,10);
 
 if (part=="NOSTL_all") {
