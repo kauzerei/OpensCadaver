@@ -28,6 +28,8 @@ else
   SCAD="openscad --q"
 fi
 
+N=$(nproc --all)
+
 mkdir -p stl
 
 if [ -z "$( ls -A $(git rev-parse --show-toplevel)/import/BOSL2 )" ]; then 
@@ -40,14 +42,15 @@ do
   PARTS=$(grep -o "part.*//.*\[.*]" ${MODULE} | sed 's/,/ /g' | sed 's/.*\[\([^]]*\)\].*/\1/g')
   echo "generating from ${MODULE}:"
   if [ -z "$PARTS" ]; then 
-    $SCAD "$(cd "$(dirname "${MODULE}")" && pwd)/$(basename "${MODULE}")" --D part=\"${PART}\" --o $(pwd)/stl/${MODULENAME}.stl
+    while [ $(pgrep -c openscad) -ge $N ]; do sleep 1; done
+    $SCAD "$(cd "$(dirname "${MODULE}")" && pwd)/$(basename "${MODULE}")" --D part=\"${PART}\" --o $(pwd)/stl/${MODULENAME}.stl &
   fi
   for PART in ${PARTS}
   do
     if [[ "${PART}" != "NOSTL"* ]]; then
       echo ${PART}
       FILENAME=$(echo stl/${MODULENAME}_${PART}.stl | tr '[:upper:]' '[:lower:]')
-      $SCAD "$(cd "$(dirname "${MODULE}")" && pwd)/$(basename "${MODULE}")" --D part=\"${PART}\" --o $(pwd)/${FILENAME}
+      $SCAD "$(cd "$(dirname "${MODULE}")" && pwd)/$(basename "${MODULE}")" --D part=\"${PART}\" --o $(pwd)/${FILENAME} &
     fi
   done
 done
