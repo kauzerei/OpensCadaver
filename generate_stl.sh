@@ -42,8 +42,8 @@ do
   PARTS=$(grep -o "part.*//.*\[.*]" ${MODULE} | sed 's/,/ /g' | sed 's/.*\[\([^]]*\)\].*/\1/g')
   echo "generating from ${MODULE}:"
   if [ -z "$PARTS" ]; then 
-    while [ $(pgrep -c openscad) -ge $N ]; do sleep 1; done
     $SCAD "$(cd "$(dirname "${MODULE}")" && pwd)/$(basename "${MODULE}")" --D part=\"${PART}\" --o $(pwd)/stl/${MODULENAME}.stl &
+    while [ $(pgrep -c openscad) -ge $N ]; do sleep 1; done
   fi
   for PART in ${PARTS}
   do
@@ -51,6 +51,8 @@ do
       echo ${PART}
       FILENAME=$(echo stl/${MODULENAME}_${PART}.stl | tr '[:upper:]' '[:lower:]')
       $SCAD "$(cd "$(dirname "${MODULE}")" && pwd)/$(basename "${MODULE}")" --D part=\"${PART}\" --o $(pwd)/${FILENAME} &
+      while [ $(pgrep -c openscad) -ge $N ]; do sleep 1; done
     fi
   done
 done
+wait
