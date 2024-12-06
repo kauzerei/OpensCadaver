@@ -19,15 +19,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-# Detect OS
-if [[ "$OSTYPE" == "darwin"* ]]; then
-  echo "Mac OS X detected"
-  SCAD="open -n -a OpenSCAD --args"
-else
-  echo "Linux detected"
-  SCAD="openscad --q"
-fi
-
 N=$(nproc --all)
 
 mkdir -p stl
@@ -42,7 +33,7 @@ do
   PARTS=$(grep -o "part.*//.*\[.*]" ${MODULE} | sed 's/,/ /g' | sed 's/.*\[\([^]]*\)\].*/\1/g')
   echo "generating from ${MODULE}:"
   if [ -z "$PARTS" ]; then 
-    $SCAD "$(cd "$(dirname "${MODULE}")" && pwd)/$(basename "${MODULE}")" --D part=\"${PART}\" --o $(pwd)/stl/${MODULENAME}.stl &
+    openscad --q "$(cd "$(dirname "${MODULE}")" && pwd)/$(basename "${MODULE}")" --D part=\"${PART}\" --o $(pwd)/stl/${MODULENAME}.stl &
     while [ $(pgrep -c openscad) -ge $N ]; do sleep 1; done
   fi
   for PART in ${PARTS}
@@ -50,7 +41,7 @@ do
     if [[ "${PART}" != "NOSTL"* ]]; then
       echo ${PART}
       FILENAME=$(echo stl/${MODULENAME}_${PART}.stl | tr '[:upper:]' '[:lower:]')
-      $SCAD "$(cd "$(dirname "${MODULE}")" && pwd)/$(basename "${MODULE}")" --D part=\"${PART}\" --o $(pwd)/${FILENAME} &
+      openscad --q "$(cd "$(dirname "${MODULE}")" && pwd)/$(basename "${MODULE}")" --D part=\"${PART}\" --o $(pwd)/${FILENAME} &
       while [ $(pgrep -c openscad) -ge $N ]; do sleep 1; done
     fi
   done
