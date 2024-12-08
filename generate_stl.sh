@@ -33,7 +33,7 @@ do
   PARTS=$(grep -o "part.*//.*\[.*]" ${MODULE} | sed 's/,/ /g' | sed 's/.*\[\([^]]*\)\].*/\1/g')
   echo "generating from ${MODULE}:"
   if [ -z "$PARTS" ]; then 
-    openscad --q "$(cd "$(dirname "${MODULE}")" && pwd)/$(basename "${MODULE}")" --D part=\"${PART}\" --o $(pwd)/stl/${MODULENAME}.stl &
+    openscad --q --enable=roof "$(cd "$(dirname "${MODULE}")" && pwd)/$(basename "${MODULE}")" --D part=\"${PART}\" --o $(pwd)/stl/${MODULENAME}.stl &
     while [ $(pgrep -c openscad) -ge $N ]; do sleep 1; done
   fi
   for PART in ${PARTS}
@@ -41,7 +41,7 @@ do
     if [[ "${PART}" != "NOSTL"* ]]; then
       echo ${PART}
       FILENAME=$(echo stl/${MODULENAME}_${PART}.stl | tr '[:upper:]' '[:lower:]')
-      openscad --q "$(cd "$(dirname "${MODULE}")" && pwd)/$(basename "${MODULE}")" --D part=\"${PART}\" --o $(pwd)/${FILENAME} &
+      openscad --q --enable=roof "$(cd "$(dirname "${MODULE}")" && pwd)/$(basename "${MODULE}")" --D part=\"${PART}\" --o $(pwd)/${FILENAME} &
       while [ $(pgrep -c openscad) -ge $N ]; do sleep 1; done
     fi
   done
