@@ -3,16 +3,16 @@ $fa=1/1;
 $fs=1/2;
 
 nozzle=0.4;
-rod=6;
-tolerance=0.4;
-shell=16;
-compression=0.5;
-n=10;
-skew=60;
+rod=5.5;
+tolerance=0.3;
+shell=10;
+compression=0.2;
+n=8;
+skew=45;
 tube_length=60;
 spring_length=10;
 
-part="tube"; //[spring, tube]
+part="spring"; //[spring, tube]
 
 module spring() {
   ri=rod/2+nozzle+tolerance-compression+nozzle;
