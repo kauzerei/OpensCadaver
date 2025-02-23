@@ -1,4 +1,4 @@
-// Hook for the toy car
+// Hook for the towel drier
 $fn=64;
 thickness=6; //height of print
 width=6; //  

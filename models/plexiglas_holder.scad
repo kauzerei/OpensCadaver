@@ -1,3 +1,6 @@
+//Plexiglas holder for enclosing 3d-printer in the shelf
+//Project: Kauzerei Werkstatt
+
 bissl=1/100;
 $fa=1/1;
 $fs=1/2;
