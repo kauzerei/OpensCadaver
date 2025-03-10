@@ -117,11 +117,16 @@ module filter_holder() {
   }
 }
 
+module power_distributor() {
+
+}
+
 if (part=="phone_frame") phone_frame();
 if (part=="mirror_frame") mirror_frame();
 if (part=="mirror_frame_mirrored") mirror([1,0,0])mirror_frame();
 if (part=="top_bracket") top_bracket();
 if (part=="filter_holder") filter_holder();
+if (part=="power_distributor") power_distributor();
 if (part=="NOSTL_all") {
   phone_frame();
   translate([-beam,0,wall_h+1]) mirror([1,0,0]) rotate([0,-90,0]) mirror_frame();
