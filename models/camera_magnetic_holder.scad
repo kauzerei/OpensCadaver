@@ -1,6 +1,6 @@
-part="NOSTL_all";//[NOSTL_all,phone_frame,mirror_frame,mirror_frame_mirrored,top_bracket]
-width=148;
-height=70;
+part="NOSTL_all";//[NOSTL_all,phone_frame,mirror_frame,mirror_frame_mirrored,top_bracket,filter_holder]
+width=149;
+height=74;
 shelf=4;
 depth=4;
 wall_v=4;
@@ -9,6 +9,9 @@ hole=4;
 glass=3;
 bissl=1/100;
 beam=2*wall_h+hole;
+filter_size=[50,50];
+filter_placement=[32,41];
+fp=[filter_placement[0],filter_placement[1],wall_h/2];
 $fs=1/1;
 $fa=1/1;
 screws=[[-beam/2,beam/2,wall_h/2],
@@ -22,6 +25,13 @@ module chain_hull() {
       children(i);
       children(i+1);
     }
+  }
+}
+
+module pairwise_hull() {
+  for (i=[0:$children-1]) for (j=[0:i]) hull() {
+    children(i);
+    children(j);
   }
 }
 
@@ -80,10 +90,38 @@ module top_bracket() {
   }
 }
 
+module filter_holder() {
+  difference() {
+    union() {
+      chain_hull() {
+        translate(screws[0]) cube([beam,beam,2*wall_h],center=true);
+        translate(fp) cube([beam,beam,2*wall_h],center=true);
+        translate(screws[0]) cube([beam,beam,2*wall_h],center=true);
+        translate(screws[1]) cube([beam,beam,2*wall_h],center=true);
+        translate(fp) cube([beam,beam,2*wall_h],center=true);
+        translate(screws[1]) cube([beam,beam,2*wall_h],center=true);
+        translate(screws[3]) cube([beam,beam,2*wall_h],center=true);
+        translate(fp) cube([beam,beam,2*wall_h],center=true);
+        translate(screws[3]) cube([beam,beam,2*wall_h],center=true);
+        translate(screws[2]) cube([beam,beam,2*wall_h],center=true);
+        translate(fp) cube([beam,beam,2*wall_h],center=true);
+        translate(screws[2]) cube([beam,beam,2*wall_h],center=true);
+        translate(screws[0]) cube([beam,beam,2*wall_h],center=true);
+      }
+      translate(fp) cube([filter_size[0]+2*wall_v,filter_size[1]+2*wall_v,2*wall_h],center=true);
+    }
+    translate(fp) cube([filter_size[0]-2*shelf,filter_size[1]-2*shelf,3*wall_h],center=true);
+    translate([0,0,wall_h])translate(fp) cube([filter_size[0],filter_size[1],2*wall_h],center=true);
+    for (tr=screws) translate(tr) cylinder(d=hole,h=2*wall_h+bissl,center=true);
+
+  }
+}
+
 if (part=="phone_frame") phone_frame();
 if (part=="mirror_frame") mirror_frame();
 if (part=="mirror_frame_mirrored") mirror([1,0,0])mirror_frame();
 if (part=="top_bracket") top_bracket();
+if (part=="filter_holder") filter_holder();
 if (part=="NOSTL_all") {
   phone_frame();
   translate([-beam,0,wall_h+1]) mirror([1,0,0]) rotate([0,-90,0]) mirror_frame();
