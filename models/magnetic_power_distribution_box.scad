@@ -1,3 +1,5 @@
+//A holder for a small power distributing PCB
+//Project: magnetic mounting system for making videos on a table surface
 $fs=1/1;
 $fa=1/1;
 bissl=1/100;

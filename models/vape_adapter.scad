@@ -1,3 +1,5 @@
+//Adapter for vape that allows blowing out smoke without inhaling
+//Project: tiny smoke machine for smoke tests, photos, videos
 $fs=1/2;
 $fa=1/2;
 bissl=1/100;

@@ -1,3 +1,4 @@
+//a part that makes the suction cup of a car phone holder hold better
 $fs=1/2;
 $fa=1/2;
 inner=7;

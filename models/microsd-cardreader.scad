@@ -1,3 +1,4 @@
+//A part to repair my tiny card-reader. Not really useful or reusable
 thickness=0.4;
 width=11.4;
 height=2.2;

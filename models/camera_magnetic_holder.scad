@@ -1,3 +1,5 @@
+//Holder for a phone and a mirror to reflect the screen.
+//Project: magnetic mounting system for making videos on a table surface
 part="NOSTL_all";//[NOSTL_all,phone_frame,mirror_frame,mirror_frame_mirrored,top_bracket,filter_holder]
 width=149;
 height=74;

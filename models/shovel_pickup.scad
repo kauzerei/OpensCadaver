@@ -1,3 +1,5 @@
+//Unfinished, unused
+//Project: shovel guitar
 $fa=1/2;
 $fs=1/2;
 shovel_d=35;
