@@ -1,3 +1,6 @@
+//modules from this setup were just copypasted to simple led lamp to make it standalone
+//not sure what to do with this file now
+
 $fa=1/1;
 $fs=1/2;
 bissl=1/100;

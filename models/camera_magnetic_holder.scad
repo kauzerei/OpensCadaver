@@ -131,6 +131,8 @@ if (part=="filter_holder") filter_holder();
 if (part=="power_distributor") power_distributor();
 if (part=="NOSTL_all") {
   phone_frame();
+  translate([0,0,-2*wall_h]) filter_holder();
   translate([-beam,0,wall_h+1]) mirror([1,0,0]) rotate([0,-90,0]) mirror_frame();
+  translate([width+beam+2*wall_v,0,wall_h+1]) mirror([0,0,0]) rotate([0,-90,0]) mirror_frame();
   translate([0,0,height+2*wall_v+wall_h+2])top_bracket();
   }
