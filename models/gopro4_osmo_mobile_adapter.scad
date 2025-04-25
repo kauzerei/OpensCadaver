@@ -1,7 +1,7 @@
 //Stable and fast to print gopro-style camera holder for a phone gimbal
 //The camera protrudes forward, so the gimbal itself is not in the frame
 //Designed for GoPro 4 Silver and Osmo Mobile, but can be customized for your dimensions
-part="visualisation"; //[holder,bracket,visualisation]
+part="NOSTL_All"; //[holder,bracket,NOSTL_All]
 //how far to the front the camera protrudes
 offset=48;
 //width of gimbal jaws
@@ -75,7 +75,7 @@ module bracket(wall=2.4,camera=[60,22,42],latch=2.4,bracket_width=4) {
 }
 if (part=="holder") holder(offset=offset,width=width,height=height,wall=wall,camera=camera);
 if (part=="bracket") bracket(wall=wall,camera=camera,latch=latch,bracket_width=bracket_width);
-if (part=="visualisation") {
+if (part=="NOSTL_All") {
 color([0.5,0.5,1])holder(offset=offset,width=width,height=height,wall=wall,camera=camera);
 color([0.5,1,0.5])translate([-camera[0]/2-bracket_width/2,offset-camera[1]-3*wall,-wall])rotate([90,0,90])bracket(wall=wall,camera=camera,latch=latch,bracket_width=bracket_width);
 color([1,0.5,0.5])translate([-camera[0],offset-camera[1]-wall,wall])cube(camera);
