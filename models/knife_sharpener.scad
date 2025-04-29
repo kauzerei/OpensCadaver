@@ -3,7 +3,7 @@ $fa=1/2;
 $fs=1/2;
 hor_c=75;
 ver_c=33;
-length=30;
+length=40;
 angle=20;
 wall=3;
 bearing_offset=5;
@@ -13,6 +13,7 @@ bearing_od=16;
 bearing_h=4;
 bearing_extra_h=1;
 bearing_extra_w=2;
+holder_thickness=1.5;
 height=ver_c-bearing_od/2+bearing_offset;
 part="main";//[main,bearing_holder,NOSTL_all]
 module main() {
@@ -38,8 +39,8 @@ module main() {
 module bearing_holder() {
   difference() {
     union() {
-      cylinder(d=bearing_id+2*bearing_extra_w,h=wall);
-      cylinder(d=bearing_id,h=bearing_h+wall);
+      cylinder(d=bearing_id+2*bearing_extra_w,h=holder_thickness);
+      cylinder(d=bearing_id,h=bearing_h+holder_thickness);
     }
     translate([0,0,-bsl]) cylinder(h=bearing_h+wall+2*bsl,d=hole);
   }
@@ -49,7 +50,7 @@ if (part=="bearing_holder") {bearing_holder();}
 if (part=="NOSTL_all") {
   rotate([0,90,0]) main();
   rotate([0,90,0]) for (m=[[0,0,0],[0,0,1]]) mirror(m)
-  for (tr=[[height-bearing_offset,length-bearing_offset,-hor_c/2-2*wall-bearing_h-bearing_extra_h-1],
-           [height-bearing_offset,bearing_offset,-hor_c/2-2*wall-bearing_h-bearing_extra_h-1],
+  for (tr=[[height-bearing_offset,length-bearing_offset,-hor_c/2-wall-holder_thickness-bearing_h-bearing_extra_h-1],
+           [height-bearing_offset,bearing_offset,-hor_c/2-wall-holder_thickness-bearing_h-bearing_extra_h-1],
           ]) translate(tr) bearing_holder();
 }
