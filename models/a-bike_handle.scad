@@ -27,9 +27,9 @@ zl=zvals[len(zvals)-1];
 
 //grip shape without chamfer
 crossections=[for (i=[0:l-1]) move([(fronts[i][1]+backs[i][1])/2,0,zvals[i]],
-                                    yrot(angles[i][1],path3d(ellipse(d=[fronts[i][1]-backs[i][1],widths[i][1]]))))];
-shapes=[each crossections, move([(bl+fl)/2,0,zl+1],yrot(al,path3d(ellipse(d=[fl-bl-2,wl-2]))))]; //add chamfer
-endcap_egg=yrot(al,move([-1,0,0],path3d(egg(length=36,r1=13,r2=8,R=26,anchor="left"))));
+                                    yrot(angles[i][1],path3d(ellipse(d=[fronts[i][1]-backs[i][1],widths[i][1]],$fn=128))))];
+shapes=[each crossections, move([(bl+fl)/2,0,zl+1],yrot(al,path3d(ellipse(d=[fl-bl-2,wl-2],$fn=128))))]; //add chamfer
+endcap_egg=yrot(al,move([-1,0,0],path3d(egg(length=36,r1=13,r2=8,R=26,anchor="left",$fn=64))));
 if (part=="handle") difference() {
   skin(shapes,slices=1);
   cylinder(d=25,h=120,$fn=40);
@@ -41,10 +41,10 @@ if (part=="cap") yrot(20) {
   skin([endcap_egg,up(2,endcap_egg)],slices=1);
   difference() {
     union() {
-      translate([0,0,-3]) cylinder(d=25,h=9.5);
-      cylinder(d=21,h=25);
+      translate([0,0,-3]) cylinder(d=25,h=9.5,$fn=64);
+      cylinder(d=21,h=25,$fn=64);
     }
-    cylinder(d=17,h=26);
+    cylinder(d=17,h=26,$fn=64);
     skin([endcap_egg,down(10,endcap_egg)],slices=1);
   }
 }
