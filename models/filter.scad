@@ -1,10 +1,10 @@
 pi=3.1415926;
 include <../import/BOSL2/std.scad>
-l=50; //lower seam length
-d=150; //opening diameter
-s=120; //side seam length
+l=55; //lower seam length
+d=125; //opening diameter
+s=105; //side seam length
 h=sqrt(pow(s,2)-pow(d/2-l/2,2));
-w=4; //distance between teeth
+w=4.5; //distance between teeth
 h0=1; //starting height of filter holder
 db=20; //bottle diameter
 tube_length=40;
@@ -38,12 +38,11 @@ zvals=[filtered_zvals[0],each [for (i=[1:1:len(filtered_zvals)-2]) each [filtere
 nvals=[for (z=filtered_zvals) each [ns(z),ns(z)]];
 paths=[ for (i=[0:len(zvals)-1]) toothed_shape(params(zvals[i])[0],params(zvals[i])[1],w,nvals[i])];
 mirror([0,0,1]) {
-  skin(paths, slices=2, z=[for (i=[0:1:len(paths)-1]) zvals[i] ], refine=2, method="fast_distance");
-  //skin([paths[0],paths[1]], slices=1, z=[zvals[0],zvals[1]], refine=1, method="fast_distance"); //testing purposes
-  skin([toothed_shape(params(zvals[0])[0]+w,params(zvals[0])[1]-2*w,0,nvals[0]), paths[0]], slices=2, z=[-2*w, zvals[0] ], refine=2, method="fast_distance");
+  skin(paths, slices=0, z=[for (i=[0:1:len(paths)-1]) zvals[i] ], refine=1, sampling="segment",method="fast_distance");
+  skin([toothed_shape(params(zvals[0])[0]+w,params(zvals[0])[1]-2*w,0,nvals[0]), paths[0]], slices=10, z=[-2*w, zvals[0] ], refine=4, sampling="segment",method="fast_distance");
   hull() {
     translate([0,0,-2*w-(l-db)/2]) scale([1,1,0]) cylinder(d=db,h=1,$fn=64);
-    translate([0,0,-2*w]) scale([1,1,0]) linear_extrude(1) polygon(toothed_shape(params(zvals[0])[0]+w,params(zvals[0])[1]-2*w,0,4*nvals[0]));
+    translate([0,0,-2*w]) scale([1,1,0]) linear_extrude(1) polygon(toothed_shape(params(zvals[0])[0]+w,params(zvals[0])[1]-2*w,0,nvals[0]));
   }
   translate([0,0,-2*w-(l-db)/2]) mirror([0,0,1]) cylinder(d=db,h=tube_length,$fn=64);
 }
