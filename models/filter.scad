@@ -4,8 +4,10 @@ l=50; //lower seam length
 d=150; //opening diameter
 s=120; //side seam length
 h=sqrt(pow(s,2)-pow(d/2-l/2,2));
-w=5; //distance between teeth
-h0=1;
+w=4; //distance between teeth
+h0=1; //starting height of filter holder
+db=20; //bottle diameter
+tube_length=40;
 
 //oval ranges
 //0 - l/2 - half line
@@ -30,22 +32,18 @@ function ns(z)=floor(total(params(z)[0],params(z)[1])/w);
 
 function findnext(list)=[list[0],for (i=[1:1:len(list)-1]) each ns(list[i])==2*ns(list[0])&&ns(list[i-1])<2*ns(list[0])?findnext([for (j=[i:1:len(list)-1]) list[j]]):[]];
 
-//coords=toothed_shape(20,50,2,50);
-//z=10;
-//coords=toothed_shape(params(z)[0],params(z)[1],w,ns(z));
-//polygon(coords);
-//zvals=[for (z=[10:10:h]) z];
 unfiltered_zvals=[for (z=[h0:1:h]) z];
 filtered_zvals=[each findnext(unfiltered_zvals), unfiltered_zvals[len(unfiltered_zvals)-1]];
-zvals=[filtered_zvals[0],each [for (i=[1:1:len(filtered_zvals)-2]) each [filtered_zvals[i]-w,filtered_zvals[i]]],filtered_zvals[len(filtered_zvals)-1]];
+zvals=[filtered_zvals[0],each [for (i=[1:1:len(filtered_zvals)-2]) each [filtered_zvals[i]-2*w,filtered_zvals[i]]],filtered_zvals[len(filtered_zvals)-1]];
 nvals=[for (z=filtered_zvals) each [ns(z),ns(z)]];
-echo (filtered_zvals);
-echo (zvals);
-echo (nvals);
-paths=[for (i=[0:len(zvals)-1]) toothed_shape(params(zvals[i])[0],params(zvals[i])[1],w,nvals[i])];
-echo(len(paths));
-//len 4 
-//paths=[for (z=zvals) toothed_shape(params(z)[0],params(z)[1],w,ns(z))];
-//echo(unfiltered_zvals);
-//echo(zvals);
-//skin(paths, slices=1, z=zvals, refine=1, method="fast_distance");
+paths=[ for (i=[0:len(zvals)-1]) toothed_shape(params(zvals[i])[0],params(zvals[i])[1],w,nvals[i])];
+mirror([0,0,1]) {
+  skin(paths, slices=2, z=[for (i=[0:1:len(paths)-1]) zvals[i] ], refine=2, method="fast_distance");
+  //skin([paths[0],paths[1]], slices=1, z=[zvals[0],zvals[1]], refine=1, method="fast_distance"); //testing purposes
+  skin([toothed_shape(params(zvals[0])[0]+w,params(zvals[0])[1]-2*w,0,nvals[0]), paths[0]], slices=2, z=[-2*w, zvals[0] ], refine=2, method="fast_distance");
+  hull() {
+    translate([0,0,-2*w-(l-db)/2]) scale([1,1,0]) cylinder(d=db,h=1,$fn=64);
+    translate([0,0,-2*w]) scale([1,1,0]) linear_extrude(1) polygon(toothed_shape(params(zvals[0])[0]+w,params(zvals[0])[1]-2*w,0,4*nvals[0]));
+  }
+  translate([0,0,-2*w-(l-db)/2]) mirror([0,0,1]) cylinder(d=db,h=tube_length,$fn=64);
+}
