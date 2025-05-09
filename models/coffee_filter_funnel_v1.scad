@@ -1,5 +1,6 @@
 //Funnel for coffee filters
 //To filter chemicals directly into bottles
+//Older round version
 //To be printed in vase mode (outer shell only)
 include <../import/BOSL2/std.scad>
 top_d=130;

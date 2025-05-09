@@ -1,5 +1,9 @@
-pi=3.1415926;
+//Funnel for coffee filters
+//To filter chemicals directly into bottles
+//Newer geometrically correct version
+//To be printed in vase mode (outer shell only)
 include <../import/BOSL2/std.scad>
+pi=355/113;
 l=55; //lower seam length
 d=125; //opening diameter
 s=105; //side seam length
