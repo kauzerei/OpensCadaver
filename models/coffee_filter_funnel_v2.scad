@@ -6,10 +6,11 @@ include <../import/BOSL2/std.scad>
 pi=355/113;
 l=55; //lower seam length
 d=125; //opening diameter
-s=105; //side seam length
-h=sqrt(pow(s,2)-pow(d/2-l/2,2));
-w=4.5; //distance between teeth
+s=115; //side seam length
+mw=2; //minimal width of the sharp part
 h0=1; //starting height of filter holder
+h=sqrt(pow(s,2)-pow(d/2-l/2,2))+h0;
+w=5.2; //distance between teeth
 db=20; //bottle diameter
 tube_length=40;
 
@@ -28,7 +29,10 @@ function coordinates(r,l,t)=t<l/2?[t,r]
 
 function total(r,l)=2*l+2*r*pi;
 
-function toothed_shape(r,l,d,n)=[for (i=[0:1:n-1]) each [coordinates(r,l,i*total(r,l)/n),coordinates(r+d,l,(i+0.5)*total(r+d,l)/n)]];
+//function toothed_shape(r,l,d,n)=[for (i=[0:1:n-1]) each [coordinates(r,l,i*total(r,l)/n),coordinates(r+d,l,(i+0.5)*total(r+d,l)/n)]];
+function toothed_shape(r,l,d,n)=let(p=mw/(total(r+d,l)/n))[for (i=[0:1:n-1]) each [coordinates(r,l,i*total(r,l)/n),
+                                                         for (j=[-0.5*p:0.25*p:0.5*p]) coordinates(r+d,l,(i+0.5+j)*total(r+d,l)/n)]];
+
 
 function params(z)=[z*0.5*d/h,(h-z)*l/h];
 
@@ -42,11 +46,13 @@ zvals=[filtered_zvals[0],each [for (i=[1:1:len(filtered_zvals)-2]) each [filtere
 nvals=[for (z=filtered_zvals) each [ns(z),ns(z)]];
 paths=[ for (i=[0:len(zvals)-1]) toothed_shape(params(zvals[i])[0],params(zvals[i])[1],w,nvals[i])];
 mirror([0,0,1]) {
-  skin(paths, slices=0, z=[for (i=[0:1:len(paths)-1]) zvals[i] ], refine=1, sampling="segment",method="fast_distance");
-  skin([toothed_shape(params(zvals[0])[0]+w,params(zvals[0])[1]-2*w,0,nvals[0]), paths[0]], slices=10, z=[-2*w, zvals[0] ], refine=4, sampling="segment",method="fast_distance");
+  skin(paths, slices=10, z=[for (i=[0:1:len(paths)-1]) zvals[i] ], refine=1, sampling="segment",method="direct");
+  skin([toothed_shape(params(zvals[0])[0]+w,params(zvals[0])[1]-2*w,0,nvals[0]), paths[0]], slices=10, z=[h0-2*w, zvals[0] ], refine=1, sampling="segment",method="direct");
+  //skin([paths[0],paths[1]], slices=0, z=[for (i=[0:1]) zvals[i] ], refine=1, sampling="segment",method="fast_distance");
+  //skin([toothed_shape(params(zvals[0])[0]+w,params(zvals[0])[1]-2*w,0,nvals[0]), paths[0]], slices=10, z=[h0-2*w, zvals[0] ], refine=4, sampling="segment",method="fast_distance");
   hull() {
-    translate([0,0,-2*w-(l-db)/2]) scale([1,1,0]) cylinder(d=db,h=1,$fn=64);
-    translate([0,0,-2*w]) scale([1,1,0]) linear_extrude(1) polygon(toothed_shape(params(zvals[0])[0]+w,params(zvals[0])[1]-2*w,0,nvals[0]));
+    translate([0,0,h0-2*w-(l-db)/2]) scale([1,1,0]) cylinder(d=db,h=1,$fn=64);
+    translate([0,0,h0-2*w]) scale([1,1,0]) linear_extrude(1) polygon(toothed_shape(params(zvals[0])[0]+w,params(zvals[0])[1]-2*w,0,nvals[0]));
   }
-  translate([0,0,-2*w-(l-db)/2]) mirror([0,0,1]) cylinder(d=db,h=tube_length,$fn=64);
+  translate([0,0,h0-2*w-(l-db)/2]) mirror([0,0,1]) cylinder(d=db,h=tube_length,$fn=64);
 }
