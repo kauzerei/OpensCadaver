@@ -7,10 +7,10 @@ extra=0;
 difference() {
   for (xb=[0:99]) {
     hull() {
-    translate([back[xb+1],0,xb+1])cylinder(h=0.001,d=30);
-    translate([back[xb],0,xb])cylinder(h=0.001,d=30);
-    translate([front[xb+1]+extra,0,xb+1])cylinder(h=0.001,d=30);
-    translate([front[xb]+extra,0,xb])cylinder(h=0.001,d=30);
+    translate([back[xb+1],0,xb+1])scale([1,1,0])cylinder(h=1,d=30);
+    translate([back[xb],0,xb])scale([1,1,0])cylinder(h=1,d=30);
+    translate([front[xb+1]+extra,0,xb+1])scale([1,1,0])cylinder(h=1,d=30);
+    translate([front[xb]+extra,0,xb])scale([1,1,0])cylinder(h=1,d=30);
     }
   }
  * translate([8,0,4])cylinder(d=16,h=100);
