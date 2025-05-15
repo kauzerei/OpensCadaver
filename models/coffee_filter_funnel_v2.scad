@@ -8,7 +8,7 @@ l=55; //lower seam length
 d=125; //opening diameter
 s=115; //side seam length
 mw=0.4; //minimal width of the sharp part
-r0=0.5; //defines funnel opening at filter base
+r0=1; //defines funnel opening at filter base
 step=2; //now often new cross section profile is generated
 h=sqrt(pow(s,2)-pow(d/2-l/2,2));
 w=5; //distance between teeth
@@ -75,4 +75,4 @@ xvals=[[-2*w-(l-db)/2-tl,0],[dbl-2*w,0],[dbl,0.5],[h,0.5]];
 zvals=[for (z=[-2*w-(l-db)/2-tl:step:h]) z];
 paths=[for (z=zvals) path(r=lookup(z,rvals),l=lookup(z,lvals),d=lookup(z,dvals),n=n,mw=mw,x=lookup(z,xvals))];
 //let(lim=34)skin([for (i=[0:1:lim]) paths[i]], slices=0, z=[for (i=[0:1:lim]) zvals[i]], refine=1, sampling="segment",method="direct");
-skin(paths, slices=0, z=zvals, refine=1, sampling="segment",method="direct");
+mirror([0,0,1])skin(paths, slices=0, z=zvals, refine=1, sampling="segment",method="direct");
