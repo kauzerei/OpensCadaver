@@ -7,9 +7,10 @@ pi=355/113;
 l=55; //lower seam length
 d=125; //opening diameter
 s=115; //side seam length
-mw=0.4; //minimal width of the sharp part
+wi=0.2; //minimal width of inner teeth
+wo=1; //minimal width of outer teeth
 r0=1; //defines funnel opening at filter base
-step=2; //now often new cross section profile is generated
+step=1; //now often new cross section profile is generated
 h=sqrt(pow(s,2)-pow(d/2-l/2,2));
 w=5; //distance between teeth
 db=20; //bottle diameter
@@ -34,10 +35,23 @@ function total(r,l)=2*l+2*r*pi;
 
 //shape of a unit tooth p is the tip width
 //x=0 is single tooth, x=0.5 two teeth, inbetween x values give smooth bledning on teeth doubling
-function tooth(x,p=1)=x<2*p?[[0,0],
+function tooth(x,pi,po)=x<pi+po?[[0,0],
+                                 [pi/2,0],
+                                 each [for (i=[0:1:5]) [0.5-x/2-po/2+(x+po)*0.2*i,1]],
+                                 [1-pi/2,0]]
+                               :[[0,0],
+                                 [pi/2,0],
+                                 [0.5-x/2-po/2,1], 
+                                 [0.5-x/2+po/2,1],
+                                 [0.5-pi/2,(1-2*x)/(1-x-pi-po)],
+                                 [0.5+pi/2,(1-2*x)/(1-x-pi-po)],
+                                 [0.5+x/2-po/2,1],
+                                 [0.5+x/2+po/2,1],
+                                 [1-pi/2,0]];
+/*
+function tooth(x,pi,po)=let(p=pi)x<2*p?[[0,0],
                                             [p/2,0],
-                                            each [for (i=[0.5-x/2-p/2:(x+p)/4:0.5+x/2+p/2]) [i,1]],
-                                            [0.5+x/2+p/2,1],
+                                            each [for (i=[0.5-x/2-p/2:(x+p)/5:0.5+x/2+p/2]) [i,1]],
                                             [1-p/2,0]]
                                            :[[0,0],
                                             [p/2,0],
@@ -47,13 +61,12 @@ function tooth(x,p=1)=x<2*p?[[0,0],
                                             [0.5+p/2,(1-2*x)/(1-x-2*p)],
                                             [0.5+x/2-p/2,1],
                                             [0.5+x/2+p/2,1],
-                                            [1-p/2,0]];
-
+                                            [1-p/2,0]];*/
 //array of n teeth, outputs tuples of parameter t and degree of r expansion
-function teeth(x,n,p=1)=[for (i=[0:1:n-1]) for(t=tooth(x,p)) [t[0]+i,t[1]] ];
+function teeth(x,n,pi,po)=[for (i=[0:1:n-1]) for(t=tooth(x,pi=pi,po=po)) [t[0]+i,t[1]] ];
 
 //generate path from radius, length of straight part, number of teeth, minimal groove pointiness, stage of transition
-function path(r,l,d,n,mw=0.8,x=0)=let(p=n*mw/total(r+d,l))[for (i=teeth(x,n,p)) oval(r=r+i[1]*d,l=l,t=i[0]*total(r+i[1]*d,l)/n)];
+function path(r,l,d,n,wi,wo,x=0)=let(po=n*wo/total(r+d,l))let(pi=n*wi/total(r,l))[for (i=teeth(x,n,pi,po)) oval(r=r+i[1]*d,l=l,t=i[0]*total(r+i[1]*d,l)/n)];
 
 //params to pass into cross_section: namely r and h
 function params(z)=[z*0.5*d/h,(h-z)*l/h];
@@ -73,6 +86,6 @@ dbl=[for (i=[0:1:h]) each totvals[i]>=2*totvals[0]?[i]:[]][0];
 
 xvals=[[-2*w-(l-db)/2-tl,0],[dbl-2*w,0],[dbl,0.5],[h,0.5]];
 zvals=[for (z=[-2*w-(l-db)/2-tl:step:h]) z];
-paths=[for (z=zvals) path(r=lookup(z,rvals),l=lookup(z,lvals),d=lookup(z,dvals),n=n,mw=mw,x=lookup(z,xvals))];
+paths=[for (z=zvals) path(r=lookup(z,rvals),l=lookup(z,lvals),d=lookup(z,dvals),n=n,wi=wi,wo=wo,x=lookup(z,xvals))];
 //let(lim=34)skin([for (i=[0:1:lim]) paths[i]], slices=0, z=[for (i=[0:1:lim]) zvals[i]], refine=1, sampling="segment",method="direct");
 mirror([0,0,1])skin(paths, slices=0, z=zvals, refine=1, sampling="segment",method="direct");
