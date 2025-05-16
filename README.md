@@ -9,19 +9,15 @@ The designer of the model can make it parametric, which means that some properti
 If you want to have an STL with some parameters differing from default, open the `.scad` file with OpenSCAD and you will typically see the Customizer window on the right. Turn it on in Window submenu if it does not appear by default. Change the values however you like (what you see on screen may take long time to update, depending on complexity of moded) and press **F6** to build the solid (may take some time) and **F7** to save it.
 ## Dependencies?
 Openscad. Some of the models may rely on latest features of OpenSCAD, not available in stable builds, so if something doesn't work, try using openscad-nightly or build from master branch on github if you are hardcore.  
-Some of the models are using BOSL2 library, you need to clone it into `import/BOSL2` in order to generate the models.  
-´´´
-cd import && git clone https://github.com/BelfrySCAD/BOSL2.git
-´´´  
-Autogenerating script is written for Unix shell and works only on Linux and Mac.  
+Some of the models are using BOSL2 library, it is a submodule of this repo, so just do ```git submodule update --init``` in order to have it in `import/BOSL2` to have those models generated.  
+Autogenerating script does that automatically if needed. It works only on Linux.  
 ## Repo structure
 `models` openscad models written by me.  
 `import` external files such as STLs of scanned objects or other people's models and libraries which are used. All information is either in files themselves or in `import/README.md`.  
 `stl` not part of the repo anymore. This directory is created when running `generate_stl.sh` and all generated parts are saved there.  
 ## generate_stl.sh
-Currently works on Linux and Mac. A script that takes names of the models (or just `stl/*`) and writes STLs with the same names into `stl` directory.  
+Currently works on Linux only. A script that takes names of the models (or just `stl/*`) as an argument and writes STLs with the same names into `stl` directory.  
 If a model is multipart it outputs several STLs for each part.  
-If `stl` directory does not exist, it creates it.  
 ## About structure of scad files
 If an object is multipart, a variable `part` is declared near the beginning, which contains the name of default part. After variable declaration there is a comment in Customizer-compatible format, which contains all parts' names.  
 ```
