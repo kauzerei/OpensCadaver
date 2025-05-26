@@ -1,31 +1,17 @@
 include <../import/BOSL2/std.scad>
 include <../import/BOSL2/rounding.scad>
-part="handle";//[handle,cap]
 $fn=128;
 l=64;
-//measurements of the handle: position of furthest point and rearest point, grip width and plane inclanation
-//measured at certain z-values relative to the handle center
-zval=[0,15,45,85,105];
-back=[-16,-17,-16,-16,-16/cos(20)];
-front=[16,16,19,17,25/cos(20)];
-width=[32,34,33,34,32];
-angle=[0,0,0,0,-20];
 
-//smoothed and interpolated values
-backs=resample_path(smooth_path([for (i=[0:len(zval)-1]) [zval[i],back[i]]],splinesteps=l/2),l,closed=false);
-fronts=resample_path(smooth_path([for (i=[0:len(zval)-1]) [zval[i],front[i]]],splinesteps=l/2),l,closed=false);
-widths=resample_path(smooth_path([for (i=[0:len(zval)-1]) [zval[i],width[i]]],splinesteps=l/2),l,closed=false);
-angles=resample_path(smooth_path([for (i=[0:len(zval)-1]) [zval[i],angle[i]]],splinesteps=l/2),l,closed=false);
-zvals=[for (i=[0:l-1]) (backs[i][0]+fronts[i][0]+widths[i][0]+angles[i][0])/4];
+//angles=resample_path(smooth_path([for (i=[0:len(zval)-1]) [zval[i],angle[i]]],splinesteps=l/2),l,closed=false);
 
-//last points of the arrays for calculating chamfered top
-bl=backs[len(backs)-1][1];
-fl=fronts[len(fronts)-1][1];
-wl=widths[len(widths)-1][1];
-al=angles[len(angles)-1][1];
-zl=zvals[len(zvals)-1];
+function crossection(f, b, w, t="ellipse")=(t=="ellipse")?fwd((f+b)/2,ellipse(d=[f-b,w]))
+                                          :(t=="slot")?fwd((f+b)/2,rect([f-b,w],rounding=w/2))
+                                          :[];
 
-//grip shape without chamfer
+
+polygon(crossection(16,-16,16,"slot"));
+/*
 crossections=[for (i=[0:l-1]) move([(fronts[i][1]+backs[i][1])/2,0,zvals[i]],
                                     yrot(angles[i][1],path3d(ellipse(d=[fronts[i][1]-backs[i][1],widths[i][1]],$fn=128))))];
 shapes=[each crossections, move([(bl+fl)/2,0,zl+1],yrot(al,path3d(ellipse(d=[fl-bl-2,wl-2],$fn=128))))]; //add chamfer
@@ -72,3 +58,4 @@ if (part=="handle") intersection() {
 vasgen(ir=ir,or=or,n=n,h=h,subdivision=subdivision,angle=ang);
 handle();
 }
+*/
