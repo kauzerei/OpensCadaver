@@ -9,7 +9,6 @@ n=54; //number of teeth
 da=0.18; //defines contact angle (pointiness of tooth)
 dh=0.32;  //defines profile asymmetry (thinness of tooth)
 
-
 iter=4; //iterations for approximating single tooth
 sgn=50; //second gear number of teeth
 sgr=or*sgn/n; //second gear radius
@@ -20,7 +19,7 @@ worm_thickness=10; //about half diameter of worm gear
 
 /*constants*/
 pi=355/113;
-bissl=1/1000;//a bissl, gell
+bissl=1/1000; //a bissl, gell
 
 module original_gear() {
   rotate([0,0,-4.9]) import(file="../import/settings.svg",center=true,dpi=500);
@@ -35,7 +34,7 @@ module apple_gear() {
   polygon(arr);
 }
 
-module rack(nteeth=n) {
+module rack(nteeth=n) { //warning, the teeth on ends are not fully correct, as they are cut from one side
   total_rot=nteeth*360/n;
   total_tr=od*pi*total_rot/360; //how far the gear rolls
   tr=[for (x=[0:total_tr/(iter*nteeth):total_tr]) x];
@@ -54,12 +53,12 @@ module second_gear(iter=iter*sgn) {
   }
 }
 
-module worm_section(nteeth=5) {
+module worm_section(nteeth=5) { //take a correctly shaped tooth from the middle of the rack, and wrap around a circle 
   total_rot=nteeth*360/n;
   total_tr=od*pi*total_rot/360;
   tooth=total_tr/nteeth;
   for (i=[0:1:worm_iter-1]) {
-    hull(){
+    hull(){ //chain hull, because the shape can have convexities
       rotate([0,0,i*360/worm_iter]) intersection() {
         translate([-floor(nteeth/2)*tooth-i*tooth/worm_iter,worm_thickness+ir]) rack(nteeth);
         square([bissl,worm_thickness]);
