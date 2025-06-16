@@ -1,4 +1,6 @@
 /* thingiverse/printables description
+Pry tool for Audi A1 side mirror, customizable
+
 A prying tool designed to remove the mirror from Audi A1 Gen 1 (8x).
 
 Probably suits similar jobs where you need to pull something out,
@@ -8,12 +10,18 @@ Many other pry bars published here would probably also work,
 this one makes it easier to pull with significant force thanks to the ring.
 
 Place thin radial parts of two (or more) of those tools between
- the reflective part of the mirror and the frame (see picture),
- and pull them in turns in a particular way: the mechanism for adjusting
- the mirror swivels, so don't allow one side of the mirror sink inside
- the frame as you pull the other side. Apply the force simultaneously
- to both tools, but move them towards you in turns in kind of 
- gentle swinging motion.
+the reflective part of the mirror and the frame (see picture),
+and pull them in turns in a particular way: the mechanism for adjusting
+the mirror swivels, so don't allow one side of the mirror sink inside
+the frame as you pull the other side. Apply the force simultaneously
+to both tools, but move them towards you in turns in kind of 
+gentle swinging motion.
+
+Made in OpenSCAD, fully customizable for different jobs:
+the thickness and length of radial part and other parameters
+cam be changed. My github repo for all of my models may contain
+a newer version of this model if I decide to update something:
+https://github.com/kauzerei/OpensCadaver/blob/main/models/prying_tool_mirror_audi_a1.scad
 */
 width= 10;
 thinness=1.6;
