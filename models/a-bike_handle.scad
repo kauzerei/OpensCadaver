@@ -1,3 +1,5 @@
+//Attempt at recreating original Sinclair A-Bike handle rubber grip
+
 include <../import/BOSL2/std.scad>
 include <../import/BOSL2/rounding.scad>
 part="handle";//[handle,cap]

@@ -1,3 +1,6 @@
+//Code that for any given gear calculates the shape of a gear that couples with it
+//inspired by mastodon post that asserted that apple's settings gear didn't work
+
 part="coupling_gear";//[one_gear,rack,coupling_gear,worm_gear,reference]
 
 /*constants*/

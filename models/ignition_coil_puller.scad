@@ -1,3 +1,18 @@
+/* A tool to remove ignition coils from the N43 engine of E87
+Printables descroption:
+I designed this tool to remove ignition coils from the N43B20 engine of my E87.
+It will also probably work on N43B16 engine and other BMWs with one of those engines.
+It could potentially even work on other engines if you change the model parameters
+(clip_size is the size of the ignition coil clip, which is the part, that this tool grabs),
+but that's probably a stretch.
+Some people are able to pull them with bare hands (but sometimes break the clips),
+some use a screwdriver as a lever (which is barbaric and could damage insulation
+or the plastic of the coil). I find it easier to have the perfect tool, since I'm
+planning to stick with this engine for a while.
+I used the initial version of this tool and it was hard to pull the third coil
+without removing the tension brace (which requires outer torx bit and could be avoided),
+so I made a longer version with shorter handle, but the longer version is yet untested.
+*/
 wall=4;
 handle_length=75;
 handle_width=70;

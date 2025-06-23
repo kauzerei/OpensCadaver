@@ -1,6 +1,7 @@
 //Stable and fast to print gopro-style camera holder for a phone gimbal
 //The camera protrudes forward, so the gimbal itself is not in the frame
 //Designed for GoPro 4 Silver and Osmo Mobile, but can be customized for your dimensions
+//Didn't make it work actually
 part="NOSTL_All"; //[holder,bracket,NOSTL_All]
 //how far to the front the camera protrudes
 offset=48;

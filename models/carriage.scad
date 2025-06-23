@@ -2,7 +2,7 @@
 //never used
 $fa=1/1;
 $fs=0.1/1;
-part="lower_plate"; //[upper_plate,eccentric,post,lower_plate, all]
+part="lower_plate"; //[upper_plate,eccentric,post,lower_plate, NOSTL_all]
 bissl=0.01;
 air=0.5;
 
@@ -84,7 +84,7 @@ module eccentric(nut_d=18,nut_h=10,bolt_d=4,bearing_h=7,id=8,od=22,lip_h=1, lip_
       translate([offset,0,nut_h])cylinder(d=id+2*lip_w,h=lip_h);
       translate([offset,0,nut_h+lip_h])cylinder(d=id,h=bearing_h);
       translate([0,0,-h])cylinder(d=d,h=h);
-      if (part=="all") color([0,1,1]) translate([offset,0,nut_h+lip_h]) difference() {
+      if (part=="NOSTL_all") color([0,1,1]) translate([offset,0,nut_h+lip_h]) difference() {
         cylinder(d=od,h=bearing_h-bissl);
         translate([0,0,-bissl])cylinder(d=id,h=bearing_h+bissl);
   }

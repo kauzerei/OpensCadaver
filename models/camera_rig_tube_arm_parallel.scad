@@ -1,3 +1,5 @@
+// Arm to mount a tube with parallel offset from arri rosette
+// Probably should become a part of rig-htsized repo
 $fa=1/1;
 $fs=0.5/1;
 d_tube=16;

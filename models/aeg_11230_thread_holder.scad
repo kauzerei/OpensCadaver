@@ -1,3 +1,4 @@
+//Replacment for lost rod, that holds thread on AEG-11230 sewing machine
 $fs=1/2;
 $fa=1/2;
 linear_extrude(height=4.5) {

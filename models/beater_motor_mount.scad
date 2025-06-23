@@ -1,3 +1,5 @@
+// Mounting a drum stick to a motor
+// Developed for LARS, never used
 $fa=1/1;
 $fs=1/2;
 bissl=1/100;

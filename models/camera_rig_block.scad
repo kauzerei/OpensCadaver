@@ -1,3 +1,6 @@
+// A solid cheeseplate block. 
+// Spacer for bringing camera cage higher or something
+// Probably should become a part of rig-htsized repo
 nholes_across=5;
 nholes_along=5;
 d_hole=4;

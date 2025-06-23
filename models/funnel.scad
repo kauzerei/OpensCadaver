@@ -1,4 +1,5 @@
 //Funnel to fill sand toys with sand
+//There's an option to print in vase mode now
 $fn=128;
 d1=50;
 h1=30;

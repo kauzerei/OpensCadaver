@@ -1,3 +1,5 @@
+// Arm to mount something offset and perpendicualr to a tube a tube
+// Probably should become a part of rig-htsized repo
 $fa=1/1;
 $fs=0.5/1;
 d_tube=15;

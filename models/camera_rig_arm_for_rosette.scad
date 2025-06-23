@@ -1,3 +1,5 @@
+// Arm with two arri rosette mounts on each side
+// Probably should become a part of rig-htsized repo
 length=100;
 depth=10;
 wall=3;

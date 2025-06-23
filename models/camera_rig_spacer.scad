@@ -1,3 +1,6 @@
+// A spacer block that offsets two things with hole raster
+// Like a cage from tripod plate or something
+// Probably should become a part of rig-htsized repo
 $fa=1/1;
 $fs=1/2;
 module camera_spacer() {
