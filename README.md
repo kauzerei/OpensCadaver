@@ -13,6 +13,7 @@ Some of the models are using BOSL2 library, it is a submodule of this repo, so j
 Autogenerating script does that automatically if needed. It works only on Linux.  
 ## Repo structure
 `models` openscad models written by me.  
+`drafts` openscad models of low value. One-offs, terribly written, on prototype stage, etc.  
 `import` external files such as STLs of scanned objects or other people's models and libraries which are used. All information is either in files themselves or in `import/README.md`.  
 `stl` not part of the repo anymore. This directory is created when running `generate_stl.sh` and all generated parts are saved there.  
 ## generate_stl.sh
