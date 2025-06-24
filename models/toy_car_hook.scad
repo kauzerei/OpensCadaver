@@ -1,8 +1,7 @@
 // Hook for the toy car
 // no idea why it crashes on saving stl when run from command line
 // therefore moved to drafts, otherwise fstl stops viewing on corrupted stl
-$fs=1/1;
-$fa=1/1;
+$fn=32;
 thickness=3; //height of print
 width=3;
 bend_radius=6;
@@ -11,7 +10,7 @@ ring_diameter=3; //inner hole
 step=5; //kinda like fa
 
 module shape() {
-  for (angle=[150-step:-step:min_angle]) hull() {
+  for (angle=[150:-step:min_angle+step]) hull() {
     rotate(angle) translate([bend_radius,0])circle(d=width);
     rotate(angle-step) translate([bend_radius,0])circle(d=width);
   }

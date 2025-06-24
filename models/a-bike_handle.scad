@@ -2,7 +2,7 @@
 
 include <../import/BOSL2/std.scad>
 include <../import/BOSL2/rounding.scad>
-part="handle";//[handle,cap]
+part="cap";//[handle,cap]
 $fn=128;
 l=64;
 //measurements of the handle: position of furthest point and rearest point, grip width and plane inclanation
@@ -59,7 +59,7 @@ n=20;
 h=150;
 subdivision=64;
 ang=45;
-include <../import/BOSL2/std.scad>
+
 //path=[for (i=[0:1:n-1]) each [[i*360/(2*n),id],[(i+0.5)*360/(2*n),id],[(i+0.5)*360/(2*n),od],[(i+1)*360/(2*n),od]]];
 
 module vasgen(ir,or,n,h,subdivision,angle) {
