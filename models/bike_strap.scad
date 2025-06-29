@@ -12,12 +12,10 @@ revolutions=2*(max_length)/(pi*(max_diameter+min_diameter));
 pitch=(max_diameter-min_diameter)/revolutions;
 n=floor((max_length-min_length)/distance);
 
-module oval_hole() {
+module oval_hole() { //it's a separate module in case you want a fancy shape here
 cylinder(d=10,h=2*thickness,center=true);
-//cylinder(d=10,h=pitch-thickness,center=true);
 }
 
-echo(len(path[0]));
 path = helix(h=0,d1=min_diameter,d2=max_diameter,turns=revolutions,$fn=128);
 path2d=[for (p=path) [p[0],p[1]]];
 difference() {
