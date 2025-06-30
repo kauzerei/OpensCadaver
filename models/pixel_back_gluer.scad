@@ -1,5 +1,7 @@
-width=69;
-height=174;
+//a back plate to apply the pressure when glueing the back of the phone
+
+width=70;
+height=148;
 back_rim_width=7;
 side_rim_width=5;
 back_rim_thickness=3;
