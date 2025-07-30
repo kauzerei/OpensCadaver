@@ -1,6 +1,6 @@
 include <../import/BOSL2/std.scad>
 include <../import/BOSL2/rounding.scad>
-
+include <../import/BOSL2/fnliterals.scad>
 $fn=32;
 
 width=10;
@@ -30,10 +30,24 @@ links=[for (i=[0:1:len(p)-1]) [
 ]];
 
 //link-specific features
-//key height screw
+//link 1
+module key_height_screw() {
+echo(links[1][1]-links[1][0]);
+angle=atan2((links[1][1]-links[1][0])[0],(links[1][1]-links[1][0])[1]);
+translate(mean(links[1])) rotate([0,-90,-angle]) cylinder(d=4,h=10,center=true);
+}
 
-//key height stop
+//link 2
+module key_height_stop() {
+}
 
-
-for (i=[0:1:len(p)-1]) stroke(joints[i],width=t[i]);
-for (i=[0:1:len(p)-1]) stroke(links[i],width=w[i]);
+module main() {
+  linear_extrude(height=width,center=true,convexity=4) {
+    for (i=[0:1:len(p)-1]) stroke(joints[i],width=t[i]);
+    for (i=[0:1:len(p)-1]) stroke(links[i],width=w[i]);
+  }
+}
+difference() {
+  main();
+  key_height_screw();
+}
