@@ -1,15 +1,34 @@
 include <../import/BOSL2/std.scad>
 include <../import/BOSL2/rounding.scad>
+
+$fa=1/2;
+$fs=1/2;
+
 p=[[0,0],[0,50],[100,-50],[50,-50]];
 w=[5,5,5,5]; //widths of links
 l=[1,1,1,1]; //lengths of joints
 t=[2,2,2,2]; //thicknesses of joints
 tg=path_tangents(p,closed=true,uniform=false);
-for (i=[0:1:len(p)-1]) stroke([
-  p[i]-0.5*tg[i]*(l[i]+w[(i-1+len(p))%len(p)]),
-  p[i]+0.5*tg[i]*(l[i]+w[i])
-], width=t[i]);
-for (i=[0:1:len(p)-1]) stroke([
-  p[i]+0.5*tg[i]*(l[i]+w[(i)%len(p)]),
-  p[(i+1)%len(p)]-0.5*tg[(i+1)%len(p)]*(l[(i+1)%len(p)]+w[i])
-],width=w[i]);
+
+//allowing "out of bounds" indices
+assert (len(p)==len(w));
+assert (len(w)==len(t));
+assert (len(p)==len(l));
+function p(i)=let(s=len(p)) p[(i+s)%s];
+function w(i)=let(s=len(w)) w[(i+s)%s];
+function l(i)=let(s=len(l)) l[(i+s)%s];
+function t(i)=let(s=len(t)) t[(i+s)%s];
+function tg(i)=let(s=len(tg)) tg[(i+s)%s];
+
+
+joints=[for (i=[0:1:len(p)-1]) [
+  p(i)-0.5*tg(i)*(l(i)+w(i-1)),
+  p(i)+0.5*tg(i)*(l(i)+w(i))
+]];
+links=[for (i=[0:1:len(p)-1]) [
+  p(i)  +0.5*tg(i)  *(l(i)  +w(i)),
+  p(i+1)-0.5*tg(i+1)*(l(i+1)+w(i))
+]];
+
+for (i=[0:1:len(p)-1]) stroke(joints[i],width=t[i]);
+for (i=[0:1:len(p)-1]) stroke(links[i],width=w[i]);
