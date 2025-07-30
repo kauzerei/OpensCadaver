@@ -24,30 +24,30 @@ if (part=="small") {
     }
   }
 }
-if (part=="big") {
-  w1=101;
-  w2=99;
-  r=5;
-  h=60;
-  wall=3;
-  slot=1.2;
-  clamping=3;
+if (part=="big") rotate([0,-90,0]){
+  w1=90;
+  w2=86.4;
+  r=8;
+  h=64;
+  wall=3.5;
+  slot=1.5;
+  clamping=2;
   bsl=1/10;
   p=[[0,-w1/2],[0,w1/2],[h,w2/2],[h,-w2/2]];
   pout=[[p[0][0]-bsl,p[0][1]-bsl],[p[1][0]-bsl,p[1][1]+bsl],[p[2][0]+bsl,p[2][1]+bsl],[p[3][0]+bsl,p[3][1]-bsl]];
   pin=[[p[0][0]-bsl,p[0][1]-bsl],[p[1][0]-bsl,p[1][1]+bsl],[p[2][0]-slot,p[2][1]-slot],[p[3][0]-slot,p[3][1]+slot]];
   pr=round_corners(path=p,method="circle",radius=[0,0,r,r],$fn=32);
-  difference() {
-    linear_extrude(height=wall,center=true) union() {
-      polygon(pr);
+  linear_extrude(height=wall,center=true) {
       translate([clamping/2,-w1/2]) circle(d=clamping);
       translate([clamping/2,w1/2]) circle(d=clamping);
     }
+  difference() {
+    linear_extrude(height=wall,center=true) polygon(pr);
     linear_extrude(height=slot,center=true,convexity=3) difference() {
       polygon(round_corners(path=pout,method="circle",radius=[0,0,r,r],$fn=32));
       polygon(round_corners(path=pin,method="circle",radius=[0,0,r,r],$fn=32));
     }
-    linear_extrude(height=wall+bsl,center=true) union() {
+   * linear_extrude(height=wall+bsl,center=true) union() {
       translate([0,-w1/2+wall]) square([10,wall]);
       translate([0,w1/2-2*wall]) square([10,wall]);
     }
