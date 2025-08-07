@@ -30,15 +30,21 @@ links=[for (i=[0:1:len(p)-1]) [
 ]];
 
 //link-specific features
-//link 1
+//link 2
 module key_height_screw() {
-echo(links[1][1]-links[1][0]);
-angle=atan2((links[1][1]-links[1][0])[0],(links[1][1]-links[1][0])[1]);
-translate(mean(links[1])) rotate([0,-90,-angle]) cylinder(d=4,h=10,center=true);
+angle=atan2((links[2][1]-links[2][0])[0],(links[2][1]-links[2][0])[1]);
+translate(mean(links[2])) rotate([0,-90,-angle]) cylinder(d=4,h=10,center=true);
 }
 
-//link 2
+//link 3
 module key_height_stop() {
+//  echo(line_normal(links[0]));
+//angle=atan2((links[3][1]-links[3][0])[0],(links[3][1]-links[3][0])[1]);
+proportion=0.9;
+//translate(proportion*links[3][0]+(1-proportion)*links[3][1]) rotate([0,-90,-angle]) cylinder(d=4,h=10,center=true);
+starting_point=proportion*links[3][0]+(1-proportion)*links[3][1];
+feature=[starting_point,starting_point+[-9,10]];
+linear_extrude(height=width,center=true) stroke(feature,width=w[3]);
 }
 
 module main() {
@@ -47,7 +53,38 @@ module main() {
     for (i=[0:1:len(p)-1]) stroke(links[i],width=w[i]);
   }
 }
-difference() {
-  main();
-  key_height_screw();
+
+sec_len=[30,70];
+sec_wid=[4,4];
+sec_stp=[10,10];
+stp_pos=[3,3];
+sec_ang=15;
+sec_l=2;
+sec_t=1;
+
+module secondary() {
+  p1=[0,sec_len[0]];
+  p2=p1+(sec_wid[0]/2+sec_wid[1]/2+sec_l)*[sin(sec_ang/2),cos(sec_ang/2)];
+  p3=p2+sec_len[1]*[sin(sec_ang),cos(sec_ang)];
+  p4=p2+stp_pos[1]*[sin(sec_ang),cos(sec_ang)];
+  difference() {
+    linear_extrude(height=width,center=true,convexity=4) {
+      stroke([[0,0],[0,sec_len[0]]],width=sec_wid[0]);
+      stroke([[0,sec_len[0]-stp_pos[0]],[sec_stp[0],sec_len[0]-stp_pos[0]]],width=sec_wid[0]);
+      stroke([p1,p2],width=sec_t); //maybe hange conecting line shape?
+      stroke([p2,p3],width=sec_wid[1]);
+      stroke([p4,p4+sec_stp[1]*[cos(sec_ang),-sin(sec_ang)]],width=sec_wid[1]);
+      translate(p3) circle(d=30); //hammer efinitely to be changed
+    }
+    translate(p4+0.5*sec_stp[1]*[cos(sec_ang),-sin(sec_ang)]) rotate([0,-90,-sec_ang-90]) cylinder(d=4,h=10,center=true);
+  }
 }
+
+union() {
+  difference() {
+    main();
+    key_height_screw();
+  }
+  key_height_stop();
+}
+translate(mean(links[1])) rotate([0,0,-20]) secondary();
