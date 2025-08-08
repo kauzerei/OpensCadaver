@@ -4,11 +4,22 @@ include <../import/BOSL2/fnliterals.scad>
 $fn=32;
 
 width=10;
-p=[[0,0],[0,70],[12,71],[24,65]];
-w=[4,4,4,4]; //widths of links
-l=[2,2,2,2]; //lengths of joints
-t=[1,1,1,1]; //thicknesses of joints
+p=[[0,0],[-3,70],[5,70],[19,68],[30,61]];
+w=[4,4,4,4,4]; //widths of links
+l=[2,-4,2,2,2]; //lengths of joints
+t=[1,1,1,1,1]; //thicknesses of joints
 tg=path_tangents(p,closed=true,uniform=false);
+
+sec_len=[20,80];
+sec_wid=[4,4];
+sec_stp=[10,10];
+stp_pos=[3,3];
+sec_ang=15;
+fix_ang=-20;
+sec_l=2;
+sec_t=1;
+d=4;
+h=1.1*max([each w, each sec_wid]);
 
 //allowing "out of bounds" indices
 assert (len(p)==len(w));
@@ -30,21 +41,28 @@ links=[for (i=[0:1:len(p)-1]) [
 ]];
 
 //link-specific features
-//link 2
-module key_height_screw() {
-angle=atan2((links[2][1]-links[2][0])[0],(links[2][1]-links[2][0])[1]);
-translate(mean(links[2])) rotate([0,-90,-angle]) cylinder(d=4,h=10,center=true);
+//link 3
+module key_height_screw(i=3) {
+angle=atan2((links[i][1]-links[i][0])[0],(links[i][1]-links[3][0])[1]);
+translate(mean(links[3])) rotate([0,-90,-angle]) cylinder(d=d,h=h,center=true);
 }
 
-//link 3
-module key_height_stop() {
+//link 4
+module key_height_stop(i=4) {
 //  echo(line_normal(links[0]));
 //angle=atan2((links[3][1]-links[3][0])[0],(links[3][1]-links[3][0])[1]);
 proportion=0.9;
 //translate(proportion*links[3][0]+(1-proportion)*links[3][1]) rotate([0,-90,-angle]) cylinder(d=4,h=10,center=true);
-starting_point=proportion*links[3][0]+(1-proportion)*links[3][1];
+starting_point=proportion*links[i][0]+(1-proportion)*links[i][1];
 feature=[starting_point,starting_point+[-9,10]];
-linear_extrude(height=width,center=true) stroke(feature,width=w[3]);
+linear_extrude(height=width,center=true) stroke(feature,width=w[i]);
+}
+
+//link 0
+module base(i=0) {
+  linear_extrude(height=width,center=true) {
+    stroke([links[i][0],links[i][1]+0.2*(links[i][1]-links[i][0])],width=w[i]);
+  }
 }
 
 module main() {
@@ -53,14 +71,6 @@ module main() {
     for (i=[0:1:len(p)-1]) stroke(links[i],width=w[i]);
   }
 }
-
-sec_len=[30,70];
-sec_wid=[4,4];
-sec_stp=[10,10];
-stp_pos=[3,3];
-sec_ang=15;
-sec_l=2;
-sec_t=1;
 
 module secondary() {
   p1=[0,sec_len[0]];
@@ -76,7 +86,8 @@ module secondary() {
       stroke([p4,p4+sec_stp[1]*[cos(sec_ang),-sin(sec_ang)]],width=sec_wid[1]);
       translate(p3) circle(d=30); //hammer efinitely to be changed
     }
-    translate(p4+0.5*sec_stp[1]*[cos(sec_ang),-sin(sec_ang)]) rotate([0,-90,-sec_ang-90]) cylinder(d=4,h=10,center=true);
+    translate(p4+0.7*sec_stp[1]*[cos(sec_ang),-sin(sec_ang)]) rotate([0,-90,-sec_ang-90]) cylinder(d=d,h=h,center=true);
+    translate([0,sec_len[0]-stp_pos[0]-6]) rotate([0,-90,0]) cylinder(d=d,h=h,center=true);
   }
 }
 
@@ -86,5 +97,6 @@ union() {
     key_height_screw();
   }
   key_height_stop();
+  base();
 }
-translate(mean(links[1])) rotate([0,0,-20]) secondary();
+translate(mean(links[2])) rotate([0,0,fix_ang]) secondary();
