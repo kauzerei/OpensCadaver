@@ -5,16 +5,15 @@ $fa=1/2;
 $fs=1/2;
 bsl=1/100;
 
-phone_width=70;
-phone_height=170;
-edge_radius=5;
-side_radius=10;
+phone_width=74;
+phone_height=156;
+edge_radius=6;
 
 wall_width=4;
-wall_height=4;
+wall_height=5;
 beam_width=8;
-edge_size=22;
-beam_pos=30;
+edge_size=14;
+beam_pos=0;
 
 charger_d=92;
 charger_h=11;
@@ -33,12 +32,16 @@ function holder_crossection()=round_corners(round_corners(
                               method="chamfer"
                               ),
                               cut=[1,0,0,0,0,0,0,0,0,0]);
+ module corner() {
+  edge=[for (i=subdivide_path(phone(),maxlen=1)) each norm(i-[phone_width/2,phone_height/2])<edge_size?[i]:[] ];
+  path_sweep(holder_crossection(),edge,closed=false,caps=1,$fn=4);
+}
 
 module beam_structure() {
-  translate([phone_width/2,phone_height/2]) circle(d=edge_size);
-  translate([-phone_width/2,phone_height/2]) circle(d=edge_size);
-  translate([phone_width/2,-phone_height/2]) circle(d=edge_size);
-  translate([-phone_width/2,-phone_height/2]) circle(d=edge_size);
+  //translate([phone_width/2,phone_height/2]) circle(d=edge_size);
+  //translate([-phone_width/2,phone_height/2]) circle(d=edge_size);
+  //translate([phone_width/2,-phone_height/2]) circle(d=edge_size);
+  //translate([-phone_width/2,-phone_height/2]) circle(d=edge_size);
   hull() {
     translate([phone_width/2,phone_height/2]) circle(d=beam_width);
     translate([0,beam_pos]) circle(d=beam_width);
@@ -56,17 +59,15 @@ module beam_structure() {
     translate([0,-beam_pos]) circle(d=beam_width);
   }
 }
-
+  
 difference() {
   union() {
+    for (m1=[[0,0,0],[1,0,0]]) for (m2=[[0,0,0],[0,1,0]]) mirror(m1) mirror(m2) corner();
     intersection ()  {
       linear_extrude(height=30,convexity=2) beam_structure();
-      union() {
-        path_sweep2d(holder_crossection(),phone(),closed=true);
-        linear_extrude(height=charger_h-camera_protrusion) polygon(phone());
-      }
+      linear_extrude(height=charger_h-camera_protrusion) polygon(phone());
     }
-    cylinder(d=charger_d+2*wall_width,h=charger_h);
+  cylinder(d=charger_d+2*wall_width,h=charger_h);
   }
   translate([0,0,-bsl]) cylinder(d=charger_d,h=charger_h+2*bsl);
   rotate([90,0,0]) cylinder(d=14,h=2*phone_height);
