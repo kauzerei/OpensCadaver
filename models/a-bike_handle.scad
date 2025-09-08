@@ -71,6 +71,6 @@ linear_extrude(height=h,twist=60*(h/or),slices=50) polygon(path_polar);
 }
 
 if (part=="handle") intersection() {
-vasgen(ir=ir,or=or,n=n,h=h,subdivision=subdivision,angle=ang);
+//vasgen(ir=ir,or=or,n=n,h=h,subdivision=subdivision,angle=ang);
 handle();
 }
