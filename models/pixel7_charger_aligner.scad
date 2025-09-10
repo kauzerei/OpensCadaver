@@ -1,6 +1,20 @@
-//An aligner to be placed on Ikea's wireless charger.
-//Doesn't centers Google Pixel 7 perfectly, because of the stupid camera bump
-//It's 4mm off and I hate it, but it's the best one can do
+//Aligner or cradle for Pixel 7 to be placed on Ikea's wireless charger.
+
+/* Printables/Thingiverse description
+Google Pixel 7 wireless charging cradle for Ikea LIVBOJ 
+
+Fits around Ikea wireless charger LIVBOJ.
+Designed for Google Pixel 7 (just 7, not A, not Pro) without any case.
+It's parametric and written in OpenSCAD, so it can be enlarged to fit the case if needed.
+Doesn't center the phone perfectly: because of the stupid camera bump, it's 4mm off, but it's more than precise enough.
+There are two versions of cable alignment: towards the charging port of the phone and towards the right side.
+You can also print it facing the left side by mirroring in the slicer.
+
+Heavily inspired by https://www.printables.com/model/450027-phone-cradle-for-pixel-7-and-ikea-nordmarke-qi-cha
+although it's not a remix, but a complete rewrite from scratch.
+
+My github repo for all of my models may contain a newer version of this model: https://github.com/kauzerei/OpensCadaver/blob/main/models/pixel7_charger_aligner.scad
+*/
 
 include <../import/BOSL2/std.scad>
 include <../import/BOSL2/rounding.scad>
@@ -8,6 +22,9 @@ include <../import/BOSL2/rounding.scad>
 $fa=1/2;
 $fs=1/2;
 bsl=1/100;
+
+part="side_cut";//[side_cut,end_cut]
+cutout_width=14;
 
 phone_width=73;
 phone_height=155;
@@ -21,6 +38,7 @@ beam_pos=0;
 
 charger_d=91;
 charger_h=10;
+charger_s=-4;
 camera_protrusion=4;
 
 function phone()=subdivide_path(rect([phone_width,phone_height],rounding=edge_radius),maxlen=1);
@@ -68,9 +86,9 @@ difference() {
       linear_extrude(height=30,convexity=2) beam_structure();
       linear_extrude(height=charger_h-camera_protrusion) polygon(phone());
     }
-  translate([0,-4,0])cylinder(d=charger_d+2*beam_width,h=charger_h-camera_protrusion);
+  translate([0,charger_s,0])cylinder(d=charger_d+2*beam_width,h=charger_h-camera_protrusion);
   }
-  translate([0,-4,-bsl]) cylinder(d=charger_d,h=charger_h+2*bsl);
-  //rotate([90,0,0]) cylinder(d=14,h=2*phone_height);
-  translate([-7,-phone_height,-bsl]) cube([14,phone_height,charger_h-camera_protrusion+2*bsl]);
+  translate([0,charger_s,-bsl]) cylinder(d=charger_d,h=charger_h+2*bsl);
+  if (part=="side_cut") translate([0,charger_s-cutout_width/2,-bsl]) cube([charger_d,cutout_width,charger_h-camera_protrusion+2*bsl]);
+  if (part=="end_cut") translate([-cutout_width/2,-charger_d,-bsl]) cube([cutout_width,charger_d,charger_h-camera_protrusion+2*bsl]);
 }
