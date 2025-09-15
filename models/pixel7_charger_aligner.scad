@@ -1,4 +1,4 @@
-//Aligner or cradle for Pixel 7 to be placed on Ikea's wireless charger.
+//Aligner or cradle for Pixel 7 to be placed on Ikea's wireless charger. Almost centers the phone.
 
 /* Printables/Thingiverse description
 Google Pixel 7 wireless charging cradle for Ikea LIVBOJ 
@@ -37,7 +37,7 @@ edge_size=14;
 beam_pos=0;
 
 charger_d=91;
-charger_h=10;
+charger_h=11;
 charger_s=-4;
 camera_protrusion=4;
 
