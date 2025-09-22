@@ -6,19 +6,19 @@ $fs=1/2;
 bsl=1/100;
 
 //triangular_base:
-t_size=50;
+t_size=55;
 t_a=70;
 //magnet dimensions
-m_d=12.5;
-m_h=4;
-m_wall=1;
+m_d=15.3;
+m_h=6;
+m_wall=0.6;
 //mounting ball
-ball=17;
+ball=17.5;
 //the curvy connecting thing
-offset_base=-8;
+offset_base=-9;
 offset_ball=10;
-offset_hor=55;
-d_start=17;
+offset_hor=35;
+d_start=ball;
 d_end=7;
 
 //general
@@ -40,23 +40,5 @@ translate([offset_ball,0,offset_hor])sphere(d=ball);
 
 difference() {
   offset_sweep(offset(tr,r=m_d/2+wall),height=m_h+m_wall,top=os_circle(r=round));
-  for (pt=tr) translate([0,0,m_wall]) translate(pt) cylinder(d=m_d,h=m_h+round);
+  for (pt=tr) translate([0,0,m_wall]) translate(pt) cylinder(d=m_d,h=m_h+bsl);
 }
-
-/*
-*yrot(-t_a) {
-  difference() {
-    offset_sweep(offset(tr,r=m_d/2+wall),height=m_h+m_wall,top=os_circle(r=round));
-    for (pt=tr) translate([0,0,m_wall]) translate(pt) cylinder(d=m_d,h=m_h+round);
-  }
-}
-
-base=yrot(-t_a,path3d(offset(tr,r=m_d/2+wall)));
-shifted=left((m_h+m_wall)/sin(t_a),base);
-fillet=left(round,scale(0.9,shifted));
-
-skin([base,shifted,fillet],slices=1);
-
-path=smooth_path([yrot(-t_a,[0,0,m_h]),[-15,0,30]],method="edges",tangents=[yrot(-t_a,[0,0,1]),[0,0,1]]);
-path_sweep(circle(d=t_size/2),path,scale=0.2);
-*/
