@@ -19,6 +19,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+shopt -s expand_aliases
+
+command -v openscad >/dev/null 2>&1 || { echo >&2 alias openscad='openscad-nightly'; }
+command -v openscad >/dev/null 2>&1 || { echo >&2 "Openscad not installed. Abotring "; exit 1; }
+command -v pgrep >/dev/null 2>&1 || { echo >&2 "procps not installed. Aborting "; exit 1; }
+
 N=$(nproc --all)
 
 mkdir -p stl
