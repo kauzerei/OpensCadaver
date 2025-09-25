@@ -1,12 +1,35 @@
-//render()translate([50,35,3]) import("/home/kauz/Downloads/3d_models/Piko Key Keyboard case - 6826547/files/Keys.stl", convexity=3);
 include <../import/BOSL2/std.scad>
 $fa=1/2;
 $fs=1/2;
 bsl=1/100;
+
+part="keys";//[top,bottom,keys]
+
 pcb_size=[100,70];
 pcb_holes=[[3.2,3.2],[3.2,67.2],[97.2,3.2],[97.2,67.2]];
-buttons=[//zeroth row
-         [[5,7],[5.4,61.5],"e"],
+pcb_thickness=2;
+pcb_slack=2;
+switch=2;
+screw=3;
+
+usb_size=[10,10];
+usb_pos=[18,pcb_size[1]-usb_size[1]/2];
+
+case_wall=2;
+case_top=1;
+case_bottom=1;
+case_rounding=2;
+
+key_bottom=1;
+key_height=2;
+key_slack=1;
+key_rounding=0.5;
+key_chamfer=0.5;
+letters=1;
+hairline=2;
+
+keys=[//zeroth row
+         [[5,7],[7.4,61.5],"e"],
          [[5,7],[85.4,61.5],"d"],
          [[5,7],[92.4,61.5],"p"],
          //first row
@@ -74,65 +97,49 @@ buttons=[//zeroth row
          [[5,7],[32.5,6.5],"a"],
          [[43,7],[58.25,6.5]," "],
          [[5,7],[84,6.5],"a"],
-         [[5,7],[91,6.5],"c"],
+         [[5,7],[91,6.5],"c"]
          ];
 
-case_wall=2;
-case_top=1;
-case_bottom=1;
-button_bottom=1;
-button_height=2;
-button_slack=1;
-key_chamfer=0.5;
-pcb_thickness=2;
-switch=2;
-screw=3;
-cut_key=0.5;
-cut_case=2;
-pcb_slack=2;
-letters=1;
-hairline=2;
-usb_size=[12,10];
-usb_pos=[18,pcb_size[1]-usb_size[1]/2];
-
-function button_shape(wh,cut=1)=round_corners(square(wh,center=true),cut=cut,$fn=32);
+function key_shape(wh,cut=1)=round_corners(square(wh,center=true),cut=cut,$fn=32);
 
 module keys2d() {
-  for (button=buttons) {
-    translate(button[1]) polygon(button_shape(button[0],cut_key));
+  for (key=keys) {
+    translate(key[1]) polygon(key_shape(key[0],key_rounding));
   }
 }
 
 module case_top_wall_shape() difference() {
-  translate([-case_wall-pcb_slack,-case_wall-pcb_slack]) polygon(round_corners(square(pcb_size+2*[case_wall,case_wall]+2*[pcb_slack,pcb_slack]),cut=cut_case));
+  translate([-case_wall-pcb_slack,-case_wall-pcb_slack]) polygon(round_corners(square(pcb_size+2*[case_wall,case_wall]+2*[pcb_slack,pcb_slack]),cut=case_rounding));
   translate([-pcb_slack,-pcb_slack]) polygon(round_corners(square(pcb_size+[pcb_slack,pcb_slack]),cut=pcb_slack));
 }
+
 module case_top() {
-  translate([0,0,switch+pcb_thickness+button_bottom]) linear_extrude(height=case_top) difference() { //case top with key cutouts
-    translate([-case_wall-pcb_slack,-case_wall-pcb_slack]) polygon(round_corners(square(pcb_size+2*[case_wall,case_wall]+2*[pcb_slack,pcb_slack]),cut=cut_case));
-    offset(delta=button_slack)keys2d();
+  translate([0,0,switch+pcb_thickness+key_bottom]) linear_extrude(height=case_top) difference() { //case top with key cutouts
+    translate([-case_wall-pcb_slack,-case_wall-pcb_slack]) polygon(round_corners(square(pcb_size+2*[case_wall,case_wall]+2*[pcb_slack,pcb_slack]),cut=case_rounding));
+    offset(delta=key_slack)keys2d();
   }
-  linear_extrude(height=switch+pcb_thickness+button_bottom+bsl) case_top_wall_shape()
-  translate([0,0,pcb_thickness]) for (tr=pcb_holes) translate(tr) {//screw stands
-    linear_extrude(height=button_bottom+switch+bsl) difference() {
-      circle(r=2*screw);
-      circle(r=screw);
+  linear_extrude(height=switch+pcb_thickness+key_bottom+bsl) case_top_wall_shape();
+  translate([0,0,pcb_thickness]) linear_extrude(height=key_bottom+switch+bsl) for (tr=pcb_holes) translate(tr) {//screw stands
+    difference() {
+      circle(d=2*screw);
+      circle(d=screw);
     }
   }
 }
+
 module keys3d() {
   difference() {
     union() {
-      linear_extrude(height=button_bottom+case_top+button_height,convexity=8) keys2d();
-      translate([0,0,button_bottom+case_top+button_height]) roof(method="straight") keys2d();
+      linear_extrude(height=key_bottom+case_top+key_height,convexity=8) keys2d();
+      translate([0,0,key_bottom+case_top+key_height]) roof(method="voronoi") keys2d();
     }
-    translate([0,0,button_bottom+case_top+button_height+key_chamfer]) cube([pcb_size[0],pcb_size[1],10]);
-    for (button=buttons) {
-      translate([0,0,button_bottom+case_top+button_height-letters]) { //letters
+    translate([0,0,key_bottom+case_top+key_height+key_chamfer]) cube([pcb_size[0],pcb_size[1],10]);
+    for (key=keys) {
+      translate([0,0,key_bottom+case_top+key_height-letters]) { //letters
         linear_extrude(height=letters+key_chamfer+bsl,convexity=8) { 
-          translate(button[1])text(button[2],
-          font=button[2]<="ü"?"Quicksand:style=Bold":"DejaVu Sans:style=Bold",
-          size=3.5,
+          translate(key[1])text(key[2],
+          font=key[2]<="ü"?"Quicksand:style=Bold":"DejaVu Sans:style=Bold",
+          size=3,
           valign="center",halign="center");
         }
       }
@@ -141,7 +148,7 @@ module keys3d() {
 }
 
 module frame() {
-  linear_extrude(height=button_bottom) {
+  linear_extrude(height=key_bottom) {
     intersection() {
       difference() { //allowed footprint: pcb size and screw holes
         square(pcb_size);
@@ -151,22 +158,22 @@ module frame() {
         translate(usb_pos) square(usb_size,center=true);
       }
       union() { //frame including out-of-bounds elements
-        for (button=buttons) { //connecting thingies
-          translate(button[1]) stroke([[-50,5.55],[0,5.55],[0,0],[0,5.55],[50,5.55]],width=hairline);
+        for (key=keys) { //connecting thingies
+          translate(key[1]) stroke([[-50,5.55],[0,5.55],[0,0],[0,5.55],[50,5.55]],width=hairline);
         }
         //stroke(offset(square(pcb_size),delta=-hairline/2),width=hairline,closed=true); //if frame had no cutouts
-        shapes=[[[hairline/2,buttons[16][1][1]+6], //PikoKey-specific shape
+        shapes=[[[hairline/2,keys[16][1][1]+6], //PikoKey-specific shape
                  [hairline/2,pcb_size[1]-hairline/2],
                  [usb_pos[0]-usb_size[0]/2-hairline/2,pcb_size[1]-hairline/2],
                  [usb_pos[0]-usb_size[0]/2-hairline/2,pcb_size[1]-hairline/2-usb_size[1]],
                  [usb_pos[0]+usb_size[0]/2+hairline/2,pcb_size[1]-hairline/2-usb_size[1]],
                  [usb_pos[0]+usb_size[0]/2+hairline/2,pcb_size[1]-hairline/2],
                  [pcb_size[0]-hairline/2,pcb_size[1]-hairline/2],
-                 [pcb_size[0]-hairline/2,buttons[30][1][1]+6]],
-                [[pcb_size[0]-hairline/2,buttons[31][1][1]+5],
+                 [pcb_size[0]-hairline/2,keys[30][1][1]+6]],
+                [[pcb_size[0]-hairline/2,keys[31][1][1]+5],
                  [pcb_size[0]-hairline/2,hairline/2],
                  [hairline/2,hairline/2],
-                 [hairline/2,buttons[17][1][1]+5]]];
+                 [hairline/2,keys[17][1][1]+5]]];
         for (shape=shapes) stroke(shape,width=hairline);
         for (tr=pcb_holes) translate(tr) {//screw hole stabilizers
           circle(d=screw+1.4*hairline);
@@ -175,12 +182,16 @@ module frame() {
     }
   }
 }
+
 module keys() {
   frame();
   keys3d();
 }
-keys();
-//case_top();
-//rotate([180,0,0])case_top();
-//keys3d();
-//echo(("6">"z")?"true":false);
+
+module case_bottom() {
+
+}
+
+if (part=="keys") keys();
+if (part=="top") rotate([180,0,0]) case_top();
+if (part=="bottom") case_bottom();
