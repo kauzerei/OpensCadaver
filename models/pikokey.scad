@@ -3,7 +3,7 @@ $fa=1/2;
 $fs=1/2;
 bsl=1/100;
 
-part="cyberdeck";//[top,bottom,keys,NOSTL_all]
+part="cyberdeck";//[top,bottom,keys,cyberdeck,NOSTL_all]
 
 pcb_size=[100,70];
 pcb_holes=[[3.2,3.2],[3.2,67.2],[97.2,3.2],[97.2,67.2]];
@@ -17,7 +17,7 @@ usb_pos=[18,pcb_size[1]-usb_size[1]/2];
 
 case_wall=2;
 case_top=1;
-case_bottom=3;
+case_bottom=2;
 case_rounding=2;
 case_seam=0.4;
 
@@ -222,11 +222,13 @@ module holder() {
 */
 
   width=155;
-  height=73;
+  height=75;
   thickness=11.5;
   corner=6;
   holder_wall=2;
   structure=10;
+  offset=20;
+  chamfer=2;
 
 module phone_cutout() {
 //  side_profile=smooth_path([[0,9],[7,0],[11.5,1.5]],tangents=[[0,-1],[1,0],[1.5,1]],size=2.3);
@@ -239,12 +241,12 @@ module phone_cutout() {
 module holding_shape() {
   phone_shape=rect([width,height],rounding=corner);
   difference() {
-    offset_sweep(offset(r=holder_wall,phone_shape),height=thickness+holder_wall, bottom=os_chamfer(width=2), top=os_chamfer(width=2));
+    offset_sweep(offset(r=holder_wall,phone_shape),height=thickness+holder_wall, bottom=os_chamfer(width=chamfer), top=os_chamfer(width=chamfer));
     translate([0,0,holder_wall+bsl]) minkowski() {
       phone_cutout();
       scale([0,-50,0]) cube([1,1,1]);
     }
-    translate([0,0,holder_wall+thickness/2]) cuboid([200,10,6],chamfer=1,anchor=RIGHT); 
+    translate([0,0,holder_wall+thickness/2+1]) cuboid([200,12,6],chamfer=1,anchor=RIGHT); 
   }
 }
 
@@ -259,8 +261,21 @@ module holder() {
   }
 }
 
+kbd=switch+pcb_thickness+key_bottom+case_top+case_bottom;
+depth=(2*case_wall+2*pcb_slack+pcb_size[1]-(pcb_holes[1]-pcb_holes[0])[1])/2;
+
+module cyberdeck() {
+  structure=screw+2*holder_wall;
+  translate([0,-height/2-holder_wall,0]) holder();
+  translate([-(pcb_holes[2][0]+pcb_holes[0][0])/2,0,0])for (tr=[[pcb_holes[0][0],0],[pcb_holes[2][0],0]]) translate(tr) difference() {
+    translate([-structure/2,-chamfer,0]) cube([structure,offset+chamfer+depth+screw/2+holder_wall,kbd+2*holder_wall]);
+    translate([-structure/2-bsl,offset+chamfer,holder_wall])cube([structure+2*bsl,depth+screw/2+holder_wall,kbd]);
+    translate([0,offset+depth,-bsl]) cylinder(d=screw,h=kbd+2*holder_wall+2*bsl);
+  }
+}
+
 if (part=="keys") keys();
 if (part=="top") rotate([180,0,0]) case_top();
 if (part=="bottom") case_bottom();
-if (part=="cyberdeck") holder();
+if (part=="cyberdeck") cyberdeck();
 if (part=="NOSTL_all") {keys(); case_top(); translate([0,0,-case_bottom]) case_bottom();}
