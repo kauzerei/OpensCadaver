@@ -196,7 +196,7 @@ module case_bottom() {
     for (tr=pcb_holes) translate(tr) circle(d=screw);
   }
 }
-
+/*
 module holder() {
   width=155;
   height=73;
@@ -218,6 +218,45 @@ module holder() {
   }
   translate([-pcb_size[0]/2,20,0]) translate([0,holder_wall+pcb_slack+case_wall,0]) case_bottom();
   translate([-40,0,0])cube([80,30,holder_wall]);
+}
+*/
+
+  width=155;
+  height=73;
+  thickness=11.5;
+  corner=6;
+  holder_wall=2;
+  structure=10;
+
+module phone_cutout() {
+//  side_profile=smooth_path([[0,9],[7,0],[11.5,1.5]],tangents=[[0,-1],[1,0],[1.5,1]],size=2.3);
+  side_profile=smooth_path([[-9,0],[0,7],[-1.5,11.5]],tangents=[[1,0],[0,1],[-1,2]],size=2.3);
+  phone_shape=rect([width,height],rounding=corner);
+//  polygon(side_profile);
+  hull() path_sweep2d(side_profile,phone_shape,closed=true);
+}
+
+module holding_shape() {
+  phone_shape=rect([width,height],rounding=corner);
+  difference() {
+    offset_sweep(offset(r=holder_wall,phone_shape),height=thickness+holder_wall, bottom=os_chamfer(width=2), top=os_chamfer(width=2));
+    translate([0,0,holder_wall+bsl]) minkowski() {
+      phone_cutout();
+      scale([0,-50,0]) cube([1,1,1]);
+    }
+    translate([0,0,holder_wall+thickness/2]) cuboid([200,10,6],chamfer=1,anchor=RIGHT); 
+  }
+}
+
+module holder() {
+  outer=offset(square([width,height],center=true),delta=holder_wall-structure/2);
+  intersection() {
+    holding_shape();
+    for (c1=outer) for (c2=outer) hull() {
+      translate(c1) cylinder(d=structure,h=thickness+holder_wall+bsl);
+      translate(c2) cylinder(d=structure,h=thickness+holder_wall+bsl);
+    }
+  }
 }
 
 if (part=="keys") keys();
