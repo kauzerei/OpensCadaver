@@ -8,7 +8,7 @@ bsl=1/100;
 hex_sizes=[1.5,2,2.5,3,4,5,6,8,9,10];
 
 slack=0.3;
-wall=1;
+wall=1.5;
 dist=0.4;
 spring_width=0.5;
 spring_length=10;
@@ -20,10 +20,13 @@ last=len(hex_sizes)-1;
 adjusted=[for (hex=hex_sizes) sqrt(4/3)*(hex+2*slack)];
 widths=[for (d=adjusted) wall+2*dist+2*spring_width+d];
 translations=cumsum([0, for (i=[0:1:last-1]) (widths[i]+widths[i+1])/2]);
-thickness=max(adjusted)+2*wall;
-
+//thickness=max(adjusted)+2*wall;
 beg=-widths[0]/2;
 end=translations[last]+widths[last]/2;
+inc=2*(end-beg)/(adjusted[last]-adjusted[0]);
+a=atan(inc)-90;
+thickness=adjusted[last]+2*wall+(widths[last])/inc;
+
 
 module unit_holder(d,spring_width,spring_shape,spring_length,round_length,dist,thickness,wall) {
   //spring_dev=(1-sqrt(3/4))*d/2+spring_compression
@@ -44,7 +47,7 @@ module unit_holder(d,spring_width,spring_shape,spring_length,round_length,dist,t
     stroke(-spring,width=spring_width);
   }
 }
-a=atan(2*(end-beg)/(adjusted[last]-adjusted[0]))-90;
+
 rotate([0,a,0]) intersection() {
   union() {
     for (i=[0:1:last]) translate([translations[i],0,0]) { //individual holders
@@ -62,8 +65,7 @@ rotate([0,a,0]) intersection() {
   }
   hull() {
     translate([beg,0,0]) rotate([90,90,0]) cylinder(d=adjusted[0]+2*wall,h=spring_length+2*round_length,center=true);
-    translate([end,0,0]) rotate([90,90,0]) cylinder(d=adjusted[last]+2*wall,h=spring_length+2*round_length,center=true);
+    translate([end,0,0]) rotate([90,90,0]) cylinder(d=adjusted[last]+2*wall+(widths[last])/inc,h=spring_length+2*round_length,center=true);
   }
 }
-
-*unit_holder(4,0.5,1,20,10,1,10,2);
+echo(inc);
