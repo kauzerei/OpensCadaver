@@ -12,15 +12,15 @@ if (part=="pusher") render() difference() {
 }
 if (part=="switch_offset") {
   linear_extrude(height=5) difference() {
-    polygon(round_corners(rect([16,25],chamfer=[0,0,0,11]),radius=[0,0,5,5,0]));
-    translate([-4,7.5]) circle(d=3.5);
-    translate([-4,-7.5]) circle(d=3.5);
+    polygon(round_corners(rect([14,25],chamfer=[0,0,0,9]),radius=[0,0,5,5,0]));
+    translate([-3,7.5]) circle(d=3.5);
+    translate([-3,-7.5]) circle(d=3.5);
   }
-  translate([3,-1.5,0]) cube([5,14,16]);
+  translate([2,-1.5,0]) cube([5,14,16]);
   difference() {
-    translate([3,0.5,0]) cube([5,12,38]);
-    translate([7,9,22.5])xcyl(d=3,h=10);
-    translate([7,9,32.5])xcyl(d=3,h=10);
+    translate([2,0.5,0]) cube([5,12,40]);
+    translate([6,9,24.5])xcyl(d=3,h=10);
+    translate([6,9,34.5])xcyl(d=3,h=10);
   }
 }
 if(part=="screw_holder") {
