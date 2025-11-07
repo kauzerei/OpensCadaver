@@ -18,7 +18,7 @@ max_angle=45; //maximal printable angle without supports, inclination of flaps w
 part="thumb_screw";//[thumb_screw,jam_screw]
 
 module jam_nut() {
-  difference() {
+  #difference() {
     handle(d=handle,h=h+wall,n=n);
     cylinder(d=id,h=h+wall+bissl);
     translate([0,0,wall])cylinder($fn=6,d=hex,h=h+bissl);
@@ -43,7 +43,7 @@ module thumb_screw(bolt_d,hex_d,wall=3,angle=45,flap_d,flap_l,flap_h){
   flap_d=is_undef(flap_d)?hex_d/2+wall:flap_d;
   flap_l=is_undef(flap_l)?hex_d+2*wall:flap_l;
   flap_h=is_undef(flap_h)?hex_d+2*wall:flap_h;
-  cyl_d=hex+2*wall;
+  cyl_d=hex_d+2*wall;
   h=((flap_l-cyl_d/2-flap_d/2)+(flap_d/2)/cos(angle))/tan(angle);
   difference() {
     hull() {
@@ -61,4 +61,4 @@ module thumb_screw(bolt_d,hex_d,wall=3,angle=45,flap_d,flap_l,flap_h){
   }
 }
 if (part=="thumb_screw") thumb_screw(bolt_d=id,hex_d=hex,wall=wall,angle=max_angle);
-if (part=="jam_screw") jam_screw();
+if (part=="jam_screw") jam_nut();
