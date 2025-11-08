@@ -1,7 +1,7 @@
 $fs=1/2;
 $fa=1/2;
 bsl=1/100;
-part="03-support";//[03-support,11-lever_end_ball,08-adjust_screw]
+part="03-support";//[03-support,11-lever_end_ball,08-adjust_screw,11-spring_adapter]
 
 module ball() {
   difference() {
@@ -49,6 +49,12 @@ module thumb_screw(bolt_d,hex_d,wall=3,angle=45,flap_d,flap_l,flap_h){
   }
 }
 
+module spring_adapter() {
+  cylinder(d=16,h=10);
+  cylinder(d=12,h=13);
+}
+
 if (part=="03-support") support();
 if (part=="11-lever_end_ball") ball();
-if (part=="08-adjust_screw") thumb_screw(bolt_d=5,hex_d=9,wall=3,angle=45);
+if (part=="08-adjust_screw") thumb_screw(bolt_d=5,hex_d=9.5,wall=3,angle=45);
+if (part=="11-spring_adapter") spring_adapter();
