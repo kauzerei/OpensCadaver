@@ -1,17 +1,18 @@
 include <../import/BOSL2/std.scad>
 include <../import/BOSL2/gears.scad>
-part="enclosure";//[NOSTL_all,top,top_mech,bottom,servo_gear,enclosure]
+part="NOSTL_all";//[NOSTL_all,top,top_mech,bottom,servo_gear,enclosure]
 $fa=1/2;
 $fs=1/2;
 bsl=1/100;
-base_width=150;
-base_depth=100;
+base_width=140;
+base_depth=88;
 base_thickness=4;
-base_rounding=4;
-bath_width=160;
-bath_depth=115;
-bath_lip=3;
-bath_rounding=15;
+base_rounding=0;
+bath_width=161;
+bath_depth=106;
+bath_lip=4;
+bath_rounding=0;//15;
+bath_chamfer=15;
 height=20;
 eyelet_d=4;
 eyelet_w=16;
@@ -29,6 +30,9 @@ servo_d=5;
 servo_ax=4;
 screw_d=3;
 enclosure_h=25;
+holes=[[41,17],[71,17],[11,17]];
+hole_d=7;
+
 screw_offset=eyelet_d/2+2*wall+screw_d/2;
 dist=gear_dist(circ_pitch=gear_pitch,teeth1=servo_gear,teeth2=servo_gear*gear_ratio)+gear_gap;
 max_rotation=90/gear_ratio;
@@ -36,7 +40,7 @@ global_rotation=0*max_rotation;
 servo_position=[dist*cos(90/gear_ratio),-gear_thickness/2,-dist*sin(90/gear_ratio)];
 thickness=eyelet_d+2*wall;
 cylr=root_radius(mod=gear_pitch/PI,teeth=servo_gear*gear_ratio);
-  
+
 module servo_gear() {
   difference() {
     union() {
@@ -51,9 +55,10 @@ module servo_gear() {
 module top_mechanics() {
   depth=bath_depth/2+bath_lip-base_depth/2-eyelet_gap;
   cyld=2*root_radius(mod=gear_pitch/PI,teeth=servo_gear*gear_ratio)-2*mech_thickness;
-  //for (m=[[0,0,0],[0,1,0]]) mirror(m)
   yflip_copy() difference() { //eyelets
-    back(base_depth/2-base_thickness-eyelet_gap-mech_thickness/2) difference() {
+    back(base_depth/2-base_thickness-eyelet_gap-mech_thickness/2)
+    //back(base_thickness/2)
+    difference() {
       union() {
         ycyl(d=eyelet_d+2*wall,h=mech_thickness);
         up(eyelet_d/4+wall/2) cube([eyelet_d+2*wall,mech_thickness,eyelet_d/2+wall],center=true);
@@ -66,8 +71,10 @@ module top_mechanics() {
   }
   down(mech_thickness-wall-eyelet_d/2)difference() {
     union() { //bars
-      left(bath_width/2+bath_lip)cube([bath_width/2+bath_lip+cylr,thickness,mech_thickness],anchor=LEFT+BOTTOM);
-      cube([thickness,base_depth-2*base_thickness-2*eyelet_gap,mech_thickness],anchor=CENTER+BOTTOM);
+      //left(bath_width/2+bath_lip)cube([bath_width/2+bath_lip+cylr,thickness,mech_thickness],anchor=LEFT+BOTTOM);
+      cube([2*cylr,thickness,mech_thickness],anchor=CENTER+BOTTOM);
+//      cube([thickness,2*cylr,mech_thickness],anchor=CENTER+BOTTOM);
+      cube([thickness,base_depth-2*base_thickness-2*eyelet_gap-2*mech_thickness,mech_thickness],anchor=CENTER+BOTTOM);
     }
     for (tr=(cylr-screw_d/2-wall)*[[1,0,0],[0,1,0],[-1,0,0],[0,-1,0]]) translate(tr) { //screw holes
       down(bsl)cylinder(d=screw_d,h=mech_thickness+2*bsl);
@@ -87,7 +94,7 @@ module servo_mount() {
 
 module top() {
   top_profile=bath_lip*[[0,0],[1,0],[1,-1],[-1,-1],[-1,1],[0,1]];
-  path=rect([bath_width,bath_depth],rounding=bath_rounding);
+  path=rect([bath_width,bath_depth],chamfer=bath_chamfer,rounding=bath_rounding);
   path_extrude2d(path,closed=true) polygon(top_profile);
   difference() {
     union() {
@@ -126,21 +133,25 @@ module bottom() {
 module enclosure(){
   r=rect([base_width,base_depth],rounding=base_rounding);
   difference() {
-    linear_extrude(height=enclosure_h+enclosure_wall,convexity=4) difference() { //walls
-      polygon(offset(r,r=enclosure_gap+enclosure_wall));
-      polygon(offset(r,r=enclosure_gap));
+    union() {
+      linear_extrude(height=enclosure_h+2*base_thickness,convexity=4) difference() { //walls
+        polygon(offset(r,r=enclosure_gap+enclosure_wall));
+        polygon(offset(r,r=enclosure_gap));
+      }
+      up(enclosure_h+0.5*base_thickness) difference() { 
+        linear_extrude(height=base_thickness,center=true) polygon(offset(r,r=enclosure_gap));
+        linear_extrude(height=base_thickness+bsl,center=true,scale=[(base_width-2*base_thickness)/(base_width+2*enclosure_gap),(base_depth-2*base_thickness)/(base_depth+2*enclosure_gap)]) polygon(offset(r,r=enclosure_gap));
     }
-    up (13) fwd(base_depth/2+enclosure_gap+enclosure_wall/2) ycyl(d=10,h=enclosure_wall+bsl);
-    right(30) up (13) fwd(base_depth/2+enclosure_gap+enclosure_wall/2) ycyl(d=10,h=enclosure_wall+bsl);
-
   }
-  linear_extrude(height=enclosure_wall) { //floor
+    fwd(base_depth/2+enclosure_gap+enclosure_wall/2) right(base_width/2) for (hole=holes) {
+      left(hole[0]) up(hole[1]) {
+        ycyl(d=hole_d,h=enclosure_wall+bsl);
+        back(enclosure_wall/2)ycyl(d=16,h=base_thickness+enclosure_gap,anchor=FRONT);
+        }
+    }
+  }
+  down(enclosure_wall)linear_extrude(height=enclosure_wall) { //floor
     polygon(offset(r,r=enclosure_gap+enclosure_wall));
-  }
-  up(enclosure_h-1.5*base_thickness) difference() { 
-    linear_extrude(height=base_thickness,center=true) polygon(offset(r,r=enclosure_gap));
-    linear_extrude(height=base_thickness+bsl,center=true,scale=[(base_width-2*base_thickness)/(base_width+2*enclosure_gap),(base_depth-2*base_thickness)/(base_depth+2*enclosure_gap)]) polygon(offset(r,r=enclosure_gap));
-    //skin([offset(r,r=enclosure_gap),offset(r,r=-base_thickness)],z=[-bsl,base_thickness+bsl],slices=2);
   }
 }
 //render() 
@@ -155,7 +166,7 @@ if (part=="NOSTL_all")
   }
   yrot(90/gear_ratio)right(dist)yrot(-global_rotation*gear_ratio)yrot(180/servo_gear)xrot(90)servo_gear();
   //yrot(90/gear_ratio)right(dist)yrot(180/servo_gear)xrot(90)servo_gear();
-  down(height+enclosure_h) enclosure();
+  down(height+enclosure_h+base_thickness) enclosure();
 }
 if (part=="top") top();
 if (part=="top_mech") mirror([0,0,1])top_mechanics();
