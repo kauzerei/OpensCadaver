@@ -7,10 +7,10 @@ bsl=1/100;
 base_width=140;
 base_depth=88;
 base_thickness=4;
-base_rounding=0;
+base_rounding=1;
 bath_width=161;
 bath_depth=106;
-bath_lip=4;
+bath_lip=3;
 bath_rounding=0;//15;
 bath_chamfer=15;
 height=20;
@@ -151,7 +151,10 @@ module enclosure(){
     }
   }
   down(enclosure_wall)linear_extrude(height=enclosure_wall) { //floor
-    polygon(offset(r,r=enclosure_gap+enclosure_wall));
+    difference() {
+      polygon(offset(r,r=enclosure_gap+enclosure_wall));
+      polygon(offset(r,r=-3));
+    }
   }
 }
 //render() 
