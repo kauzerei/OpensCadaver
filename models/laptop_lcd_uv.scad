@@ -19,6 +19,7 @@ lip=3;
 wall=0.8;
 el_depth=15;
 el_width=6;
+bsl=1/100;
 /*
 *intersection() {
   translate([-100,0,0])cube([200,200,200],center=true);
@@ -56,18 +57,18 @@ module thingy() difference() {
       square([width+el_width,el_depth],center=true);
     }
   }
-  translate([wall,wall,0]) cube([width-2*wall,depth-2*wall,height+lip]); //big hole
+  translate([wall,wall,-bsl]) cube([width-2*wall,depth-2*wall,height+lip+2*bsl]); //big hole
   translate([-el_width+wall,-el_depth+2*wall,wall]) cube([width+el_width-2*wall,el_depth-2*wall,height]); //electronic hole
 }
 
-render() 
+//render() 
 { //divide into two parts, bring to one build plate
   translate([-100,0,0]) intersection() {
-    translate([110,-50,0]) cube([200,200,200]);
+    translate([110,-50,-10]) cube([200,200,200]);
     thingy();
   }
   translate([0,-25,0]) difference() {
     thingy();
-    translate([110,-50,0]) cube([200,200,200]);
+    translate([110,-50,-10]) cube([200,200,200]);
   }
 }
