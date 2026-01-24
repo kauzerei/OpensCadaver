@@ -1,5 +1,5 @@
 /* Thingiverse/Printables description:
-Pioneer CDJ800 Vinyl Touch Release/Brake Knob
+Pioneer CDJ800 Vinyl Touch/Release Knob
 
 Replica of DAA1194 part.
 According to the internet, it should be compatible with
@@ -8,7 +8,7 @@ CDJ-1000, CDJ-2000, CDJ-800, CDJ-850, CDJ-900, CDJ-TOUR1, XDJ-1000, and XDJ-1000
 I didn't find any good D-shaft knob, so I designed my own.
 There are a million knob collections and libraries on Printables/Thingiverse, but none have the correct geometry.
 
-Print as is without supports.
+Print as is without supports, clean up a little to get rid of print lines and paint a white line with nail polish.
 
 My github repo for all of my models may contain a newer version of this model, if I decide to update something and forget to reupload: https://github.com/kauzerei/OpensCadaver/blob/main/models/cdj_knob.scad
 */
