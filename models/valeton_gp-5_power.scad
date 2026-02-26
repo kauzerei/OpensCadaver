@@ -1,6 +1,5 @@
 //Rechargable battery pack for Valeton GP-5
 //Uses cheap charge+boost module with street lithium cells.
-//TODO: way to fix PCB, some wall for batteries
 
 include <../import/BOSL2/std.scad>
 $fs=1/2;
@@ -33,7 +32,7 @@ jack_o=-1; //horizontal offset
 jack_depth=2; //outer collar recess
 jack_hole=8.5; //outer colar diameter
 jack_wall=1.2; //wall thickness that holds the jack
-jack_thread=7.8; //diameter of "threaded" part
+jack_thread=7.5; //diameter of "threaded" part
 thread_depth=5; //length of "threaded" part
 
 sw_dist=15; //distance between switch mounting points
