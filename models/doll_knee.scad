@@ -3,12 +3,12 @@ $fs=1/4;
 $fa=1/4;
 bsl=1/100;
 
-part="ring";//[knee_plate,knee_half,ring]
+part="knee_plate";//[knee_plate,knee_left_half,knee_right_half,ring]
 
 id=4.6; //inner diameter of joint ring
 od=9.5; //outer diameter of joint ring
 ring_w=4.3; //width of the inner ring
-dist=10.5; //distance between ring centers
+dist=11.0; //distance between ring centers
 width=8.5; //height in printed orientation, complete width of both halves of the joint
 depth=12; //size of joint front to back without a knee cap
 ring_offset=7; //distance from ring to block
@@ -29,6 +29,9 @@ knee_front=14.5;
 wedge_pos=[1.0,2.1];
 wedge_r1=2.25; //bigger radius at bending point
 wedge_r2=1; //rounding top anb bottom of kneecap on the front
+screw=2;
+insert_d=3.3;
+insert_l=3;
 
 module outer_shell() {
   hull() {
@@ -69,11 +72,31 @@ module knee_half() {
   arc2=arc(r=5,n=8,angle=[120,90]);
   prof=right(1,path_join([arc1,arc2]));
   convex_offset_extrude(bottom=os_profile(prof), height=wall,steps=8) outer_shell();
-  up(wall) linear_extrude(ring_w/2+gap_v) offset(r=r2) offset(r=-r2) inner_shape();
+  up(wall) linear_extrude(ring_w/2+gap_v,convexity=4) offset(r=r2) offset(r=-r2) inner_shape();
   difference() {
     kneecap();
     up(wall) left(dist/2) cylinder(d=od+2*gap_h,h=knee_w);
     up(wall) right(dist/2) cylinder(d=od+2*gap_h,h=knee_w);
+  }
+}
+
+module knee_left_half() xrot(180){
+  difference() {
+    knee_half();
+    left(dist/2) down(bsl) cylinder(d=screw,h=width+2*bsl);
+    right(dist/2) down(bsl) cylinder(d=screw,h=width+2*bsl);
+    left(dist/2) down(bsl) cylinder(d=insert_d,h=insert_l);
+    right(dist/2) down(bsl) cylinder(d=insert_d,h=insert_l);
+  }
+}
+
+module knee_right_half() mirror([1,0,0])xrot(180){
+  difference() {
+    knee_half();
+    left(dist/2) down(bsl) cylinder(d=screw,h=width+2*bsl);
+    right(dist/2) down(bsl) cylinder(d=screw,h=width+2*bsl);
+    left(dist/2) down(bsl) cylinder(d1=2*screw,d2=screw,h=screw/2);
+    right(dist/2) down(bsl) cylinder(d1=2*screw,d2=screw,h=screw/2);
   }
 }
 
@@ -82,7 +105,7 @@ module ring() yrot(90){
     circle(d=od);
     circle(d=id);
   }
-  yrot(-90)right(od/2+ring_offset)cube(rect,anchor=LEFT);
+  yrot(-90)right(od/2+ring_offset)cuboid(rect,chamfer=rr*0.7,anchor=LEFT);
   difference() {
     join_prism(circle(d=conn_d),base="cylinder",base_r=od/2,fillet=rr,aux="plane",aux_T=up(od/2+ring_offset));
     right(ring_w/2) cube([rr,od,od+rr],anchor=LEFT);
@@ -111,9 +134,10 @@ module ring_skookum() {
   }
 }
 
-if (part=="knee_half") knee_half();
-if (part=="knee_plate") yrot(180){
-  fwd(15) mirror([0,1,0]) knee_half();
-  knee_half();
+if (part=="knee_left_half") knee_left_half();
+if (part=="knee_right_half") knee_right_half();
+if (part=="knee_plate") {
+  fwd(8) knee_right_half();
+  back(8) knee_left_half();
 }
 if (part=="ring") ring();

@@ -3,11 +3,11 @@ include <../import/BOSL2/rounding.scad>
 include <../import/BOSL2/fnliterals.scad>
 $fn=32;
 
-width=10;
+width=8;
 p=[[0,0],[-3,70],[5,70],[19,68],[30,61]];
-w=[4,4,4,4,4]; //widths of links
-l=[2,-4,2,2,2]; //lengths of joints
-t=[2,2,2,2,2]; //thicknesses of joints
+w=[3,3,3,3,3]; //widths of links
+l=[2,-3,2,2,2]; //lengths of joints
+t=[0.8,0.8,0.8,0.8,0.8]; //thicknesses of joints
 tg=path_tangents(p,closed=true,uniform=false);
 
 sec_len=[20,80];
