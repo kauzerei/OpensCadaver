@@ -2,17 +2,17 @@ $fs=1/2;
 $fa=1/2;
 bsl=1/100;
 
-angle1=108.2;
-angle2=74.6;
+angle1=107.8;
+angle2=74.7;
 measured_thickness=6; //measured between flats, at angle to strings 
-string_height=10; //measured in the middle at the thikest place
+string_height=7.4; //measured in the middle at the thikest place
 width=52; //fretboard width, measured at narrowest end
 fillet=4;
 chamfer=1;
 radius=350; //fingerboard radius at nut in mm
 headstock_angle=12;
 offset_top=3;
-offset_low=3;
+offset_low=3.7;
 string_gauges=[.010, .013, .017, .030, .042, .054, .064, .074];
 
 function sum(list)=(len(list)==0)?0:list * [for(i = [1 : len(list)]) 1];
