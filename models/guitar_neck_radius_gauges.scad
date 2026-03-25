@@ -1,18 +1,20 @@
 include <../import/BOSL2/std.scad>
-$fs=1/4;
-$fa=1/4;
+$fs=1/2;
+$fa=1/2;
+
 bsl=1/100;
 
-radius=350;
 length=80;
 width=4;
 thickness=4;
-chamfer=1;
+chamfer=0.6;
 round=1;
 tab_width=4;
 tab_length=20;
-tab_diameter=10;
+tab_diameter=16;
 text=0.4;
+
+radii=[7.25,9.5,10,12,14,15,16,17,20];
 dist=2;
 
 module bow(r,w,l) {
@@ -29,7 +31,8 @@ module bow(r,w,l) {
   }
 }
 
-module profile(radius) {
+module profile(inch) {
+  radius=inch*25.4;
   bow(radius,width,length);
   translate([-width/2,-tab_width/2])square([tab_length+width/2+tab_diameter/2,tab_width]);
   translate([tab_length+tab_diameter/2,0]) circle(d=tab_diameter);
@@ -62,13 +65,20 @@ module gauge(radius) {
         translate([-chamfer,-tab_width/2-chamfer]) square([tab_length+2*chamfer,width+2*chamfer]);
       }
     }
-    translate([tab_length+tab_diameter/2,0,-thickness/2+text]) rotate([180,0,0]) linear_extrude(text) {
-      text(text=str(round(radius/25.4)),halign="center",valign="center",size=tab_diameter/3);
+    translate([tab_length+tab_diameter/2,0,-thickness/2+text]) rotate([180,0,0]) linear_extrude(text) { //here inch
+      text(text=str(radius),halign="center",valign="center",size=tab_diameter/4);
     }
   }
-  linear_extrude(thickness/2+text) translate([tab_length+tab_diameter/2,0]) {
-    text(text=str(radius),halign="center",valign="center",size=tab_diameter/4);
+  linear_extrude(thickness/2+text) translate([tab_length+tab_diameter/2,0]) { //here mm
+    text(text=str(round(radius*25.4)),halign="center",valign="center",size=tab_diameter/4);
   }
 }
 
-gauge(radius);
+rows=floor(sqrt(len(radii)));
+for (i=[0:1:rows-1]) for (j=[0:1:rows-1]) {
+  shiftx=(j+(i%2)/2)*(tab_length+tab_diameter+width+dist);
+  shifty=i*(length+2*dist+width+tab_width)/2;
+  if (i+rows*j<len(radii)) render() translate([shiftx,shifty]) {
+    gauge(radii[i+rows*j]);
+  }
+}
