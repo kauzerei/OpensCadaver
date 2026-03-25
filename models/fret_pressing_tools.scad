@@ -1,8 +1,12 @@
+//Tools that couple with a weird clamp I have to press guitar frets into fingerboard
+//or to hold them in place during glueing
+//Initially designed to fix my 8 string
+
 $fs=1/2;
 $fa=1/2;
 bsl=1/100;
 
-part="fret_press";//[fret_press, neck support]
+part="neck_support";//[fret_press, neck_support]
 
 radius_fretboard=16*25.4; //fret is bent to this radius
 radius_fret=1.75; //curvature of a fret crown
@@ -14,7 +18,7 @@ support_block=[25,30]; //back side of the neck
 support_thickness=4; //extra material in neck support to distribute the load
 
 press_width=10; //fret-pressing part as it widens
-press_thickness=2; //extra material in fret press to distribute the load
+press_thickness=4; //extra material in fret press to distribute the load
 clamp_size=18; //diameter of the clamp coupling
 clamp_depth=3; //depression for the clamp to be locked in
 
@@ -28,40 +32,52 @@ module neck_support() {
   }
 }
 
-module fret_press() {
-  module fret_profile() {
-    translate([-press_width/2-radius_fretboard+radius_fret,0])difference() {
-      polygon([[-press_thickness,-press_width/2],
-               [0,-press_width/2],
-               [press_width/2,-radius_fret],
-               [press_width/2,radius_fret],
-               [0,press_width/2],
-               [-press_thickness,press_width/2]]);
-      translate([press_width/2,0])circle(r=radius_fret);
+if (part=="fret_press") fret_press_holder();
+if (part=="neck_support") neck_support();
+if (part=="debug") fret_press();
+
+module dome(d,h) {
+  translate([0,0,h]) intersection() {
+    sphere(d=d);
+    cylinder(d=d,h=d/2);
+  }
+  cylinder(d=d,h=h);
+}
+
+module blank() {
+  difference() {
+    hull() {
+      translate([0,0,-press_thickness-length_fret/2+clamp_size/2+clamp_depth]) {
+        dome(d=clamp_size+2*clamp_depth,h=clamp_depth);
+      }
+      for (tr=[[-length_fret/2+rounding,-press_width/2+rounding],
+              [-length_fret/2+rounding,press_width/2-rounding],
+              [length_fret/2-rounding,-press_width/2+rounding],
+              [length_fret/2-rounding,press_width/2-rounding]]) {
+        translate(tr) mirror([0,0,1]) dome(d=rounding,h=press_thickness);
+      }
+    }
+    translate([0,0,-press_thickness-length_fret/2+clamp_size/2+clamp_depth-bsl]) {
+      cylinder(d=clamp_size,h=clamp_depth);
     }
   }
-  intersection() {
-    translate([0,0,radius_fretboard+press_width/2-radius_fret]) rotate([90,0,0])rotate_extrude() fret_profile();
-    linear_extrude(radius_fretboard,center=true) offset(r=rounding) offset(r=-rounding) {
-      square([length_fret,press_width],center=true);
+}
+
+module profile() {
+  translate([-radius_fret,0]) {
+    rotate(-45) difference() {
+      square(100,center=true);
+      square(100);
     }
+    circle(r=radius_fret);
   }
 }
 
 module fret_press_holder() {
-  shift=radius_fretboard-sqrt(radius_fretboard^2-(length_fret/2)^2);
-  translate([0,0,press_thickness])fret_press();
   difference() {
-    hull() {
-      linear_extrude(shift) offset(r=rounding) offset(r=-rounding) {
-        square([length_fret,press_width],center=true);
-      }
-      translate([0,0,-length_fret/2+clamp_size/2]) cylinder(d=clamp_size+2*clamp_depth,h=clamp_depth);
+    blank();
+    translate([0,0,radius_fretboard-radius_fret])rotate([90,0,0]) {
+      rotate_extrude() translate([radius_fretboard,0]) profile();
     }
-    translate([0,0,-bsl-length_fret/2+clamp_size/2]) cylinder(d=clamp_size,h=clamp_depth);
   }
 }
-
-if (part=="fret_press") fret_press_holder();
-if (part=="neck_support") neck_support();
-if (part=="debug") fret_press();
