@@ -4,10 +4,10 @@ $fa=1/2;
 
 bsl=1/100;
 
-length=80;
-width=4;
+length=85;
+width=2.4;
 thickness=4;
-chamfer=0.6;
+chamfer=0.4;
 round=1;
 tab_width=4;
 tab_length=20;
@@ -74,7 +74,7 @@ module gauge(radius) {
   }
 }
 
-rows=floor(sqrt(len(radii)));
+rows=ceil(sqrt(len(radii)));
 for (i=[0:1:rows-1]) for (j=[0:1:rows-1]) {
   shiftx=(j+(i%2)/2)*(tab_length+tab_diameter+width+dist);
   shifty=i*(length+2*dist+width+tab_width)/2;

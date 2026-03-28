@@ -23,43 +23,50 @@ hole_dist=2*led_offset*sin(180/n_leds);
 id=45;
 od=128;
 
-module hook() {
+bp_length=60;
+bp_height=18;
+bp_width=(od-id)/2+2*vert_wall;
+bp_offset=id/2-vert_wall;
+
+module hook() { //holds led from one side
   hull() {
     translate([-hook_width/2,0,0]) cube([hook_width,vert_wall,pcb_height+led_height]);
     scale([1,1,0]) translate([-hook_width/2,0,0]) cube([hook_width,vert_wall+pcb_height+led_height,1]);
   }
 }
 
-module bottom_holder() {
+module bottom_holder() { //holds one led from 4 sides
   rot=[0,90,180,270];
   shift=[pcb_size[1]/2,pcb_size[0]/2,pcb_size[1]/2,pcb_size[0]/2];
   for (i=[0:1:3]) rotate([0,0,rot[i]]) translate([0,shift[i]+slack,0]) hook();
 }
 
 module bottom() {
-  linear_extrude(height=wall) {
+  linear_extrude(height=wall) { //ring shaped area, large back surface
     difference() {
       circle(d=od);
       circle(d=id);
       for (a=[360/n_leds:360/n_leds:360]) {
-        rotate([0,0,a]) translate([led_offset,0,0]) square(pcb_size-2*[lip,lip],center=true);
-        rotate([0,0,a+360/(2*n_leds)]) translate([led_offset,0,0]) circle(d=insert_w+bsl);
+        rotate([0,0,a]) translate([led_offset,0,0]) square(pcb_size-2*[lip,lip],center=true); //vent squares
+        rotate([0,0,a+360/(2*n_leds)]) translate([led_offset,0,0]) circle(d=insert_w+bsl); //screw holes
       }
     }
   }
-  for (a=[360/n_leds:360/n_leds:360]) {
-    rotate([0,0,a]) translate([led_offset,0,wall]) bottom_holder();
-    rotate([0,0,a+360/(2*n_leds)]) translate([led_offset,0,0]) linear_extrude(wall+pcb_height+led_height) difference() {
-      circle(d=insert_w+2*wall);
-      circle(d=insert_w);
+  for (a=[360/n_leds:360/n_leds:360]) { //stuff above ring surface
+    rotate([0,0,a]) translate([led_offset,0,wall]) bottom_holder(); //stops lateral motion of led
+    rotate([0,0,a+360/(2*n_leds)]) translate([led_offset,0,0]) linear_extrude(wall+pcb_height+led_height) {
+      *difference() { // protrusions for thread inserts
+        circle(d=insert_w+2*wall);
+        circle(d=insert_w);
+      }
     }
   }
-  linear_extrude(height=wall+pcb_height+led_height) {
-    difference() {
+  linear_extrude(height=wall+pcb_height+led_height) { //ring walls around inner circle and outer circle
+    difference() { //outer wall
       circle(d=od+2*vert_wall);
       circle(d=od);
     }
-    difference() {
+    difference() { //inner wall
       circle(d=id);
       circle(d=id-2*vert_wall);
     }
@@ -67,30 +74,42 @@ module bottom() {
 }
 
 module top() {
-  linear_extrude(wall) {
+  linear_extrude(wall) { //ring shaped area, largest front surface
     difference() {
       circle(d=od+2*vert_wall);
       circle(d=id-2*vert_wall);
       for (a=[360/n_leds:360/n_leds:360]) {
-        rotate(a) translate([led_offset,0]) square(pcb_size-2*[lip,lip],center=true);
-        rotate(a+360/(2*n_leds)) translate([led_offset,0]) circle(d=insert_w+bsl);
+        rotate(a) translate([led_offset,0]) square(pcb_size-2*[lip,lip],center=true); //led cutouts
+        rotate(a+360/(2*n_leds)) translate([led_offset,0]) circle(d=insert_w+bsl); //screw holes
       }
     }
   }
-  translate([0,0,wall]) linear_extrude(led_height) {
+  translate([0,0,wall]) linear_extrude(led_height) { //lifted frames around leds
     for (a=[360/n_leds:360/n_leds:360]) {
-      rotate(a) translate([led_offset,0]) difference() {
-        square(pcb_size-2*[slack,slack],center=true);
-        square(pcb_size-2*[lip,lip],center=true);
+      rotate(a) translate([led_offset,0]) {
+        difference() {
+          square(pcb_size-2*[slack,slack],center=true);
+          square(pcb_size-2*[lip,lip],center=true);
+        }
       }
     }
   }
-  linear_extrude(wall+pcb_height+led_height) {
-    difference() {
+  translate([0,0,wall]) linear_extrude(pcb_height+led_height) {
+    for (a=[180/n_leds:360/n_leds:360]) { // protrusions for thread inserts
+      rotate(a) translate([led_offset,0]) {
+        difference() { 
+          circle(d=insert_w+2*wall);
+          circle(d=insert_w);
+        }
+      }
+    }
+  }
+  linear_extrude(wall+pcb_height+led_height) { //ring walls around inner circle and outer circle
+    difference() { //outer wall
       circle(d=od-2*slack);
       circle(d=od-2*slack-2*vert_wall);
     }
-    difference() {
+    difference() { //inner wall
       circle(d=id+2*slack+2*vert_wall);
       circle(d=id+2*slack);
     }
@@ -148,12 +167,40 @@ module battery() {
     translate([-wall-dcdc_thickness,0,0]) cube([wall+dcdc_thickness,2*battery_d+3*vert_wall,wall+battery_d]);
     translate([-dcdc_thickness,vert_wall,-bsl]) cube([dcdc_thickness,2*battery_d+vert_wall,battery_d]);
   }
-  
 }
+
+module bp_shape() { //footprint of a battery pack
+  intersection() {
+    translate([bp_offset,-bp_length/2]) square([bp_width,bp_length]);
+    difference() {
+      circle(d=od+2*vert_wall);
+      circle(d=id-2*vert_wall);
+    }
+  }
+}
+
+module bat_pack() {
+  linear_extrude(wall) {
+    difference() {
+      bp_shape();
+      for (a=[360/n_leds:360/n_leds:360]) {
+        rotate(a+360/(2*n_leds)) translate([led_offset,0]) circle(d=insert_w+bsl); //screw holes
+      }
+    }
+  }
+  translate([0,0,wall])linear_extrude(bp_height) {
+    difference() {
+      bp_shape();
+      offset(r=-wall) bp_shape();
+    }
+  }
+}
+
+bat_pack();
 
 if (part=="top") top();
 if (part=="bottom") bottom();
-if (part=="battery") battery();
+//if (part=="battery") battery();
 if (part=="NOSTL_assembly") {
   difference() {
     union() {

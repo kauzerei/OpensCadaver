@@ -2,16 +2,16 @@
 //or to hold them in place during glueing
 //Initially designed to fix my 8 string
 
-$fs=1/2;
-$fa=1/2;
+$fs=1/4;
+$fa=1/4;
 bsl=1/100;
 
-part="neck_support";//[fret_press, neck_support]
+part="fret_press";//[fret_press, neck_support]
 
 radius_fretboard=16*25.4; //fret is bent to this radius
 radius_fret=1.75; //curvature of a fret crown
 radius_neck=40; //curvature of back side of the neck
-rounding=2; //fillet
+rounding=4; //fillet
 
 length_fret=55; //neck width or more if multiscale
 support_block=[25,30]; //back side of the neck
