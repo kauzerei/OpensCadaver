@@ -2,7 +2,7 @@ $fs=1/1;
 $fa=1/1;
 bsl=1/100;
 
-part="enclosure";//[bottom,top,enclosure,battery,cover,camera_mount,NOSTL_assembly]
+part="camera_mount";//[bottom,top,enclosure,battery,cover,camera_mount,NOSTL_assembly]
 
 pcb_height=1; // thickness of the board where the led is mounted
 led_height=1; // how hight led protrudes above the board surface
@@ -226,13 +226,15 @@ module battery() { //isolating tubes to make battery look safer lol
 }
 
 module camera_mount() { //very ugly camera-specific module
-  x_offset=-29; //offset of mounting thread from origin
+  x_offset=-27.5; //offset of mounting thread from origin
   y_offset=-20;
-  z_offset=50;
-  screw=8; //screw thread
+  z_offset=45;
+  screw=7; //screw thread
+  head=20; //screw head diameter
   add_depth=12; //size of camera plate
   add_width=20;
   add_mount=3; //additional material around mount holes
+  wall=2;
   linear_extrude(wall) difference() {
     for (i=[1:1:3]) hull() {
       rotate(180/n_leds+i*360/n_leds) translate([led_offset,0]) circle(d=2*add_mount+insert_w);
@@ -242,13 +244,14 @@ module camera_mount() { //very ugly camera-specific module
   }
   difference() {
     hull() {
-      translate([x_offset,y_offset,z_offset]) cube([1,add_width*2,add_depth*2],center=true);
+      translate([x_offset-wall/2,y_offset,z_offset]) cube([wall,add_width*2,add_depth*2],center=true);
       rotate(180/n_leds+2*360/n_leds) translate([led_offset,0,wall]) cylinder(d=2*add_mount+insert_w,h=bsl);
       rotate(180/n_leds+(2+1)*360/n_leds) translate([led_offset,0,wall]) cylinder(d=2*add_mount+insert_w,h=bsl);
     }
     rotate(180/n_leds+2*360/n_leds) translate([led_offset,0,wall]) cylinder(d=2*insert_w,h=z_offset);
     rotate(180/n_leds+(2+1)*360/n_leds) translate([led_offset,0,wall]) cylinder(d=2*insert_w,h=z_offset);
     translate([x_offset,y_offset,z_offset]) rotate([0,90,0])cylinder(d=screw,h=100,center=true);
+    translate([x_offset-wall,y_offset,z_offset]) rotate([0,-90,0])cylinder(d=head,h=100);
     }
 }
 
