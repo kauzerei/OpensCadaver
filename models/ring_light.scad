@@ -2,11 +2,13 @@ $fs=1/1;
 $fa=1/1;
 bsl=1/100;
 
-part="camera_mount";//[bottom,top,enclosure,battery,cover,camera_mount,NOSTL_assembly]
+part="NOSTL_assembly";//[bottom,top,enclosure,battery,cover,camera_mount,NOSTL_assembly]
 
 pcb_height=1; // thickness of the board where the led is mounted
 led_height=1; // how hight led protrudes above the board surface
-pcb_size=[30.5,28.4]; //distances between mount edges of the board (board itself is bigger)
+pcb_mount_size=[30.5,28.4]; //distances between mount edges of the board (board itself is bigger)
+pcb_extra=1.8; //how much wider than mounting width pcb is, for weirdly shaped pcbs
+pcb_size=[pcb_mount_size[0]+2*pcb_extra,pcb_mount_size[1]+2*pcb_extra]; //for calculating proper spacing
 
 slack=0.2; //extra space aroung led mounting features
 hook_width=12; //width of led mounting features
@@ -16,10 +18,12 @@ lip=1; //thickness of the frame around led
 insert_w=3.2; //diameters of holes, same for threaded inserts and for screws to go through
 
 n_leds=6; //number of leds
-led_offset=43; //offset of led center from origin. Later change to calculated value
 
-id=45; //inner diameter of the ring, without walls. Later calculate the value from pcb size
-od=128; //outer diameter
+//id=45; //inner diameter of the ring, without walls.
+id=2*(0.5*pcb_size[1]/tan(180/n_leds)+pcb_extra-(vert_wall+pcb_height+led_height)-2*slack-vert_wall);
+led_offset=0.5*pcb_size[1]/tan(180/n_leds)+pcb_size[0]/2; //offset of led center from origin.
+od=sqrt((led_offset+pcb_size[0]/2)^2+(pcb_size[1]/2)^2)*2+4*vert_wall; //outer diameter
+echo(od);
 
 sw_dist=15; //distance between switch mounting points
 sw_depth=3; //distance to mounting surface
@@ -31,8 +35,8 @@ sw_width=2*sw_wall+max([sw_hole,sw_rect[1]]); //shorter side of mounting surface
 
 bp_length=60; //outer length of battery pack enclusire, longer for longer batteries
 bp_height=sw_length; //battery pack length, currently defined by switch, can be bigger
-bp_width=(od-id)/2+2*vert_wall; //width of enclosure, currently max, later make smaller
-bp_offset=id/2-vert_wall; //how close to center the battery compartment starts
+bp_width=43.9; //width of enclosure, with walls: outside dimension
+bp_offset=od/2+vert_wall-bp_width; //how close to center the battery compartment starts
 
 dt_h=2; //total height of dovetatil profile
 dt_offset=1; //dovetailness of dovetail, 1mm offset on 1mm half-height is 45 degrees
@@ -53,7 +57,7 @@ module hook() { //holds led from one side
 
 module bottom_holder() { //holds one led from 4 sides
   rot=[0,90,180,270];
-  shift=[pcb_size[1]/2,pcb_size[0]/2,pcb_size[1]/2,pcb_size[0]/2];
+  shift=[pcb_mount_size[1]/2,pcb_mount_size[0]/2,pcb_mount_size[1]/2,pcb_mount_size[0]/2];
   for (i=[0:1:3]) rotate([0,0,rot[i]]) translate([0,shift[i]+slack,0]) hook();
 }
 
@@ -63,7 +67,7 @@ module bottom() {
       circle(d=od);
       circle(d=id);
       for (a=[360/n_leds:360/n_leds:360]) {
-        rotate([0,0,a]) translate([led_offset,0,0]) square(pcb_size-2*[lip,lip],center=true); //vent squares
+        rotate([0,0,a]) translate([led_offset,0,0]) square(pcb_mount_size-2*[lip,lip],center=true); //vent squares
         rotate([0,0,a+360/(2*n_leds)]) translate([led_offset,0,0]) circle(d=insert_w+bsl); //screw holes
       }
       rotate(-180/n_leds) translate([wire_offset,0]) circle(d=wire); //single hole for wire
@@ -96,7 +100,7 @@ module top() {
       circle(d=od+2*vert_wall);
       circle(d=id-2*vert_wall);
       for (a=[360/n_leds:360/n_leds:360]) {
-        rotate(a) translate([led_offset,0]) square(pcb_size-2*[lip,lip],center=true); //led cutouts
+        rotate(a) translate([led_offset,0]) square(pcb_mount_size-2*[lip,lip],center=true); //led cutouts
         rotate(a+360/(2*n_leds)) translate([led_offset,0]) circle(d=insert_w+bsl); //screw holes
       }
     }
@@ -105,8 +109,8 @@ module top() {
     for (a=[360/n_leds:360/n_leds:360]) {
       rotate(a) translate([led_offset,0]) {
         difference() {
-          square(pcb_size-2*[slack,slack],center=true);
-          square(pcb_size-2*[lip,lip],center=true);
+          square(pcb_mount_size-2*[slack,slack],center=true);
+          square(pcb_mount_size-2*[lip,lip],center=true);
         }
       }
     }
@@ -265,7 +269,8 @@ if (part=="NOSTL_assembly") {
   difference() {
     union() {
       bottom();
-      translate([0,0,6]) mirror([0,0,1]) top();
+      translate([0,0,6]) top();
+      translate([0,0,-4]) mirror([0,0,1]) enclosure();
     }
   rotate(30)cube([100,100,100]);
   }
