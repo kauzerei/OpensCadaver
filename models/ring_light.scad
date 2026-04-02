@@ -7,8 +7,7 @@ part="NOSTL_assembly";//[bottom,top,enclosure,battery,cover,camera_mount,NOSTL_a
 pcb_height=1; // thickness of the board where the led is mounted
 led_height=1; // how hight led protrudes above the board surface
 pcb_mount_size=[30.5,28.4]; //distances between mount edges of the board (board itself is bigger)
-pcb_extra=1.8; //how much wider than mounting width pcb is, for weirdly shaped pcbs
-pcb_size=[pcb_mount_size[0]+2*pcb_extra,pcb_mount_size[1]+2*pcb_extra]; //for calculating proper spacing
+pcb_size=[32,32]; //total size for calculating proper spacing
 
 slack=0.2; //extra space aroung led mounting features
 hook_width=12; //width of led mounting features
@@ -19,11 +18,10 @@ insert_w=3.2; //diameters of holes, same for threaded inserts and for screws to 
 
 n_leds=6; //number of leds
 
-//id=45; //inner diameter of the ring, without walls.
-id=2*(0.5*pcb_size[1]/tan(180/n_leds)+pcb_extra-(vert_wall+pcb_height+led_height)-2*slack-vert_wall);
-led_offset=0.5*pcb_size[1]/tan(180/n_leds)+pcb_size[0]/2; //offset of led center from origin.
+led_offset=0.5*pcb_size[1]/tan(180/n_leds)+0.5*pcb_size[0]; //offset of led center from origin.
+hook_depth=vert_wall+pcb_height+led_height;
+id=2*(led_offset-pcb_size[0]/2-hook_depth-vert_wall-slack); //inner diameter of the ring, without walls
 od=sqrt((led_offset+pcb_size[0]/2)^2+(pcb_size[1]/2)^2)*2+4*vert_wall; //outer diameter
-echo(od);
 
 sw_dist=15; //distance between switch mounting points
 sw_depth=3; //distance to mounting surface
@@ -35,7 +33,7 @@ sw_width=2*sw_wall+max([sw_hole,sw_rect[1]]); //shorter side of mounting surface
 
 bp_length=60; //outer length of battery pack enclusire, longer for longer batteries
 bp_height=sw_length; //battery pack length, currently defined by switch, can be bigger
-bp_width=43.9; //width of enclosure, with walls: outside dimension
+bp_width=(od-id)/2+2*vert_wall; //width of enclosure, with walls: outside dimension
 bp_offset=od/2+vert_wall-bp_width; //how close to center the battery compartment starts
 
 dt_h=2; //total height of dovetatil profile
@@ -269,7 +267,7 @@ if (part=="NOSTL_assembly") {
   difference() {
     union() {
       bottom();
-      translate([0,0,6]) top();
+      translate([0,0,6]) mirror([0,0,1]) top();
       translate([0,0,-4]) mirror([0,0,1]) enclosure();
     }
   rotate(30)cube([100,100,100]);
