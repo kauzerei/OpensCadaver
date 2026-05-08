@@ -14,7 +14,8 @@ tab_length=20;
 tab_diameter=16;
 text=0.4;
 
-radii=[7.25,9.5,10,12,14,15,16,17,20];
+//radii=[7.25,9.5,10,12,14,15,16,17,20];
+radii=[13.8];
 dist=2;
 
 module bow(r,w,l) {
