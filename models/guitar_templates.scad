@@ -14,7 +14,7 @@ wall=4;
 height=5;
 cell=30;
 slop=0.15;
-part="00";//["00","01","02","03","10","11","12","13","20","21","22","23"]
+part="np0";//[00,01,02,03,10,11,12,13,20,21,22,23,np0,np1]
 
 module neck_pocket(width1,width2,length,radius,rounding) {
   height=radius-sqrt(radius^2-(width1^2)/4);
@@ -34,8 +34,8 @@ module bass_cutout() {
 //guitar: 
 module guitar_cutout() {
   neck_pocket(57.5,54.9,78,300,9.5);
-  translate([-24,0]) rect([17,70],rounding=8);
-  translate([-82,0]) rect([17,70],rounding=8);
+  *translate([-24,0]) rect([17,70],rounding=8);
+  *translate([-82,0]) rect([17,70],rounding=8);
   translate([-140,0]) rotate(-10) rect([17,70],rounding=8);
   translate([-183,0]) rect([1,70]);
 }
@@ -94,6 +94,18 @@ module skeletonize() {
     }
   }
 }
+
+module np_jig(negative) {
+  intersection() {
+    difference() {
+      translate([-261.4,-381])import("../import/guitar_contour.svg");
+      translate([0,175/2]) guitar_cutout();
+      translate([0,-175/2]) bass_cutout();
+    }
+  projection() partition_mask(l=150,w=150,gap=0,cutsize=15,cutpath="jigsaw",$fn=32,$slop=slop,inverse=negative);
+  }
+}
+
 linear_extrude(height) skeletonize() {
 if (part=="00") piece(0,0);
 if (part=="01") piece(0,1);
@@ -107,6 +119,8 @@ if (part=="20") piece(2,0);
 if (part=="21") piece(2,1);
 if (part=="22") piece(2,2);
 if (part=="23") piece(2,3);
+if (part=="np0") np_jig(false);
+if (part=="np1") np_jig(true);
 }
 
 *linear_extrude(height,convexity=10) {
