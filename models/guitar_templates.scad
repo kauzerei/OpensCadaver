@@ -13,7 +13,7 @@ puzzle=20;
 wall=4;
 height=5;
 cell=30;
-slop=0.2;
+slop=0.15;
 part="00";//["00","01","02","03","10","11","12","13","20","21","22","23"]
 
 module neck_pocket(width1,width2,length,radius,rounding) {
@@ -69,18 +69,18 @@ module piece(i,j) intersection() {
   translate([-261.4,-381])import("../import/guitar_contour.svg");
   intersection() {
     translate([xseams[i],yshift]) rotate(90) {
-      projection() partition_mask(l=800,w=500,gap=ydist/2-2*puzzle,cutsize=puzzle,cutpath="jigsaw",$slop=slop,$fn=16);
+      projection() partition_mask(l=800,w=500,gap=ydist/2-2*puzzle,cutsize=puzzle,cutpath="jigsaw",$slop=slop,$fn=32);
     }
     if(i>0) translate([xseams[i-1],yshift]) rotate(90) {
-      projection() partition_mask(l=800,w=500,gap=ydist/2-2*puzzle,cutsize=puzzle,cutpath="jigsaw",$slop=slop,$fn=16,inverse=true);
+      projection() partition_mask(l=800,w=500,gap=ydist/2-2*puzzle,cutsize=puzzle,cutpath="jigsaw",$slop=slop,$fn=32,inverse=true);
     }
   }
   intersection() {
     translate([xshift,yseams[j]]) {
-      projection() partition_mask(l=800,w=500,gap=xdist/2-2*puzzle,cutsize=puzzle,cutpath="jigsaw",$fn=16,$slop=slop);
+      projection() partition_mask(l=800,w=500,gap=xdist/2-2*puzzle,cutsize=puzzle,cutpath="jigsaw",$fn=32,$slop=slop);
     }
     if(j>0) translate([xshift,yseams[j-1]]) {
-      projection() partition_mask(l=800,w=500,gap=xdist/2-2*puzzle,cutsize=puzzle,cutpath="jigsaw",$fn=16,$slop=slop,inverse=true);
+      projection() partition_mask(l=800,w=500,gap=xdist/2-2*puzzle,cutsize=puzzle,cutpath="jigsaw",$fn=32,$slop=slop,inverse=true);
     }
   }
 }
@@ -98,12 +98,14 @@ linear_extrude(height) skeletonize() {
 if (part=="00") piece(0,0);
 if (part=="01") piece(0,1);
 if (part=="02") piece(0,2);
-if (part=="03") piece(1,0);
+if (part=="03") piece(0,3);
+if (part=="10") piece(1,0);
 if (part=="11") piece(1,1);
 if (part=="12") piece(1,2);
 if (part=="13") piece(1,3);
 if (part=="20") piece(2,0);
-if (part=="21") piece(2,2);
+if (part=="21") piece(2,1);
+if (part=="22") piece(2,2);
 if (part=="23") piece(2,3);
 }
 
