@@ -14,7 +14,7 @@ wall=4;
 height=5;
 cell=30;
 slop=0.15;
-part="np0";//[00,01,02,03,10,11,12,13,20,21,22,23,np0,np1]
+part="np1";//[00,01,02,03,10,11,12,13,20,21,22,23,np0,np1]
 
 module neck_pocket(width1,width2,length,radius,rounding) {
   height=radius-sqrt(radius^2-(width1^2)/4);
@@ -102,7 +102,26 @@ module np_jig(negative) {
       translate([0,175/2]) guitar_cutout();
       translate([0,-175/2]) bass_cutout();
     }
-  projection() partition_mask(l=150,w=150,gap=0,cutsize=15,cutpath="jigsaw",$fn=32,$slop=slop,inverse=negative);
+  //projection() partition_mask(l=150,w=150,gap=0,cutsize=15,cutpath="jigsaw",$fn=32,$slop=slop,inverse=negative);
+  projection() partition_mask(l=200,w=150,gap=0,cutsize=15,cutpath="jigsaw",$fn=32,$slop=slop,inverse=negative);
+  translate([25,0]) rect([200,300]);
+  }
+}
+
+module np_jig_better(negative) { //trying to make more stable
+  intersection() {
+    difference() {
+      union() {
+        translate([-261.4,-381])import("../import/guitar_contour.svg");
+        difference() {
+          translate([75,0]) rect([130,300],rounding=15);
+          translate([55,0]) rect([100,260],rounding=15);
+        }
+      }
+      translate([0,175/2]) guitar_cutout();
+      #translate([0,-175/2]) bass_cutout();
+    }
+  translate([65,0]) projection() partition_mask(l=200,w=150,gap=0,cutsize=15,cutpath="jigsaw",$fn=32,$slop=slop,inverse=negative);
   }
 }
 
