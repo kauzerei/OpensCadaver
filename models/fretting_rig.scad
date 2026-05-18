@@ -1,12 +1,19 @@
 /*
 Thingiverse/printables description
 
+Fret slotting mitre (miter) box for adding extra microtonal frets.
+
 A truly minimal fret slotting mitre (miter) box. It's designed for making additional slots in already fretted instruments: ideal if you're too much into Angine de Poitrine, KGLW, Massive Audio Nerve and other microtonal stuff and want to modify your guitar. Should be also fine for just slotting a fingerboard billet, why not.
+
 It is usable without any guiding bearings, better if you can add 4 of them above the teeth to further limit the unwanted motions of the blade inside the tool, or put 8 bearings with a plate on top to pretty much guarantee the blade is always in one plane.
-The model is parametric and written in OpenSCAD, you can customize it for the geometry of the saw and bearings you want to use.
-Mark where you want to cut, align the mitre box and press it against the fretboard so it doensn't move while cutting. A couple of shims (with the same radius as the fretboard) go between the flat surface of the tool and the neck. Those shims have cutouts for existing frets and they make sure, that the saw is always perpendicular to the surface.
-I made the tool pretty minimal, so that it doesn't collide with the tuners, headstock or the body (you have to remove the nut though), but you may change any dimensions, they are commented nicely in OpenSCAD script.
+The model is parametric and written in OpenSCAD, you can customize it for the geometry of the saw and bearings you want to use. The default values and generated stl files are for 62mm wide fine saw and 625 bearings (5x16x5mm). Holding the tool together are 4 threaded rods M3x85 and 8 M3 nuts.
+
+Mark where you want to cut, align the mitre box and press it against the fretboard so it doesn't move while cutting. A couple of shims (with the same radius as the fretboard) go between the flat surface of the tool and the neck. Those shims have cutouts for existing frets and they make sure, that the saw is always perpendicular to the surface.
+
+I made the tool size minimal, so that it doesn't collide with the tuners, headstock or the body (you have to remove the nut though), but you may change any dimensions, they are commented nicely in OpenSCAD script.
 What this model does not do is limiting the cut depth. If your saw has a depth stop, it's trivial to modify the model: make a wider cut in the box and put the bearings higher. Mine doesn't, so I didn't design for that.
+
+This tool is part of a bigger project: I'm making a replica of Angine de Poitrine doubleneck instrument. Check this and related posts if you are interested https://social.tchncs.de/@kauzerei/116550865787433029
 */
 
 bsl=1/100;
